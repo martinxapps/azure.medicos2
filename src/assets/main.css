@@ -456,4 +456,33 @@ p.black-colorv2 {
     span.color-active {
         right: 15px;
     }
+
+
+    .img-border {
+        padding: 5px 5px;
+        width: 120px;
+        height: 120px;
+    }
+
+    li.nav-item.tab-hm {
+        min-width: 140px;
+        word-wrap: normal;
+    }
+
+    .tabs-details {
+        flex-wrap: initial;
+        width: 100%;
+        overflow-x: auto;
+    }
+    .tabs-details button {
+        font-size: 15px !important;
+    }
+
+    .tabs-details .nav-link {
+        height: 62px;
+    }
+    .bottom-header[data-v-ec1127e7] {
+        display: none;
+    }
+
 }

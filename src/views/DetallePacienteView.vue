@@ -579,7 +579,7 @@ onMounted(async () => {
         </div>
         <div class="row my-2 pb-5 pt-2">
           <div class="col-sm-12 mt-2">
-            <ul class="nav nav-tabs " id="PatientTab" role="tablist">
+            <ul class="nav nav-tabs tabs-details" id="PatientTab" role="tablist">
               <li class="nav-item tab-hm" role="presentation">
                 <button class="nav-link nav-hm pl-0" id="vital-signs-tab" data-toggle="tab"
                         :class="{'active': myPatientsStore.activeTabPaciente === 0}"
