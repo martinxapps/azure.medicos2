@@ -67,13 +67,13 @@ const closeModal = () => {
 const getWord = (key) => {
   switch (key) {
     case null:
-      return 'Pendiente';
+      return 'Pendiente de Gestión HM';
     case 'N':
-      return 'Pendiente';
+      return 'Pendiente de Gestión HM';
     case 'S':
-      return 'Solicitado';
+      return 'Pendiente de Factura de Médico';
     case 'F':
-      return 'Auditado';
+      return 'Facturado por Médico';
   }
 }
 onMounted(async () => {
