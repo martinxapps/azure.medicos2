@@ -68,6 +68,8 @@ const getWord = (key) => {
   switch (key) {
     case null:
       return 'Pendiente';
+    case 'N':
+      return 'Pendiente';
     case 'S':
       return 'Solicitado';
     case 'F':
@@ -234,7 +236,7 @@ onMounted(async () => {
                   <div class="col-9 my-3">
                     <p class="title-results ">
                       <b>N° de Prefactura: {{ auditedFee?.PREFACTURA }}
-                        <span class="p-2 mx-2 pill" :class="{'gray':auditedFee.AUDITADO === 'S', 'orange':auditedFee.AUDITADO === null, 'green':auditedFee.AUDITADO === 'F'}">{{ getWord(auditedFee.AUDITADO) }}</span>
+                        <span class="p-2 mx-2 pill" :class="{'gray':auditedFee.AUDITADO === 'S', 'orange':auditedFee.AUDITADO === null || auditedFee.AUDITADO === 'N', 'green':auditedFee.AUDITADO === 'F'}">{{ getWord(auditedFee.AUDITADO) }}</span>
                       </b>
                     </p>
                     <p class="text-results"><b>Fecha de Admisión:</b> {{ auditedFee?.FECHA }}</p>
