@@ -46,7 +46,8 @@ const openDetailModal = async (item) => {
   isLoadingDetail.value = true;
   let payload = {
     hcl: item.HCL,
-    adm: item.ADM
+    adm: item.ADM,
+    cargo: item.CARGO
   };
   console.log("payload", payload);
 
