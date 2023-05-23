@@ -286,6 +286,6 @@ onMounted(async () => {
   background-color: #a39b9b;
 }
 .green{
-  background-color: #15ff19;
+  background-color: #16c119;
 }
 </style>
