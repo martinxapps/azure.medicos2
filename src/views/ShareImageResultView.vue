@@ -11,7 +11,7 @@ const props = defineProps(["url", "nhc"]);
 const src = ref(null);
 const nhc = ref(props.nhc);
 const url = ref(props.url);
-const title = ref("Resultado de Imagen - Metrovirtual - Hospital Metropolitano");
+const title = ref("Resultado de Imagen - MetroVirtual - Hospital Metropolitano");
 const statusPaciente = ref(null);
 
 onMounted(() => {

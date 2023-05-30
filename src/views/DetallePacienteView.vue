@@ -51,7 +51,7 @@ const isLoadingSV = ref(false);
 const isLoadingForms = ref(false);
 const isLoadingLab = ref(false);
 const isLoadingImage = ref(false);
-const title = ref("Paciente - Metrovirtual - Hospital Metropolitano");
+const title = ref("Paciente - MetroVirtual - Hospital Metropolitano");
 const route = useRoute();
 const router = useRouter();
 
@@ -69,7 +69,7 @@ const getPatientDetails = (nhc) => {
       if (response.status) {
         statusPaciente.value = response.data;
         console.log("statusPaciente.value", statusPaciente.value);
-        title.value = `Paciente ${statusPaciente.value.NOMBRE_PACIENTE} - Metrovirtual - Hospital Metropolitano`;
+        title.value = `Paciente ${statusPaciente.value.NOMBRE_PACIENTE} - MetroVirtual - Hospital Metropolitano`;
       } else {
         notify({
           title: "No hay datos del paciente",
@@ -577,8 +577,15 @@ onMounted(async () => {
             </template>
           </div>
         </div>
+
         <div class="row my-2 pb-5 pt-2">
           <div class="col-sm-12 mt-2">
+            <div class="div-text-mobile">
+              <span class="span-text"> <font-awesome-icon :icon="['fas', 'chevron-left']" />
+                Menu horizonal
+               <font-awesome-icon :icon="['fas', 'chevron-right']" />
+              </span>
+            </div>
             <ul class="nav nav-tabs tabs-details" id="PatientTab" role="tablist">
               <li class="nav-item tab-hm" role="presentation">
                 <button class="nav-link nav-hm pl-0" id="vital-signs-tab" data-toggle="tab"

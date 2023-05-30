@@ -13,7 +13,7 @@ import { useNotification } from "@kyvg/vue3-notification";
 const route = useRoute();
 const router = useRouter();
 const { notify } = useNotification();
-const title = ref("Resultado de Imagen - Metrovirtual - Hospital Metropolitano");
+const title = ref("Resultado de Imagen - MetroVirtual - Hospital Metropolitano");
 const isLoading = ref(false);
 const isAvailable = ref(false);
 const props = defineProps(["url", "nhc"]);
@@ -46,7 +46,7 @@ const getPatientDetails = (nhc) => {
     statusPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
         statusPaciente.value = response.data;
-        title.value = `Resultado de Imagen ${statusPaciente.value.NOMBRE_PACIENTE} - Metrovirtual - Hospital Metropolitano`;
+        title.value = `Resultado de Imagen ${statusPaciente.value.NOMBRE_PACIENTE} - MetroVirtual - Hospital Metropolitano`;
       }
     }).catch((e) => {
       console.log("error", e);

@@ -33,7 +33,7 @@ const getPatientDetails = (nhc) => {
     statusPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
         statusPaciente.value = response.data;
-        title.value = `Resultado de Laboratorio ${statusPaciente.value.NOMBRE_PACIENTE} - Metrovirtual - Hospital Metropolitano`;
+        title.value = `Resultado de Laboratorio ${statusPaciente.value.NOMBRE_PACIENTE} - MetroVirtual - Hospital Metropolitano`;
       }
     }).catch((e) => {
       console.log("error", e);

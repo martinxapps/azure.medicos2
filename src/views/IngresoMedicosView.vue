@@ -100,7 +100,7 @@ onMounted(async () => {
 <template>
   <div>
     <teleport to="#page-title">
-      <title>Metrovirtual - Hospital Metropolitano</title>
+      <title>MetroVirtual - Hospital Metropolitano</title>
     </teleport>
     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center py-1"
          style="background-color: #f8f9fc;">
@@ -180,7 +180,7 @@ onMounted(async () => {
               <!--                            </div>-->
               <div class="form-group my-2">
                 <div class="row no-gutters no-margin">
-                  <div class="col-12 col-md-7 col-lg-6 mt-2">
+                  <div class="col-12 col-md-7 col-lg-7 mt-2">
                     <!--                                        <button class="text-center cursor-pointer pt-2"-->
                     <!--                                                :class="[-->
                     <!--                                                     loginForm.user && loginForm.pass ? 'btn-loginv3' : 'left-button'-->
@@ -192,8 +192,13 @@ onMounted(async () => {
                             @click="newLogin()">
                       <img class="icono-user mt-1" src="@/assets/MICROSOFT.png"
                            alt="microsift icon" width="30px" height="28px">
-                      {{ language === "es" ? "Ingresar  con Microsoft" : "Log In" }}
+                      {{ language === "es" ? "Ingreso seguro" : "Log In" }}
                     </button>
+                    <span class="span-text mt-2">
+                      Ingrese con el usuario proporcionado por el hospital seguido de @hmetro.med.ec <br>
+                      Su contraseña es la misma proporcionada por el hospital.<br>
+                      Ej: Si su usario es pperez ustede deberá ingresar pperez@hmetro.med.ec
+                    </span>
                   </div>
                   <div class="col-3 col-lg-2">
                   </div>
@@ -216,12 +221,24 @@ onMounted(async () => {
           <div class="col-12 col-md-5 mb-md-4">
             <div class="px-2 mt-5 pt-8">
               <iframe width="100%" height="300" src="https://www.youtube.com/embed/t0zKd0QUxyY?controls=0"
-                      title="Metrovirtual" frameborder="0"
+                      title="MetroVirtual" frameborder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowfullscreen></iframe>
-              <p style="text-align: center;">¿Qué es Metrovirtual?</p>
+              <p style="text-align: center;">¿Qué es MetroVirtual médicos?</p>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-4 mb-md-2 justify-content-center  pb-5 mt-5 my-5">
+      <!--columna de text-->
+      <div class="termi">
+        <div class="mt-2 mt-md-5 justify-content-center">
+          <a href="https://www.hospitalmetropolitano.org/es/terminos-condiciones-y-uso-de-medios" target="_blank">
+            <h5 class="title-terminos">
+              Términos y condiciones
+            </h5>
+          </a>
         </div>
       </div>
     </div>

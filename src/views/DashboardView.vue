@@ -33,7 +33,7 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
   <div class="justify-content-center py-1"
        style="background-color: #f8f9fc;">
     <teleport to="#page-title">
-      <title>Metrovirtual - Hospital Metropolitano</title>
+      <title>MetroVirtual - Hospital Metropolitano</title>
     </teleport>
     <div class="container m-auto d-block">
       <div class="row mb-2 mb-md-2 mt-2 ml-3">

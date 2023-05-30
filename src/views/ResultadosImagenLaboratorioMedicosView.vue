@@ -25,7 +25,7 @@ const router = useRouter();
 const route = useRoute();
 const props = defineProps(["nhc"]);
 const nhc = ref(props.nhc);
-const title = ref("Resultados de Imagen y Laboratorio - Metrovirtual - Hospital Metropolitano");
+const title = ref("Resultados de Imagen y Laboratorio - MetroVirtual - Hospital Metropolitano");
 
 const goBack = () => {
   patientsListStore.activeTab = 0;
@@ -174,7 +174,7 @@ const getPatientDetails = (nhc) => {
   searchPatients(data).then((response) => {
     if (response.status) {
       patient.value = response.data[0];
-      title.value = `Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS} - Metrovirtual - Hospital Metropolitano`;
+      title.value = `Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS} - MetroVirtual - Hospital Metropolitano`;
     } else {
       notify({
         title: "El paciente no existe",

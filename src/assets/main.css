@@ -429,6 +429,10 @@ p.black-colorv2 {
     width: 200px;
     height: 35px;
 }
+span.span-text {
+    font-size: 12px;
+}
+
 @media screen and (max-width: 600px) {
     button.btn-loginv2mobile {
         border-radius: 30px !important;
@@ -485,4 +489,11 @@ p.black-colorv2 {
         display: none;
     }
 
+}
+
+
+@media only screen and (min-width: 600px)  {
+    .div-text-mobile {
+        display: none;
+    }
 }
