@@ -41,6 +41,11 @@ export function misHonorariosAuditadosDetalle(payload) {
     return patients.post(payload);
 }
 
+export function misHonorariosAuditadosAtencion(payload) {
+    const patients = mande(`${baseURLV2}/medicos/honorarios/detalle-atencion`);
+    return patients.post(payload);
+}
+
 // export function svPacienteEmergencia(nhc) {
 //     const data = {
 //         numeroHistoriaClinica: nhc

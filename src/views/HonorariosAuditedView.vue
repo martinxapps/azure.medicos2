@@ -5,7 +5,7 @@ import { useAuthStore } from "../stores/auth";
 import { useMyAuditedFeesStore } from "../stores/myAuditedFees";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { misHonorariosAuditadosDetalle } from "../services/fees";
+import { misHonorariosAuditadosAtencion, misHonorariosAuditadosDetalle } from "../services/fees";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -17,9 +17,13 @@ const startDate = ref(null);
 const endDate = ref(null);
 const searchType = ref(4);
 const showDetailModal = ref(false);
+const activeTab = ref(0);
 const isLoadingDetail = ref(false);
 const details = ref([]);
 const successDetail = ref(false);
+const isLoadingAttention = ref(false);
+const attentions = ref([]);
+const successAttention = ref(false);
 const selectedItem = ref(null);
 let isLoading = ref(false);
 const router = useRouter();
@@ -42,6 +46,12 @@ const openDetailModal = async (item) => {
   console.log("item", item);
   showDetailModal.value = true;
   selectedItem.value = item;
+  getDetail(item);
+  getAttention(item);
+
+};
+
+const getDetail = async (item) => {
   // get the detail
   isLoadingDetail.value = true;
   let payload = {
@@ -56,13 +66,33 @@ const openDetailModal = async (item) => {
   successDetail.value = response.status;
   details.value = response.data;
   isLoadingDetail.value = false;
-};
+}
+
+const getAttention = async (item) => {
+  // get the detail
+  isLoadingAttention.value = true;
+  let payload = {
+    hcl: item.HCL,
+    adm: item.ADM,
+    cargo: item.CARGO
+  };
+  console.log("payload", payload);
+
+  let response = await misHonorariosAuditadosAtencion(payload);
+  console.log("response", response);
+  successAttention.value = response.status;
+  attentions.value = response.data;
+  isLoadingAttention.value = false;
+}
 
 const closeModal = () => {
   showDetailModal.value = false;
-  details.value = null;
+  details.value = [];
   selectedItem.value = null;
   successDetail.value = false;
+  attentions.value = [];
+  successAttention.value = false;
+  activeTab.value = 0;
 };
 const getWord = (key) => {
   switch (key) {
@@ -124,67 +154,150 @@ onMounted(async () => {
       <ModalBox :showing="showDetailModal" @close="closeModal">
         <div class="p-4">
           <div class="d-flex justify-content-between ">
-            <p class="title-results p-3">
-              <b>Detalle de la Prefactura: {{ selectedItem?.PREFACTURA }} </b>
+            <p class="title-results p-2 m-0">
+              <b>Prefactura: {{ selectedItem?.PREFACTURA }} </b>
             </p>
-            <div aria-label="close" class="p-3 cursor-pointer"
+            <div aria-label="close" class="p-2 cursor-pointer"
                  @click="closeModal">
               <font-awesome-icon :icon="['fas', 'close']" size="2x"
                                  class="icon-device" />
             </div>
           </div>
-          <template v-if="isLoadingDetail">
-            <div class="my-1 p-3 text-center">
-              <img class="img-fluid" src="@/assets/loading.gif"
-                   alt="Loading Hm">
-            </div>
-          </template>
-          <template v-else>
-            <div class="my-1">
-              <template v-if="successDetail">
-                <template v-if="details.length > 0">
-                  <div class="table-responsive m-2">
-                    <table class="table table-bordered table-striped table-hover">
-                      <thead>
-                      <tr>
-                        <th scope="col">Cargo</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">CPT</th>
-                        <th scope="col">Descripción</th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">Valor Descuento</th>
-                        <th scope="col">Porcentaje cálculo</th>
-                        <th scope="col">Valor Honorario</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr v-for="(detail, detailKey) in details" :key="detailKey">
-                        <th scope="row">{{detail.CARGO}}</th>
-                        <td>{{detail.FECHA}}</td>
-                        <td>{{detail.CPT}}</td>
-                        <td>{{detail.DESCRIPCION}}</td>
-                        <td>{{detail.CANTIDAD}}</td>
-                        <td>{{detail.VALOR_DESCUENTO}}</td>
-                        <td>{{detail.PORCENTAJE_CALCULO}} %</td>
-                        <td>$ {{detail.VALOR_HONORARIO}}</td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </div>
+          <ul class="nav nav-tabs" id="invoiceTab" role="tablist">
+            <li class="nav-item tab-hm" role="presentation">
+              <button class="nav-link nav-hm px-3" id="detail-tab" data-toggle="tab"
+                      :class="{'active': activeTab === 0}" @click="activeTab = 0"
+                      data-target="#detail" type="button" role="tab" aria-controls="detail"
+                      aria-selected="true">
+                Detalle
+              </button>
+            </li>
+            <li class="nav-item tab-hm" role="presentation">
+              <button class="nav-link nav-hm px-3" id="attention-tab" data-toggle="tab"
+                      :class="{'active': activeTab === 1}" @click="activeTab = 1"
+                      data-target="#attention" type="button" role="tab" aria-controls="attention"
+                      aria-selected="false">
+                Atención
+              </button>
+            </li>
 
-                </template>
-                <template v-else>
-                  <p class="text-results">No hay detalles</p>
-                </template>
-
+          </ul>
+          <div class="tab-content" id="invoiceTabContent">
+            <div class="tab-pane fade" id="detail" role="tabpanel"
+                 :class="{'active': activeTab === 0, 'show': activeTab === 0}"
+                 aria-labelledby="detail-tab">
+              <template v-if="isLoadingDetail">
+                <div class="my-1 p-3 text-center">
+                  <img class="img-fluid" src="@/assets/loading.gif"
+                       alt="Loading Hm">
+                </div>
               </template>
               <template v-else>
-                <p class="title-results">
-                  <b>Detalle no disponible </b>
-                </p>
+                <div class="my-1">
+                  <template v-if="successDetail">
+                    <template v-if="details.length > 0">
+                      <div class="table-responsive m-2">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                          <tr>
+                            <th scope="col">Cargo</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">CPT</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Valor Descuento</th>
+                            <th scope="col">Porcentaje cálculo</th>
+                            <th scope="col">Valor Honorario</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr v-for="(detail, detailKey) in details" :key="detailKey">
+                            <th scope="row">{{detail.CARGO}}</th>
+                            <td>{{detail.FECHA}}</td>
+                            <td>{{detail.CPT}}</td>
+                            <td>{{detail.DESCRIPCION}}</td>
+                            <td>{{detail.CANTIDAD}}</td>
+                            <td>{{detail.VALOR_DESCUENTO}}</td>
+                            <td>{{detail.PORCENTAJE_CALCULO}} %</td>
+                            <td>$ {{detail.VALOR_HONORARIO}}</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                    </template>
+                    <template v-else>
+                      <p class="text-results">No hay detalles</p>
+                    </template>
+
+                  </template>
+                  <template v-else>
+                    <p class="title-results">
+                      <b>Detalle no disponible </b>
+                    </p>
+                  </template>
+                </div>
               </template>
             </div>
-          </template>
+            <div class="tab-pane fade" id="attention" role="tabpanel"
+                 :class="{'active': activeTab === 1, 'show': activeTab === 1}"
+                 aria-labelledby="attention-tab">
+              <template v-if="isLoadingAttention">
+                <div class="my-1 p-3 text-center">
+                  <img class="img-fluid" src="@/assets/loading.gif"
+                       alt="Loading Hm">
+                </div>
+              </template>
+              <template v-else>
+                <div class="my-1">
+                  <template v-if="successAttention">
+                    <template v-if="attentions.length > 0">
+                      <div class="table-responsive m-2">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                          <tr>
+                            <th scope="col">Cargo</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">CPT</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Valor Descuento</th>
+                            <th scope="col">Porcentaje cálculo</th>
+                            <th scope="col">Valor Honorario</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr v-for="(attention, attentionKey) in attentions" :key="attentionKey">
+                            <th scope="row">{{attention.CARGO}}</th>
+                            <td>{{attention.FECHA}}</td>
+                            <td>{{attention.CPT}}</td>
+                            <td>{{attention.DESCRIPCION}}</td>
+                            <td>{{attention.CANTIDAD}}</td>
+                            <td>{{attention.VALOR_DESCUENTO}}</td>
+                            <td>{{attention.PORCENTAJE_CALCULO}} %</td>
+                            <td>$ {{attention.VALOR_HONORARIO}}</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                    </template>
+                    <template v-else>
+                      <p class="text-results">No hay atenciones</p>
+                    </template>
+
+                  </template>
+                  <template v-else>
+                    <p class="title-results">
+                      <b>Detalle no disponible </b>
+                    </p>
+                  </template>
+                </div>
+              </template>
+            </div>
+
+          </div>
+
         </div>
       </ModalBox>
     </div>
