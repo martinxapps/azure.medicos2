@@ -35,6 +35,8 @@ const goBack = async () => {
   }
 };
 
+
+
 const goToPatientDetail = async (patient) => {
   try {
     router.push({ name: "detalle-paciente", params: { nhc: patient.HC } }).catch((e) => console.log("e", e));

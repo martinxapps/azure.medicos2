@@ -453,6 +453,16 @@ const goToZeroCtrlItem = async (item) => {
   window.open(url.href, "_blank");
   //await router.push({name: 'medic-patient-curva-view', params: {type, na, nhc: nhc.value}});
 };
+
+const getWord = (key) => {
+  switch (key) {
+    case "true":
+    case true:
+      return "Nuevo";
+    default:
+      return "Solicitado";
+  }
+};
 const goToImageResult = async (result) => {
   let split = result.deep_link.split("/");
   // let url = router.resolve({
@@ -824,7 +834,13 @@ onMounted(async () => {
                             :key="labResultKey">
                             <div class="col-9">
                               <p class="title-results"><b>{{ labResult?.ORIGEN }}</b>
-                                <span class="p-2 mx-2 pill" v-if="isWithin24Hours(labResult?.fecha_)">Nuevo</span>
+                                <span class="p-2 mx-2 pill" v-if="isWithin24Hours(labResult?.fecha_)"
+                                      :class="{
+                                  'gray':labResult?.IsOrderValidated === 'false' || !labResult?.IsOrderValidated,
+                                  'orange':labResult?.IsOrderValidated || labResult?.IsOrderValidated === 'true'
+                                }">
+                                  {{ getWord(labResult?.IsOrderValidated) }}
+                                </span>
                               </p>
                               <p class="text-results">{{ labResult?.FECHA }}</p>
                               <p class="text-results">
@@ -984,6 +1000,13 @@ onMounted(async () => {
   font-weight: 500
 }
 
+.orange {
+  background-color: #ff8201 !important;
+}
+
+.gray {
+  background-color: #a39b9b !important;
+}
 
 .border-result {
   border: 1px solid #c5ccca;

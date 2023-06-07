@@ -27,6 +27,16 @@ const props = defineProps(["nhc"]);
 const nhc = ref(props.nhc);
 const title = ref("Resultados de Imagen y Laboratorio - MetroVirtual - Hospital Metropolitano");
 
+const getWord = (key) => {
+  switch (key) {
+    case "true":
+    case true:
+      return "Nuevo";
+    default:
+      return "Solicitado";
+  }
+};
+
 const goBack = () => {
   patientsListStore.activeTab = 0;
   if (window.history.state.back === null) {
@@ -359,7 +369,13 @@ onMounted(async () => {
                             :key="labResultKey">
                             <div class="col-9">
                               <p class="title-results"><b>{{ labResult?.ORIGEN }}</b>
-                                <span class="p-2 mx-2 pill" v-if="isWithin24Hours(labResult?.fecha_)">Nuevo</span>
+                                <span class="p-2 mx-2 pill" v-if="isWithin24Hours(labResult?.fecha_)"
+                                      :class="{
+                                  'gray':labResult?.IsOrderValidated === 'false' || !labResult?.IsOrderValidated,
+                                   'orange':labResult?.IsOrderValidated || labResult?.IsOrderValidated === 'true'
+                                }">
+                                  {{ getWord(labResult?.IsOrderValidated) }}
+                                </span>
                               </p>
                               <p class="text-results">{{ labResult?.FECHA }}</p>
                               <p class="text-results">
