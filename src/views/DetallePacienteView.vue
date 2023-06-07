@@ -72,7 +72,7 @@ const getPatientDetails = (nhc) => {
         title.value = `Paciente ${statusPaciente.value.NOMBRE_PACIENTE} - MetroVirtual - Hospital Metropolitano`;
       } else {
         notify({
-          title: "No hay datos del paciente",
+          title: "No existen datos registrados para este paciente",
           text: response.message,
           type: "error"
         });
@@ -81,7 +81,7 @@ const getPatientDetails = (nhc) => {
     }).catch((e) => {
       console.log("error", e);
       notify({
-        title: "Hubo un problema al cargar los datos del paciente",
+        title: "Hubo un problema al cargar los datos para este paciente",
         text: e,
         type: "error"
       });
@@ -91,7 +91,7 @@ const getPatientDetails = (nhc) => {
   } catch (e) {
     console.log("error", e);
     notify({
-      title: "Hubo un problema al cargar los datos del paciente",
+      title: "Hubo un problema al cargar los datos para este paciente",
       text: e,
       type: "error"
     });
@@ -207,6 +207,7 @@ const getImage = (item) => {
       return corazon;
   }
 };
+
 const getUnit = (item) => {
   switch (item.SIGNO) {
     case "TALLA":
