@@ -146,7 +146,7 @@ const getLabResults = (nhc) => {
       lab_results.value = response.data;
     } else {
       notify({
-        title: "Atencion!!",
+        title: "¡Atención!",
         text: "No existen resultados de laboratorio disponibles para este paciente",
         type: "info"
       });
@@ -168,7 +168,7 @@ const getImageResults = (nhc) => {
       image_results.value = response.data;
     } else {
       notify({
-        title: "Atencion!!",
+        title: "¡Atención!",
         text: "No existen resultados de imagen disponibles para este paciente",
         type: "info"
       });

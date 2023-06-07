@@ -142,7 +142,7 @@ const getPatientSV = (nhc) => {
         console.log("svPaciente.value", svPaciente.value);
       } else {
         notify({
-          title: "Atencion!!",
+          title: "¡Atención!",
           text: "No existen registros de signos vitales para este paciente",
           type: "info"
         });
@@ -244,7 +244,7 @@ const getPatientEV = async (nhc) => {
 
     } else {
       notify({
-        title: "Atencion!!",
+        title: "¡Atención!",
         text: "No existen registros de evoluciones-prescripciones para este paciente",
         type: "info"
       });
@@ -268,7 +268,7 @@ const getLabResults = (nhc) => {
       lab_results.value = response.data;
     } else {
       notify({
-        title: "Atencion!!",
+        title: "¡Atención!",
         text: "No existen resultados de laboratorio disponibles para este paciente",
         type: "info"
       });
@@ -292,7 +292,7 @@ const getImageResults = (nhc) => {
       image_results.value = response.data;
     } else {
       notify({
-        title: "Atencion!!",
+        title: "¡Atención!",
         text: "No existen resultados de imagen disponibles para este paciente",
         type: "info"
       });
@@ -576,6 +576,8 @@ onMounted(async () => {
                     <b>Médico: </b>{{ statusPaciente?.NOMBRE_MEDICO }}</p>
                   <p class="descrip-paciente">
                     <b>Especialidad: </b>{{ statusPaciente?.ESPECIALIDAD }}</p>
+                  <p class="descrip-paciente">
+                    <b>Admisión: </b>{{ evPaciente?.ADM }}</p>
                 </div>
                 <div class="col-12 col-md-3">
                   <p class="descrip-paciente">
