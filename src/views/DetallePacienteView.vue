@@ -180,6 +180,7 @@ const getWhiteImage = (item) => {
     case "FRECUENCIA RESPIRATORIA":
       return frecuenciaBlanco;
     case "LLENADO CAPILAR":
+    case "GLICEMIA CAPILAR":
       return llenadoCapilarBlanco;
     case "PRESION ARTERIAL DIASTOLICA":
     case "PRESION ARTERIAL SISTOLICA":
@@ -199,6 +200,7 @@ const getImage = (item) => {
     case "FRECUENCIA RESPIRATORIA":
       return frecuencia;
     case "LLENADO CAPILAR":
+    case "GLICEMIA CAPILAR":
       return llenadoCapilar;
     case "PRESION ARTERIAL SISTOLICA":
     case "PRESION ARTERIAL DIASTOLICA":
@@ -224,6 +226,7 @@ const getUnit = (item) => {
     case "PRESION ARTERIAL DIASTOLICA":
       return "mmHg";
     case "LLENADO CAPILAR":
+    case "GLICEMIA CAPILAR":
       return "seg.";
     default:
       return "";
@@ -565,25 +568,31 @@ onMounted(async () => {
             <template v-if="statusPaciente">
               <div class="row my-2 dates-pacientes">
                 <div class="col-12 col-md-5">
-                  <p class="descrip-paciente"><b>NHC: </b>{{ statusPaciente?.HC }}
+                  <p class="descrip-paciente" v-if="statusPaciente?.HC">
+                    <b>NHC: </b>{{ statusPaciente?.HC }}
                   </p>
-                  <p class="descrip-paciente">
+                  <p class="descrip-paciente"
+                     v-if="statusPaciente?.DG_PRINCIPAL">
                     <b>Diagnóstico: </b>{{ statusPaciente?.DG_PRINCIPAL }}</p>
-                  <p class="descrip-paciente">
+                  <p class="descrip-paciente"
+                     v-if="statusPaciente?.TIPO_DCTO">
                     <b>Plan/Convenio: </b>{{ statusPaciente?.TIPO_DCTO }}</p>
                 </div>
                 <div class="col-12 col-md-4">
-                  <p class="descrip-paciente">
+                  <p class="descrip-paciente"
+                     v-if="statusPaciente?.NOMBRE_MEDICO">
                     <b>Médico: </b>{{ statusPaciente?.NOMBRE_MEDICO }}</p>
-                  <p class="descrip-paciente">
+                  <p class="descrip-paciente"
+                     v-if="statusPaciente?.ESPECIALIDAD">
                     <b>Especialidad: </b>{{ statusPaciente?.ESPECIALIDAD }}</p>
-                  <p class="descrip-paciente">
+                  <p class="descrip-paciente" v-if="statusPaciente?.ADM">
                     <b>Admisión: </b>{{ evPaciente?.ADM }}</p>
                 </div>
                 <div class="col-12 col-md-3">
-                  <p class="descrip-paciente">
+                  <p class="descrip-paciente" v-if="statusPaciente?.EDAD">
                     <b>Edad: </b>{{ statusPaciente?.EDAD }} años</p>
-                  <p class="descrip-paciente">
+                  <p class="descrip-paciente"
+                     v-if="statusPaciente?.NRO_HABITACION">
                     <b>Ubicación: </b>{{ statusPaciente?.NRO_HABITACION }}</p>
                 </div>
               </div>
@@ -595,7 +604,7 @@ onMounted(async () => {
           <div class="col-sm-12 mt-2">
             <div class="div-text-mobile">
               <span class="span-text"> <font-awesome-icon :icon="['fas', 'chevron-left']" />
-                Menu horizonal
+                Menú horizontal
                <font-awesome-icon :icon="['fas', 'chevron-right']" />
               </span>
             </div>
@@ -675,7 +684,7 @@ onMounted(async () => {
                                   <p class="title-paciente title-icons">
                                     <b>{{ item.SIGNO }}</b>
                                   </p>
-                                  <p class="detail-paciente">{{ item.VALOR }}
+                                  <p class="detail-paciente" v-if="item.VALOR">{{ item.VALOR }}
                                     {{ getUnit(item) }}</p>
                                   <p class="detail-paciente">{{ item.FECHA }}</p>
 
@@ -714,13 +723,13 @@ onMounted(async () => {
                                     </div>
                                   </template>
                                   <template
-                                    v-if="item.SIGNO === 'LLENADO CAPILAR'">
+                                    v-if="item.SIGNO === 'GLICEMIA CAPILAR'">
                                     <div @click.exact="goToGraphic('GLUC', item.ATENCION)"
                                          @click.ctrl="goToGraphicCtrl('GLUC', item.ATENCION)"
                                          class="cursor-pointer text-center">
                                       <p class="title-paciente"
                                          style="text-decoration: underline; color: black;">
-                                        Ver control de hemoglucotest
+                                        Ver control de glicemia
                                       </p>
                                     </div>
                                   </template>
