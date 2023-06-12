@@ -12,6 +12,8 @@ import temperaturaBlanco from "@/assets/temperatura-blanco.png";
 import endoscopiaBlanco from "@/assets/endoscopia-blanco.png";
 import frecuenciaBlanco from "@/assets/frecuencia-blanco.png";
 import llenadoCapilarBlanco from "@/assets/llenado-capilar-blanco.png";
+import glicemiaBlanco from "@/assets/glicemia-blanco.png";
+import glicemia from "@/assets/glicemia.png";
 import corazonBlanco from "@/assets/corazon-blanco.png";
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -134,6 +136,10 @@ const getPatientSV = (nhc) => {
         if (llc) {
           final.push(llc);
         }
+        const gc = items.find((item) => item.SIGNO === "GLICEMIA CAPILAR");
+        if (gc) {
+          final.push(gc);
+        }
         const talla = items.find((item) => item.SIGNO === "TALLA");
         if (talla) {
           final.push(talla);
@@ -180,8 +186,9 @@ const getWhiteImage = (item) => {
     case "FRECUENCIA RESPIRATORIA":
       return frecuenciaBlanco;
     case "LLENADO CAPILAR":
-    case "GLICEMIA CAPILAR":
       return llenadoCapilarBlanco;
+    case "GLICEMIA CAPILAR":
+      return glicemia;
     case "PRESION ARTERIAL DIASTOLICA":
     case "PRESION ARTERIAL SISTOLICA":
     case "FRECUENCIA CARDIACA":
@@ -200,8 +207,9 @@ const getImage = (item) => {
     case "FRECUENCIA RESPIRATORIA":
       return frecuencia;
     case "LLENADO CAPILAR":
-    case "GLICEMIA CAPILAR":
       return llenadoCapilar;
+    case "GLICEMIA CAPILAR":
+      return glicemiaBlanco;
     case "PRESION ARTERIAL SISTOLICA":
     case "PRESION ARTERIAL DIASTOLICA":
     case "FRECUENCIA CARDIACA":
