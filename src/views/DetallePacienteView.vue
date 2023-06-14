@@ -107,44 +107,66 @@ const getPatientSV = (nhc) => {
     svPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
         const items = response.data;
-        const final = [];
-        const pas = items.find((item) => item.SIGNO === "PRESION ARTERIAL SISTOLICA");
-        if (pas) {
-          final.push(pas);
-        }
-        const pad = items.find((item) => item.SIGNO === "PRESION ARTERIAL DIASTOLICA");
-        if (pad) {
-          final.push(pad);
-        }
-        const fc = items.find((item) => item.SIGNO === "FRECUENCIA CARDIACA");
-        if (fc) {
-          final.push(fc);
-        }
-        const fr = items.find((item) => item.SIGNO === "FRECUENCIA RESPIRATORIA");
-        if (fr) {
-          final.push(fr);
-        }
-        const so = items.find((item) => item.SIGNO === "SATURACION OXIGENO");
-        if (so) {
-          final.push(so);
-        }
-        const temp = items.find((item) => item.SIGNO === "TEMPERATURA");
-        if (temp) {
-          final.push(temp);
-        }
-        const llc = items.find((item) => item.SIGNO === "LLENADO CAPILAR");
-        if (llc) {
-          final.push(llc);
-        }
-        const gc = items.find((item) => item.SIGNO === "GLICEMIA CAPILAR");
+        const order = [
+          "PRESION ARTERIAL SISTOLICA",
+          "PRESION ARTERIAL DIASTOLICA",
+          "FRECUENCIA CARDIACA",
+          "FRECUENCIA RESPIRATORIA",
+          "SATURACION OXIGENO",
+          "TEMPERATURA",
+          "LLENADO CAPILAR",
+          "GLICEMIA CAPILAR",
+          "TALLA"
+        ];
+
+        const gc = items.find((item) => item.SIGNO === "LLENADO CAPILAR");
         if (gc) {
-          final.push(gc);
+          items.push({ ...gc, SIGNO: "GLICEMIA CAPILAR", VALOR: null });
         }
-        const talla = items.find((item) => item.SIGNO === "TALLA");
-        if (talla) {
-          final.push(talla);
-        }
-        svPaciente.value = final;
+        items.sort((a, b) => {
+          let indexA = order.indexOf(a.SIGNO);
+          let indexB = order.indexOf(b.SIGNO);
+          return indexA - indexB;
+        });
+
+        // const pas = items.find((item) => item.SIGNO === "PRESION ARTERIAL SISTOLICA");
+        // if (pas) {
+        //   final.push(pas);
+        // }
+        // const pad = items.find((item) => item.SIGNO === "PRESION ARTERIAL DIASTOLICA");
+        // if (pad) {
+        //   final.push(pad);
+        // }
+        // const fc = items.find((item) => item.SIGNO === "FRECUENCIA CARDIACA");
+        // if (fc) {
+        //   final.push(fc);
+        // }
+        // const fr = items.find((item) => item.SIGNO === "FRECUENCIA RESPIRATORIA");
+        // if (fr) {
+        //   final.push(fr);
+        // }
+        // const so = items.find((item) => item.SIGNO === "SATURACION OXIGENO");
+        // if (so) {
+        //   final.push(so);
+        // }
+        // const temp = items.find((item) => item.SIGNO === "TEMPERATURA");
+        // if (temp) {
+        //   final.push(temp);
+        // }
+        // const llc = items.find((item) => item.SIGNO === "LLENADO CAPILAR");
+        // if (llc) {
+        //   final.push(llc);
+        // }
+        // const gc = items.find((item) => item.SIGNO === "GLICEMIA CAPILAR");
+        // if (gc) {
+        //   final.push(gc);
+        //   final.push({ ...gc, SIGNO: 'GLICEMIA CAPILAR' });
+        // }
+        // const talla = items.find((item) => item.SIGNO === "TALLA");
+        // if (talla) {
+        //   final.push(talla);
+        // }
+        svPaciente.value = items;
         console.log("svPaciente.value", svPaciente.value);
       } else {
         notify({
@@ -188,7 +210,7 @@ const getWhiteImage = (item) => {
     case "LLENADO CAPILAR":
       return llenadoCapilarBlanco;
     case "GLICEMIA CAPILAR":
-      return glicemia;
+      return glicemiaBlanco;
     case "PRESION ARTERIAL DIASTOLICA":
     case "PRESION ARTERIAL SISTOLICA":
     case "FRECUENCIA CARDIACA":
@@ -209,7 +231,7 @@ const getImage = (item) => {
     case "LLENADO CAPILAR":
       return llenadoCapilar;
     case "GLICEMIA CAPILAR":
-      return glicemiaBlanco;
+      return glicemia;
     case "PRESION ARTERIAL SISTOLICA":
     case "PRESION ARTERIAL DIASTOLICA":
     case "FRECUENCIA CARDIACA":
@@ -234,8 +256,8 @@ const getUnit = (item) => {
     case "PRESION ARTERIAL DIASTOLICA":
       return "mmHg";
     case "LLENADO CAPILAR":
-    case "GLICEMIA CAPILAR":
       return "seg.";
+    case "GLICEMIA CAPILAR":
     default:
       return "";
   }
@@ -576,32 +598,32 @@ onMounted(async () => {
             <template v-if="statusPaciente">
               <div class="row my-2 dates-pacientes">
                 <div class="col-12 col-md-5">
-                  <p class="descrip-paciente" v-if="statusPaciente?.HC">
-                    <b>NHC: </b>{{ statusPaciente?.HC }}
+                  <p class="descrip-paciente">
+                    <b>NHC: </b>{{ statusPaciente?.HC ? statusPaciente?.HC : "No registrado" }}
                   </p>
-                  <p class="descrip-paciente"
-                     v-if="statusPaciente?.DG_PRINCIPAL">
-                    <b>Diagnóstico: </b>{{ statusPaciente?.DG_PRINCIPAL }}</p>
-                  <p class="descrip-paciente"
-                     v-if="statusPaciente?.TIPO_DCTO">
-                    <b>Plan/Convenio: </b>{{ statusPaciente?.TIPO_DCTO }}</p>
+                  <p class="descrip-paciente">
+                    <b>Diagnóstico: </b>{{ statusPaciente?.DG_PRINCIPAL ? statusPaciente?.DG_PRINCIPAL : "No registrado"
+                    }}</p>
+                  <p class="descrip-paciente">
+                    <b>Plan/Convenio: </b>{{ statusPaciente?.TIPO_DCTO ? statusPaciente?.TIPO_DCTO : "No registrado" }}
+                  </p>
                 </div>
                 <div class="col-12 col-md-4">
-                  <p class="descrip-paciente"
-                     v-if="statusPaciente?.NOMBRE_MEDICO">
-                    <b>Médico: </b>{{ statusPaciente?.NOMBRE_MEDICO }}</p>
-                  <p class="descrip-paciente"
-                     v-if="statusPaciente?.ESPECIALIDAD">
-                    <b>Especialidad: </b>{{ statusPaciente?.ESPECIALIDAD }}</p>
-                  <p class="descrip-paciente" v-if="statusPaciente?.ADM">
-                    <b>Admisión: </b>{{ evPaciente?.ADM }}</p>
+                  <p class="descrip-paciente">
+                    <b>Médico: </b>{{ statusPaciente?.NOMBRE_MEDICO ? statusPaciente?.NOMBRE_MEDICO : "No registrado" }}
+                  </p>
+                  <p class="descrip-paciente">
+                    <b>Especialidad: </b>{{ statusPaciente?.ESPECIALIDAD ? statusPaciente?.ESPECIALIDAD : "No registrado"
+                    }}</p>
+                  <p class="descrip-paciente">
+                    <b>Admisión: </b>{{ evPaciente?.ADM ? evPaciente?.ADM : "No registrado" }}</p>
                 </div>
                 <div class="col-12 col-md-3">
-                  <p class="descrip-paciente" v-if="statusPaciente?.EDAD">
-                    <b>Edad: </b>{{ statusPaciente?.EDAD }} años</p>
-                  <p class="descrip-paciente"
-                     v-if="statusPaciente?.NRO_HABITACION">
-                    <b>Ubicación: </b>{{ statusPaciente?.NRO_HABITACION }}</p>
+                  <p class="descrip-paciente">
+                    <b>Edad: </b>{{ statusPaciente?.EDAD ? statusPaciente?.EDAD + " Años" : "No registrado" }}</p>
+                  <p class="descrip-paciente">
+                    <b>Ubicación: </b>{{ statusPaciente?.NRO_HABITACION ? statusPaciente?.NRO_HABITACION : "No registrado"
+                    }}</p>
                 </div>
               </div>
             </template>
@@ -737,7 +759,7 @@ onMounted(async () => {
                                          class="cursor-pointer text-center">
                                       <p class="title-paciente"
                                          style="text-decoration: underline; color: black;">
-                                        Ver control de glicemia
+                                        Ver control de Emoglucotest
                                       </p>
                                     </div>
                                   </template>

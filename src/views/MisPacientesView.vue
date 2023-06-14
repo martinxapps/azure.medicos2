@@ -1,6 +1,6 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
-import {useAuthStore} from "../stores/auth";
+import { useAuthStore } from "../stores/auth";
 import { useMyPatientsStore } from "../stores/myPatients";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
@@ -34,7 +34,6 @@ const goBack = async () => {
     router.back();
   }
 };
-
 
 
 const goToPatientDetail = async (patient) => {
@@ -181,22 +180,24 @@ onMounted(async () => {
                                 </p>
                                 <p class="text-pacientes">
                                   <b>Especialidad:</b> {{
-                                    dealerPatient?.ESPECIALIDAD
+                                    dealerPatient?.ESPECIALIDAD ? dealerPatient?.ESPECIALIDAD : "No registrado"
                                   }}
-                                  <b>Médico:</b> {{ dealerPatient?.NOMBRE_MEDICO }}
+                                  <b>Médico:</b>
+                                  {{ dealerPatient?.NOMBRE_MEDICO ? dealerPatient?.NOMBRE_MEDICO : "No registrado" }}
                                 </p>
                                 <p class="text-pacientes">
                                   <b>Diagnóstico:</b>
-                                  {{ dealerPatient?.DG_PRINCIPAL }}
+                                  {{ dealerPatient?.DG_PRINCIPAL ? dealerPatient?.DG_PRINCIPAL : "No registrado" }}
                                 </p>
                                 <p class="text-pacientes">
                                   <b>Fecha de Admisión:</b>
-                                  {{ dealerPatient?.FECHA_ADMISION }} {{ dealerPatient?.HORA_ADMISION }}
+                                  {{ dealerPatient?.FECHA_ADMISION ? dealerPatient?.FECHA_ADMISION + " " + dealerPatient?.HORA_ADMISION : "No registrado"
+                                  }}
                                 </p>
                                 <p class="text-pacientes">
-                                  <b>Edad:</b> {{ dealerPatient?.EDAD }} Años
+                                  <b>Edad:</b> {{ dealerPatient?.EDAD ? dealerPatient?.EDAD + ' Años' : "No registrado" }}
                                   <b>Habitación:</b> {{
-                                    dealerPatient?.NRO_HABITACION
+                                    dealerPatient?.NRO_HABITACION ? dealerPatient?.NRO_HABITACION : "No registrado"
                                   }}
                                 </p>
                               </div>
