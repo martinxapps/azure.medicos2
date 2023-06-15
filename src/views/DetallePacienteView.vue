@@ -121,7 +121,7 @@ const getPatientSV = (nhc) => {
 
         const gc = items.find((item) => item.SIGNO === "LLENADO CAPILAR");
         if (gc) {
-          items.push({ ...gc, SIGNO: "GLICEMIA CAPILAR", VALOR: null });
+          items.push({ ...gc, SIGNO: "GLICEMIA CAPILAR"});
         }
         items.sort((a, b) => {
           let indexA = order.indexOf(a.SIGNO);
