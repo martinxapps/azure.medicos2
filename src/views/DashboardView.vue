@@ -169,7 +169,7 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
         </div>
         <div class=" col-6 col-md-3 d-block pb-5 " v-if="authStore.hasRole('PERFIL_MEDICO_BDOCU')">
           <a class="icon-img" style="text-decoration: none"
-             :href="`https://appdocumentosdirmed.azurewebsites.net/app/access/${user?.name}/${hash}`"
+             :href="`https://appdocumentosdirmed.azurewebsites.net/app/access/${user?.name.replace(' ', '20%')}/${hash}`"
              target="_blank">
             <div class="row d-block img-border">
               <img class="img-icon-color" src="@/assets/biblioteca-blancov2.png"

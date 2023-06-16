@@ -121,7 +121,7 @@ const getPatientSV = (nhc) => {
 
         const gc = items.find((item) => item.SIGNO === "LLENADO CAPILAR");
         if (gc) {
-          items.push({ ...gc, SIGNO: "GLICEMIA CAPILAR"});
+          items.push({ ...gc, SIGNO: "GLICEMIA CAPILAR" });
         }
         items.sort((a, b) => {
           let indexA = order.indexOf(a.SIGNO);
@@ -875,6 +875,7 @@ onMounted(async () => {
                             v-for="(labResult, labResultKey) in lab_results"
                             :key="labResultKey">
                             <div class="col-9">
+
                               <p class="title-results"><b>{{ labResult?.ORIGEN }}</b>
                                 <span class="p-2 mx-2 pill" v-if="isWithin24Hours(labResult?.fecha_)"
                                       :class="{
@@ -888,6 +889,22 @@ onMounted(async () => {
                               <p class="text-results">
                                 <b>Médico:</b> {{ labResult?.MEDICO }}
                               </p>
+                              <div class="flex cursor-pointer" @click="labResult.isOpen = !labResult.isOpen">
+                                <font-awesome-icon class="px-1"
+                                                   :icon="['fas', 'list' ]" />
+                                Exámenes solicitados
+                                <font-awesome-icon class="px-2"
+                                  :icon="['fas', labResult.isOpen ?  'chevron-up':'chevron-down' ]" />
+                              </div>
+                              <template v-if="labResult.isOpen">
+                                <hr class="my-1">
+                                <div class="row px-3 py-1">
+                                  <ul class="col-12 col-md-6 m-0"
+                                       v-for="(exam, key) in labResult.examenes" v-bind:key="key">
+                                    <li class="m-0 small-font">{{ exam }}</li>
+                                  </ul>
+                                </div>
+                              </template>
                               <p style="color: #ff8201;" class="text-results">Laboratorio</p>
 
                             </div>
@@ -1171,6 +1188,9 @@ a:hover {
     padding-right: 10px;
     margin: 10px auto;
   }
+}
+.small-font{
+  font-size: small;
 }
 
 </style>
