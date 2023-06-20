@@ -119,10 +119,10 @@ const getPatientSV = (nhc) => {
           "TALLA"
         ];
 
-        const gc = items.find((item) => item.SIGNO === "LLENADO CAPILAR");
-        if (gc) {
-          items.push({ ...gc, SIGNO: "GLICEMIA CAPILAR" });
-        }
+        // const gc = items.find((item) => item.SIGNO === "LLENADO CAPILAR");
+        // if (gc) {
+        //   items.push({ ...gc, SIGNO: "GLICEMIA CAPILAR" });
+        // }
         items.sort((a, b) => {
           let indexA = order.indexOf(a.SIGNO);
           let indexB = order.indexOf(b.SIGNO);
@@ -622,6 +622,8 @@ onMounted(async () => {
                   <p class="descrip-paciente">
                     <b>Edad: </b>{{ statusPaciente?.EDAD ? statusPaciente?.EDAD + " Años" : "No registrado" }}</p>
                   <p class="descrip-paciente">
+                    <b>CI: </b>{{ statusPaciente?.CEDULA ? statusPaciente?.CEDULA + " Años" : "No registrado" }}</p>
+                  <p class="descrip-paciente">
                     <b>Ubicación: </b>{{ statusPaciente?.NRO_HABITACION ? statusPaciente?.NRO_HABITACION : "No registrado"
                     }}</p>
                 </div>
@@ -894,13 +896,13 @@ onMounted(async () => {
                                                    :icon="['fas', 'list' ]" />
                                 Exámenes solicitados
                                 <font-awesome-icon class="px-2"
-                                  :icon="['fas', labResult.isOpen ?  'chevron-up':'chevron-down' ]" />
+                                                   :icon="['fas', labResult.isOpen ?  'chevron-up':'chevron-down' ]" />
                               </div>
                               <template v-if="labResult.isOpen">
                                 <hr class="my-1">
                                 <div class="row px-3 py-1">
                                   <ul class="col-12 col-md-6 m-0"
-                                       v-for="(exam, key) in labResult.examenes" v-bind:key="key">
+                                      v-for="(exam, key) in labResult.examenes" v-bind:key="key">
                                     <li class="m-0 small-font">{{ exam }}</li>
                                   </ul>
                                 </div>
@@ -1189,7 +1191,8 @@ a:hover {
     margin: 10px auto;
   }
 }
-.small-font{
+
+.small-font {
   font-size: small;
 }
 
