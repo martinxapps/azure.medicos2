@@ -622,7 +622,7 @@ onMounted(async () => {
                   <p class="descrip-paciente">
                     <b>Edad: </b>{{ statusPaciente?.EDAD ? statusPaciente?.EDAD + " Años" : "No registrado" }}</p>
                   <p class="descrip-paciente">
-                    <b>CI: </b>{{ statusPaciente?.CEDULA ? statusPaciente?.CEDULA + " Años" : "No registrado" }}</p>
+                    <b>CI: </b>{{ statusPaciente?.CEDULA ? statusPaciente?.CEDULA : "No registrado" }}</p>
                   <p class="descrip-paciente">
                     <b>Ubicación: </b>{{ statusPaciente?.NRO_HABITACION ? statusPaciente?.NRO_HABITACION : "No registrado"
                     }}</p>
