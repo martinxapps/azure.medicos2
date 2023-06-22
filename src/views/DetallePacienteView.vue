@@ -258,6 +258,7 @@ const getUnit = (item) => {
     case "LLENADO CAPILAR":
       return "seg.";
     case "GLICEMIA CAPILAR":
+      return "mg/dl";
     default:
       return "";
   }
