@@ -617,7 +617,7 @@ onMounted(async () => {
                     <b>Especialidad: </b>{{ statusPaciente?.ESPECIALIDAD ? statusPaciente?.ESPECIALIDAD : "No registrado"
                     }}</p>
                   <p class="descrip-paciente">
-                    <b>Admisión: </b>{{ evPaciente ? evPaciente[0].ADM : "No registrado" }}</p>
+                    <b>Admisión: </b>{{ evPaciente ? evPaciente[0] ? evPaciente[0]?.ADM : "No registrado" : "No registrado" }}</p>
                 </div>
                 <div class="col-12 col-md-3">
                   <p class="descrip-paciente">
