@@ -38,7 +38,7 @@ const nextPage = () => {
   currentPage.value = currentPage.value + 1;
 };
 
-const shareLink = computed(() => `https://https://medicos2.hospitalmetropolitano.org/compartir/${nhc.value}/${pageType.value}/${id.value}`);
+const shareLink = computed(() => `https://medicos2.hospitalmetropolitano.org/compartir/${nhc.value}/${pageType.value}/${id.value}`);
 const downloadPdf = () => {
   try {
     // Create a new link
