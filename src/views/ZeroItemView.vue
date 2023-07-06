@@ -1,6 +1,6 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { statusPacienteEmergencia } from "../services/patient";
 import IframeViewer from "../components/IframeViewer.vue";
@@ -14,7 +14,7 @@ const exam_id = ref(props.id);
 const statusPaciente = ref(null);
 const name = ref("Zero FootPrint GE");
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
-
+const shareLink = computed(() => `https://medicos2.hospitalmetropolitano.org/compartir/zerofootprint-item/${exam_id.value}`);
 onMounted(() => {});
 
 const goBack = () => {
@@ -39,9 +39,40 @@ const goBack = () => {
     <div class="d-flex flex-column zeroview">
       <div class="d-flex justify-content-end header-zero">
         <!--columna de text-->
-        <div class=" col-12 col-md-6 cursor-pointer" @click="goBack()">
+        <div class="dropdown my-1">
+          <button class="share-button mx-2 py-2 px-3 text-white d-flex justify-content-center"
+                  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <font-awesome-icon :icon="['fass', 'share-nodes']" class="px-2 py-1" />
+            <span class="text-white">Compartir</span>
+            <!--        <span class="text-white d-none d-md-block">{{ user ? 'Dr. ' + user.name : 'MÉDICOS' }}</span>-->
+          </button>
+          <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
+            <li>
+              <a class="d-flex py-1 cursor-pointer item-list" title="Compartir por whatsapp"
+                 target="_blank"
+                 :href="`https://api.whatsapp.com/send?text=Te%20comparto%20mis%20resultados%20en%20el%20siguiente%20enlace:%20${shareLink}`">
+                <img class="icon icon--small mx-2 d-block"
+                     src="@/assets/whatsapp.png" width="30" height="30"
+                     alt="Whatsapp">
+                <p class="my-1">Whatsapp</p>
+              </a>
+            </li>
+            <li class="" >
+              <a class="d-flex py-1 cursor-pointer item-list" title="Compartir por email"
+                 target="_blank"
+                 :href="`mailto:an@email.com?subject=Resultado&body=Te%20comparto%20mis%20resultados%20en%20el%20siguiente%20enlace:%20${shareLink}`">
+                <img class="icon icon--small mx-2 d-block"
+                     src="@/assets/email.png" width="30" height="30"
+                     alt="email">
+                <p class="my-1">Email</p>
+              </a>
+
+            </li>
+          </ul>
+        </div>
+        <div class=" col-4 col-md-2 cursor-pointer" @click="goBack()">
           <div class="d-flex justify-content-end py-2">
-            <h5 class=" text-white mx-4" style=" font-size: 16px;">
+            <h5 class=" text-white mx-4 my-2" style=" font-size: 16px;">
               Cerrar
               <font-awesome-icon :icon="['fas', 'xmark']" />
             </h5>
@@ -67,12 +98,19 @@ const goBack = () => {
 .zeroview {
   height: 97vh;
 }
-
+.item-list{
+  text-decoration: none;
+  color: #0d2c65 !important;
+}
 .header-zero {
   background-color: #0d9cde;
   z-index: 99999999999;
   position: absolute;
   top: 0;
   width: 100%;
+}
+.share-button{
+  border: transparent;
+  background: transparent;
 }
 </style>
