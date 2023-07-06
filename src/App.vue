@@ -26,10 +26,17 @@ onMounted(async () => {
   <div class="d-flex flex-column">
     <div class="view-content">
       <notifications :pauseOnHover="true" :duration="5000" />
-      <main-header v-if="routeName !== 'medic-patient-zerofootprint-view' && routeName !== 'medic-patient-zerofootprint-item-view'"></main-header>
+      <main-header v-if="routeName !== 'share-medic-patient-zerofootprint-view'
+      && routeName !== 'medic-patient-zerofootprint-view'
+      && routeName !== 'medic-patient-zerofootprint-item-view'
+      && routeName !== 'share-medic-patient-zerofootprint-item-view'">
+      </main-header>
       <RouterView/>
     </div>
-    <div class="footer" v-if="routeName !== 'medic-patient-zerofootprint-view' && routeName !== 'medic-patient-zerofootprint-item-view'">
+    <div class="footer" v-if="routeName !== 'share-medic-patient-zerofootprint-view'
+    && routeName !== 'medic-patient-zerofootprint-view'
+    && routeName !== 'share-medic-patient-zerofootprint-item-view'
+    && routeName !== 'medic-patient-zerofootprint-item-view'">
       <div class="d-flex justify-content-center text-footer" >
         <p class="text-white p-3 text-copyright">Todos los derechos reservados. Hospital Metropolitano - 2023</p>
       </div>
