@@ -12,7 +12,9 @@ import ImageResultView from "../views/ImageResultView.vue";
 import ShareImageResultView from "../views/ShareImageResultView.vue";
 import CurvaView from "../views/CurvaView.vue";
 import ZeroView from "../views/ZeroView.vue";
+import ShareZeroView from "../views/ShareZeroView.vue";
 import ZeroItemView from "../views/ZeroItemView.vue";
+import ShareZeroItemView from "../views/ShareZeroItemView.vue";
 import BuzonDeSugerenciasView from "../views/BuzonDeSugerenciasView.vue";
 import MiPerfilMedicoView from "../views/MiPerfilMedicoView.vue";
 import DetallePacienteView from "../views/DetallePacienteView.vue";
@@ -99,6 +101,18 @@ const router = createRouter({
         roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
       }
     },
+    // share patient zerofootprint view / medic
+    {
+      path: "/compartir/zerofootprint/:nhc",
+      name: "share-medic-patient-zerofootprint-view",
+      component: ShareZeroView,
+      props: true,
+      meta: {
+        authRequired: false,
+        userType: "generic",
+        roles: []
+      }
+    },
     // patient zerofootprint view / medic
     {
       path: "/zerofootprint-item/:id",
@@ -109,6 +123,18 @@ const router = createRouter({
         authRequired: true,
         userType: "medic",
         roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
+      }
+    },
+    // share patient zerofootprint view / medic
+    {
+      path: "/compartir/zerofootprint-item/:id",
+      name: "share-medic-patient-zerofootprint-item-view",
+      component: ShareZeroItemView,
+      props: true,
+      meta: {
+        authRequired: false,
+        userType: "generic",
+        roles: []
       }
     },
     // patient graph view / medic
