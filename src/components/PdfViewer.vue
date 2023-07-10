@@ -39,6 +39,8 @@ const nextPage = () => {
 };
 
 const shareLink = computed(() => `https://medicos2.hospitalmetropolitano.org/compartir/${nhc.value}/${pageType.value}/${id.value}`);
+const subject = ref('');
+const stringVal = ref('');
 const downloadPdf = () => {
   try {
     // Create a new link
@@ -86,7 +88,22 @@ const printPdf = async () => {
     });
   }
 };
-
+onMounted(async () => {
+  switch (pageType.value) {
+    case 'laboratorio':
+      subject.value = 'MetroVirtual%20Resultado%20de%20laboratorio'
+      stringVal.value = 'resultado%20de%20laboratorio'
+      break;
+     case 'imagen':
+       subject.value = 'MetroVirtual%20Resultado%20de%20imagen'
+       stringVal.value = 'resultado%20de%20imagen'
+       break;
+      default:
+        subject.value = 'MetroVirtual%20Resultado'
+        stringVal.value = 'resultado'
+        break;
+  }
+});
 </script>
 
 <template>
@@ -100,7 +117,7 @@ const printPdf = async () => {
       <div class="row justify-content-end my-1 row-img">
         <div class="col-2 col-md-1 col-img">
           <a class="icon-img cursor-pointer" title="Compartir por whatsapp" target="_blank"
-             :href="`https://api.whatsapp.com/send?text=Te%20comparto%20mis%20resultados%20en%20el%20siguiente%20enlace:%20${shareLink}`">
+             :href="`https://api.whatsapp.com/send?text=Te%20comparto%20mi%20${stringVal}%20en%20el%20siguiente%20enlace:%20${shareLink}`">
             <div class="row img-borderv4">
               <img class="img-icon-colorv3" src="@/assets/whatsapp.png" alt=" icon">
               <img class="img-icon-colorv3" src="@/assets/whatsapp-blanco.png" alt=" icon"
@@ -111,7 +128,7 @@ const printPdf = async () => {
         <div class="col-2 col-md-1 col-img">
 
           <a class="icon-img cursor-pointer" title="Compartir por email" target="_blank"
-             :href="`mailto:an@email.com?subject=Resultado&body=Te%20comparto%20mis%20resultados%20en%20el%20siguiente%20enlace:%20${shareLink}`">
+             :href="`mailto:an@email.com?subject=${subject}&body=Te%20comparto%20mi%20${stringVal}%20en%20el%20siguiente%20enlace:%20${shareLink}`">
             <div class="row img-borderv4">
               <img class="img-icon-colorv3" src="@/assets/email.png" alt=" icon">
               <img class="img-icon-colorv3" src="@/assets/email-blanco.png" alt=" icon"
