@@ -60,7 +60,7 @@ const goBack = () => {
             <li class="" >
               <a class="d-flex py-1 cursor-pointer item-list" title="Compartir por email"
                  target="_blank"
-                 :href="`mailto:an@email.com?subject=MetroVirtual%20MetroVirtual%20Resultados%20de%20imagen%20de%20imagen&body=Te%20comparto%20mi%20resultado%20de%20imagen%20en%20el%20siguiente%20enlace:%20${shareLink}`">
+                 :href="`mailto:an@email.com?subject=MetroVirtual%20Resultado%20de%20imagen&body=Te%20comparto%20mi%20resultado%20de%20imagen%20en%20el%20siguiente%20enlace:%20${shareLink}`">
                 <img class="icon icon--small mx-2 d-block"
                      src="@/assets/email.png" width="30" height="30"
                      alt="email">
