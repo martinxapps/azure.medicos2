@@ -141,10 +141,10 @@ onMounted(() => {
                           :key="patientKey">
                   <div class=" m-1 p-2 row text-left border-result hover-list-element cursor-pointer"
                        @click="goToPatientResults(patient)"
-                       :title="`Ver resultados del paciente ${ patient?.NOMBRES} ${ patient?.APELLIDOS}`">
+                       :title="`Ver resultados del paciente ${ patient?.APELLIDOS} ${ patient?.NOMBRES}`">
                     <div class="col-9 my-3">
                       <p class="title-results ">
-                        <b>{{ patient?.NOMBRES }} {{ patient?.APELLIDOS }}</b>
+                        <b>{{ patient?.APELLIDOS }} {{ patient?.NOMBRES }}</b>
                       </p>
                       <p class="text-results">NHC: {{ patient?.PK_NHCL }}</p>
                     </div>
