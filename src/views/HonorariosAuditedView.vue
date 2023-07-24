@@ -200,24 +200,24 @@ onMounted(async () => {
                         <table class="table table-bordered table-striped table-hover">
                           <thead>
                           <tr>
-                            <th scope="col">Cargo</th>
-                            <th scope="col">Fecha</th>
+<!--                            <th scope="col">Cargo</th>-->
+<!--                            <th scope="col">Fecha</th>-->
                             <th scope="col">CPT</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Cantidad</th>
-                            <th scope="col">Valor Descuento</th>
+<!--                            <th scope="col">Valor Descuento</th>-->
                             <th scope="col">Porcentaje cálculo</th>
-                            <th scope="col">Valor Honorario</th>
+                            <th scope="col">Valor Neto</th>
                           </tr>
                           </thead>
                           <tbody>
                           <tr v-for="(detail, detailKey) in details" :key="detailKey">
-                            <th scope="row">{{detail.CARGO}}</th>
-                            <td>{{detail.FECHA}}</td>
+<!--                            <th scope="row">{{detail.CARGO}}</th>-->
+<!--                            <td>{{detail.FECHA}}</td>-->
                             <td>{{detail.CPT}}</td>
                             <td>{{detail.DESCRIPCION}}</td>
                             <td>{{detail.CANTIDAD}}</td>
-                            <td>{{detail.VALOR_DESCUENTO}}</td>
+<!--                            <td>{{detail.VALOR_DESCUENTO}}</td>-->
                             <td>{{detail.PORCENTAJE_CALCULO}} %</td>
                             <td>$ {{detail.VALOR_HONORARIO}}</td>
                           </tr>
