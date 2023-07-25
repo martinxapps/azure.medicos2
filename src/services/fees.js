@@ -39,8 +39,8 @@ export function misHonorariosAuditados(payload) {
     if(payload.searchField){
         url += `&searchField=${payload.searchField}`
     }
-    if(payload.status){
-        url += `&status=${payload.status}`
+    if(payload.searchFilter){
+        url += `&searchFilter=${payload.searchFilter}`
     }
     const patients = mande(url);
     return patients.post(payload);
