@@ -31,6 +31,7 @@ const statuses = ref([
   'Pendiente de Gestión HM',
   'Pendiente de Factura de Médico',
   'Facturado por Médico',
+  'Factura de Médico Recibida',
 ]);
 let isLoading = ref(false);
 const router = useRouter();
