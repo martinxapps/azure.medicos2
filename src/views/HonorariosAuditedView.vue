@@ -400,7 +400,7 @@ onMounted(async () => {
                       </b>
                     </p>
                     <p class="text-results"><b>Fecha de Admisión:</b> {{ auditedFee?.FECHA }}</p>
-                    <p class="text-results"><b>Fecha de Alta:</b> {{ auditedFee?.FECHA_ALTA }}</p>
+                    <p class="text-results"><b>Fecha de Alta:</b> {{ auditedFee?.ALTA_CLIN }}</p>
                     <p class="text-results"><b>NHC:</b> {{ auditedFee?.HCL }} <b>ADM:</b> {{ auditedFee?.ADM }}</p>
                     <p class="text-results"><b>Paciente:</b> {{ auditedFee?.NOMBRES }}</p>
                     <p class="text-results"><b>Plan:</b> {{ auditedFee?.DCTO }}</p>
