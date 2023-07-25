@@ -27,7 +27,9 @@ export function misTransaccionesPorFecha(filter, start, length, dateStart, dateE
 }
 
 export function misHonorariosAuditados(payload) {
-    let url = `${baseURLV2}/medicos/honorarios/auditados?typeFilter=${payload.filter}&start=${payload.start}&length=${payload.length}`;
+    console.log('pauload', payload);
+    let url = `${baseURLV2}/medicos/honorarios/auditados?typeFilter=${payload.typeFilter}&start=${payload.start}&length=${payload.length}`;
+    console.log('url', url);
     if(payload.startDate){
         url += `&fechaDesde=${payload.startDate}`
     }

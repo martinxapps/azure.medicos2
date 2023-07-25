@@ -44,7 +44,7 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
                  width="100%" height="auto ">
           </div>
           <div class="row mt-4">
-            <h5 style=" color: #44bdf0; font-size: 18px; font-weight: 500;">Bienvenido/a</h5><br>
+            <h5 style=" color: #44bdf0; font-size: 22px; font-weight: 500;">Bienvenido/a</h5><br>
           </div>
         </div>
         <div class=" col-12 col-md-12">
@@ -56,7 +56,7 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
         <div class=" col-12 col-md-12">
           <div class="row mb-5">
             <!--                        <p class="black-colorv2" v-if="type === 'patient'">¿En que podemos ayudarte hoy?</p>-->
-            <p class="black-colorv2">!Hoy será un gran día!</p>
+            <p class="black-colorv2" style="font-size: 18px;">!Hoy será un gran día!</p>
           </div>
         </div>
       </div>

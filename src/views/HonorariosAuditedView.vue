@@ -39,7 +39,7 @@ const router = useRouter();
 const search = async () => {
   isLoading.value = true;
   let payload = {
-    filter: search_type.value,
+    typeFilter: search_type.value,
     start: start.value,
     length: length.value
   };
@@ -48,12 +48,14 @@ const search = async () => {
   }
   if (startDate.value) {
     payload.startDate = startDate.value;
+    payload.typeFilter = 2;
   }
   if (endDate.value) {
     payload.endDate = endDate.value;
+    payload.typeFilter = 2;
   }
   if (status.value) {
-    payload.status = status.value;
+    payload.searchFilter = status.value;
   }
   console.log("payload", payload);
   await myAuditedFeesStore.getAuditedFees(payload);
@@ -274,24 +276,25 @@ onMounted(async () => {
                         <table class="table table-bordered table-striped table-hover">
                           <thead>
                           <tr>
-                            <th scope="col">Cargo</th>
-                            <th scope="col">Fecha</th>
+<!--                            <th scope="col">Cargo</th>-->
+<!--                            <th scope="col">Fecha</th>-->
                             <th scope="col">CPT</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Cantidad</th>
-                            <th scope="col">Valor Descuento</th>
+<!--                            <th scope="col">Valor Descuento</th>-->
                             <th scope="col">Porcentaje Cálculo</th>
-                            <th scope="col">Valor Honorario</th>
+                            <th scope="col">Valor Neto</th>
                           </tr>
                           </thead>
                           <tbody>
-                          <tr v-for="(attention, attentionKey) in attentions" :key="attentionKey">
-                            <th scope="row">{{ attention.CARGO }}</th>
-                            <td>{{ attention.FECHA }}</td>
+                          <tr v-for="(attention, attentionKey) in attentions" :key="attentionKey"
+                              v-bind:class="{ 'accent' : detail.DESCRIPCION === 'DEVOLUCIÓN'}">
+<!--                            <th scope="row">{{ attention.CARGO }}</th>-->
+<!--                            <td>{{ attention.FECHA }}</td>-->
                             <td>{{ attention.CPT }}</td>
                             <td>{{ attention.DESCRIPCION }}</td>
                             <td>{{ attention.CANTIDAD }}</td>
-                            <td>{{ attention.VALOR_DESCUENTO }}</td>
+<!--                            <td>{{ attention.VALOR_DESCUENTO }}</td>-->
                             <td>{{ attention.PORCENTAJE_CALCULO }} %</td>
                             <td>$ {{ attention.VALOR_HONORARIO }}</td>
                           </tr>
@@ -397,6 +400,7 @@ onMounted(async () => {
                       </b>
                     </p>
                     <p class="text-results"><b>Fecha de Admisión:</b> {{ auditedFee?.FECHA }}</p>
+                    <p class="text-results"><b>Fecha de Alta:</b> {{ auditedFee?.FECHA_ALTA }}</p>
                     <p class="text-results"><b>NHC:</b> {{ auditedFee?.HCL }} <b>ADM:</b> {{ auditedFee?.ADM }}</p>
                     <p class="text-results"><b>Paciente:</b> {{ auditedFee?.NOMBRES }}</p>
                     <p class="text-results"><b>Plan:</b> {{ auditedFee?.DCTO }}</p>

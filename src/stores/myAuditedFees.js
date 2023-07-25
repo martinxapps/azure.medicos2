@@ -11,7 +11,7 @@ useMyAuditedFeesStore = defineStore({
         async getAuditedFees(payload) {
             //get data from backend
             try {
-                this.search_type = payload.filter;
+                this.search_type = payload.typeFilter;
                 this.start = payload.start;
                 this.length = payload.length;
                 const response = await misHonorariosAuditados(payload );
@@ -45,7 +45,7 @@ useMyAuditedFeesStore = defineStore({
     },
     state: () => ({
         audited_fees: [],
-        search_type: 3,
+        search_type: 1,
         start: 0,
         length: 1000,
     }),
