@@ -121,14 +121,14 @@ const closeModal = () => {
 };
 const getWord = (key) => {
   switch (key) {
-    case null:
-      return "Pendiente de Gestión HM";
-    case "N":
-      return "Pendiente de Gestión HM";
-    case "S":
-      return "Pendiente de Factura de Médico";
+    case "X":
+      return "Paciente sin alta clínica";
+    case "A":
+      return "Paciente con alta clínica y en proceso de auditoría del honorario";
+    case "P":
+      return "Solicitud de emisión de factura enviada pero aún no emitida por el médico";
     case "F":
-      return "Facturado por Médico";
+      return "Factura emitida por el médico y recibida por el hospital";
   }
 };
 onMounted(async () => {
@@ -231,7 +231,7 @@ onMounted(async () => {
                           </thead>
                           <tbody>
                           <tr v-for="(detail, detailKey) in details" :key="detailKey"
-                              v-bind:class="{ 'accent' : detail.DESCRIPCION === 'DEVOLUCIÓN'}">
+                              v-bind:class="{ 'accent' : detail?.DESCRIPCION === 'DEVOLUCIÓN'}">
                             <!--<th scope="row">{{detail.CARGO}}</th>-->
                             <!--<td>{{detail.FECHA}}</td>-->
                             <td>{{ detail.CPT }}</td>
@@ -288,7 +288,7 @@ onMounted(async () => {
                           </thead>
                           <tbody>
                           <tr v-for="(attention, attentionKey) in attentions" :key="attentionKey"
-                              v-bind:class="{ 'accent' : detail.DESCRIPCION === 'DEVOLUCIÓN'}">
+                              v-bind:class="{ 'accent' : attention?.DESCRIPCION === 'DEVOLUCIÓN'}">
 <!--                            <th scope="row">{{ attention.CARGO }}</th>-->
                             <td>{{ attention.FECHA }}</td>
                             <td>{{ attention.CPT }}</td>
@@ -404,8 +404,7 @@ onMounted(async () => {
                     <p class="text-results"><b>NHC:</b> {{ auditedFee?.HCL }} <b>ADM:</b> {{ auditedFee?.ADM }}</p>
                     <p class="text-results"><b>Paciente:</b> {{ auditedFee?.NOMBRES }}</p>
                     <p class="text-results"><b>Plan:</b> {{ auditedFee?.DCTO }}</p>
-                    <p class="text-results"><b>Factura:</b> {{ auditedFee?.SERIE}} {{ auditedFee?.NO_DOC }}</p>
-                    <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }}</p>
+                    <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }} <b>Factura:</b> {{ auditedFee?.SERIE}} {{ auditedFee?.NO_DOC }}</p>
                     <p class="text-results"><b>Origen de la Atención:</b> {{ auditedFee?.ORIGEN }}</p>
                   </div>
                   <!--                  <div class="col-3 d-flex justify-content-center">-->
