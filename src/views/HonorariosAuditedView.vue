@@ -12,10 +12,12 @@ const user = computed(() => authStore.user);
 const myAuditedFeesStore = useMyAuditedFeesStore();
 const audited_fees = computed(() => myAuditedFeesStore.audited_fees);
 const search_type = computed(() => myAuditedFeesStore.search_type);
+const start = computed(() => myAuditedFeesStore.start);
+const length = computed(() => myAuditedFeesStore.length);
 const searchTerm = ref("");
 const startDate = ref(null);
 const endDate = ref(null);
-const searchType = ref(4);
+const status = ref(null);
 const showDetailModal = ref(false);
 const activeTab = ref(0);
 const isLoadingDetail = ref(false);
@@ -25,15 +27,35 @@ const isLoadingAttention = ref(false);
 const attentions = ref([]);
 const successAttention = ref(false);
 const selectedItem = ref(null);
+const statuses = ref([
+  'Pendiente de Gestión HM',
+  'Pendiente de Factura de Médico',
+  'Facturado por Médico',
+]);
 let isLoading = ref(false);
 const router = useRouter();
 
 const search = async () => {
   isLoading.value = true;
   let payload = {
-    searchField: searchTerm.value
+    filter: search_type.value,
+    start: start.value,
+    length: length.value
   };
-  await myAuditedFeesStore.searchAuditedFeesByDate(3, 0, 1000, startDate.value, endDate.value, payload);
+  if (searchTerm.value) {
+    payload.searchField = searchTerm.value;
+  }
+  if (startDate.value) {
+    payload.startDate = startDate.value;
+  }
+  if (endDate.value) {
+    payload.endDate = endDate.value;
+  }
+  if (status.value) {
+    payload.status = status.value;
+  }
+  console.log("payload", payload);
+  await myAuditedFeesStore.getAuditedFees(payload);
   isLoading.value = false;
 };
 
@@ -66,7 +88,7 @@ const getDetail = async (item) => {
   successDetail.value = response.status;
   details.value = response.data;
   isLoadingDetail.value = false;
-}
+};
 
 const getAttention = async (item) => {
   // get the detail
@@ -83,7 +105,7 @@ const getAttention = async (item) => {
   successAttention.value = response.status;
   attentions.value = response.data;
   isLoadingAttention.value = false;
-}
+};
 
 const closeModal = () => {
   showDetailModal.value = false;
@@ -97,23 +119,17 @@ const closeModal = () => {
 const getWord = (key) => {
   switch (key) {
     case null:
-      return 'Pendiente de Gestión HM';
-    case 'N':
-      return 'Pendiente de Gestión HM';
-    case 'S':
-      return 'Pendiente de Factura de Médico';
-    case 'F':
-      return 'Facturado por Médico';
+      return "Pendiente de Gestión HM";
+    case "N":
+      return "Pendiente de Gestión HM";
+    case "S":
+      return "Pendiente de Factura de Médico";
+    case "F":
+      return "Facturado por Médico";
   }
-}
+};
 onMounted(async () => {
-  searchType.value = search_type.value;
-  isLoading.value = true;
-  let payload = {
-    searchField: searchTerm.value
-  };
-  await myAuditedFeesStore.searchAuditedFees(searchType.value, 0, 1000, payload);
-  isLoading.value = false;
+  await search();
 });
 
 </script>
@@ -200,26 +216,27 @@ onMounted(async () => {
                         <table class="table table-bordered table-striped table-hover">
                           <thead>
                           <tr>
-<!--                            <th scope="col">Cargo</th>-->
-<!--                            <th scope="col">Fecha</th>-->
+                            <!--<th scope="col">Cargo</th>-->
+                            <!--<th scope="col">Fecha</th>-->
                             <th scope="col">CPT</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Cantidad</th>
-<!--                            <th scope="col">Valor Descuento</th>-->
+                            <!--<th scope="col">Valor Descuento</th>-->
                             <th scope="col">Porcentaje cálculo</th>
                             <th scope="col">Valor Neto</th>
                           </tr>
                           </thead>
                           <tbody>
-                          <tr v-for="(detail, detailKey) in details" :key="detailKey">
-<!--                            <th scope="row">{{detail.CARGO}}</th>-->
-<!--                            <td>{{detail.FECHA}}</td>-->
-                            <td>{{detail.CPT}}</td>
-                            <td>{{detail.DESCRIPCION}}</td>
-                            <td>{{detail.CANTIDAD}}</td>
-<!--                            <td>{{detail.VALOR_DESCUENTO}}</td>-->
-                            <td>{{detail.PORCENTAJE_CALCULO}} %</td>
-                            <td>$ {{detail.VALOR_HONORARIO}}</td>
+                          <tr v-for="(detail, detailKey) in details" :key="detailKey"
+                              v-bind:class="{ 'accent' : detail.DESCRIPCION === 'DEVOLUCIÓN'}">
+                            <!--<th scope="row">{{detail.CARGO}}</th>-->
+                            <!--<td>{{detail.FECHA}}</td>-->
+                            <td>{{ detail.CPT }}</td>
+                            <td>{{ detail.DESCRIPCION }}</td>
+                            <td>{{ detail.CANTIDAD }}</td>
+                            <!--<td>{{detail.VALOR_DESCUENTO}}</td>-->
+                            <td>{{ detail.PORCENTAJE_CALCULO }} %</td>
+                            <td>$ {{ detail.VALOR_HONORARIO }}</td>
                           </tr>
                           </tbody>
                         </table>
@@ -268,14 +285,14 @@ onMounted(async () => {
                           </thead>
                           <tbody>
                           <tr v-for="(attention, attentionKey) in attentions" :key="attentionKey">
-                            <th scope="row">{{attention.CARGO}}</th>
-                            <td>{{attention.FECHA}}</td>
-                            <td>{{attention.CPT}}</td>
-                            <td>{{attention.DESCRIPCION}}</td>
-                            <td>{{attention.CANTIDAD}}</td>
-                            <td>{{attention.VALOR_DESCUENTO}}</td>
-                            <td>{{attention.PORCENTAJE_CALCULO}} %</td>
-                            <td>$ {{attention.VALOR_HONORARIO}}</td>
+                            <th scope="row">{{ attention.CARGO }}</th>
+                            <td>{{ attention.FECHA }}</td>
+                            <td>{{ attention.CPT }}</td>
+                            <td>{{ attention.DESCRIPCION }}</td>
+                            <td>{{ attention.CANTIDAD }}</td>
+                            <td>{{ attention.VALOR_DESCUENTO }}</td>
+                            <td>{{ attention.PORCENTAJE_CALCULO }} %</td>
+                            <td>$ {{ attention.VALOR_HONORARIO }}</td>
                           </tr>
                           </tbody>
                         </table>
@@ -307,20 +324,11 @@ onMounted(async () => {
           <div class="my-2 col-12">
             <div class=" d-flex flex-column flex-md-row justify-content-center">
               <div class="col-12 col-md-9 mt-3">
-                <div class="row">
-                  <div class="col-12 col-md-6">
-                    <label class="text-label mb-1" style="margin-top: -30px; display: block;">Desde:</label>
-                    <input type="date" v-model="startDate" style="border-radius: 50px;"
-                           class="special special-mobile form-control"
-                           required>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <label class="text-label mb-1" style="margin-top: -30px; display: block;">Hasta:</label>
-                    <input type="date" v-model="endDate"
-                           class="special special-mobile form-control"
-                           required>
-                  </div>
-                </div>
+                <input type="text" v-model="searchTerm"
+                       class=" special form-control"
+                       required
+                       placeholder="Busca honorarios auditados"
+                       @keyup.enter="search()">
               </div>
               <div class="col-12 col-md-3 mt-3">
                 <button class="text-center cursor-pointer pt-2 btn-loginv2 btn-loginv2mobile"
@@ -329,6 +337,39 @@ onMounted(async () => {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="row justify-content-end my-2 mt-5">
+          <div class="col-12 col-md-1">
+            <p class="title-results"><b>Filtros:</b></p>
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="text-label " style="margin-top: -30px; display: block;">Estado:</label>
+            <select  class="mt-1 form-control p-2"  v-model="status">
+              <option :value="null">Seleccione estado</option>
+              <option :value="st" v-for="(st, stkey) in statuses" v-bind:key="stkey">{{st}}</option>
+            </select>
+
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="text-label " style="margin-top: -30px; display: block;">Desde:</label>
+            <input type="date" v-model="startDate"
+                   class="mt-1 form-control p-2"
+                   @keyup.enter="search()"
+                   required>
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="text-label " style="margin-top: -30px; display: block;">Hasta:</label>
+            <input type="date" v-model="endDate"
+                   class="mt-1 form-control p-2"
+                   @keyup.enter="search()"
+                   required>
+          </div>
+          <div class="col-12 col-md-2">
+            <button class="text-center cursor-pointer pt-2 btn-loginv3"
+                    @click="search()">
+              Filtrar
+            </button>
           </div>
         </div>
         <div class="row my-2 pb-5 pt-2">
@@ -349,7 +390,9 @@ onMounted(async () => {
                   <div class="col-9 my-3">
                     <p class="title-results ">
                       <b>N° de Prefactura: {{ auditedFee?.PREFACTURA }}
-                        <span class="p-2 mx-2 pill" :class="{'gray':auditedFee.AUDITADO === 'S', 'orange':auditedFee.AUDITADO === null || auditedFee.AUDITADO === 'N', 'green':auditedFee.AUDITADO === 'F'}">{{ getWord(auditedFee.AUDITADO) }}</span>
+                        <span class="p-2 mx-2 pill"
+                              :class="{'gray':auditedFee.AUDITADO === 'S', 'orange':auditedFee.AUDITADO === null || auditedFee.AUDITADO === 'N', 'green':auditedFee.AUDITADO === 'F'}">{{ getWord(auditedFee.AUDITADO)
+                          }}</span>
                       </b>
                     </p>
                     <p class="text-results"><b>Fecha de Admisión:</b> {{ auditedFee?.FECHA }}</p>
@@ -359,12 +402,12 @@ onMounted(async () => {
                     <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }}</p>
                     <p class="text-results"><b>Origen de la Atención:</b> {{ auditedFee?.ORIGEN }}</p>
                   </div>
-<!--                  <div class="col-3 d-flex justify-content-center">-->
-<!--                    <div class="p-0 p-md-4 py-md-6">-->
-<!--                      <font-awesome-icon :icon="['fas', 'eye']" size="2x"-->
-<!--                                         class="icon-device" />-->
-<!--                    </div>-->
-<!--                  </div>-->
+                  <!--                  <div class="col-3 d-flex justify-content-center">-->
+                  <!--                    <div class="p-0 p-md-4 py-md-6">-->
+                  <!--                      <font-awesome-icon :icon="['fas', 'eye']" size="2x"-->
+                  <!--                                         class="icon-device" />-->
+                  <!--                    </div>-->
+                  <!--                  </div>-->
                 </div>
               </template>
               <template v-else>
@@ -392,13 +435,29 @@ onMounted(async () => {
   font-weight: 500;
   color: white;
 }
-.orange{
+
+.orange {
   background-color: #ff8201;
 }
-.gray{
+
+.gray {
   background-color: #a39b9b;
 }
-.green{
+
+.green {
   background-color: #16c119;
+}
+.btn-loginv3 {
+  background: linear-gradient(90deg, rgba(11,114,216,1) 0%, rgba(42,157,255,1) 0%, rgba(11,114,216,1) 100%) !important;
+  width: 100%;
+  color: #fff;
+  padding: 9px 20px;
+  min-width: 100%;
+  text-align: center;
+  border-radius: 20px;
+  border: none;
+}
+.accent{
+  background-color: #ffda96;
 }
 </style>

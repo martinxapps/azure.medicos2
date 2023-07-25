@@ -26,15 +26,25 @@ export function misTransaccionesPorFecha(filter, start, length, dateStart, dateE
     return patients.post(payload);
 }
 
-export function misHonorariosAuditados(filter, start, length, payload) {
-    const patients = mande(`${baseURLV2}/medicos/honorarios/auditados?typeFilter=${filter}&start=${start}&length=${length}`);
+export function misHonorariosAuditados(payload) {
+    let url = `${baseURLV2}/medicos/honorarios/auditados?typeFilter=${payload.filter}&start=${payload.start}&length=${payload.length}`;
+    if(payload.startDate){
+        url += `&fechaDesde=${payload.startDate}`
+    }
+    if(payload.endDate){
+        url += `&fechaHasta=${payload.endDate}`
+    }
+    if(payload.searchField){
+        url += `&searchField=${payload.searchField}`
+    }
+    if(payload.status){
+        url += `&status=${payload.status}`
+    }
+    const patients = mande(url);
     return patients.post(payload);
 }
 
-export function misHonorariosAuditadosPorFecha(filter, start, length, dateStart, dateEnd, payload) {
-    const patients = mande(`${baseURLV2}/medicos/honorarios/auditados?typeFilter=${filter}&start=${start}&length=${length}&fechaDesde=${dateStart}&fechaHasta=${dateEnd}`);
-    return patients.post(payload);
-}
+
 
 export function misHonorariosAuditadosDetalle(payload) {
     const patients = mande(`${baseURLV2}/medicos/honorarios/detalle-auditados`);
