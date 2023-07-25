@@ -118,7 +118,7 @@ const getUrl = async (url) => {
                 </div>
                 <h4 class="d-flex text-headerv2 mt-2" style="text-align:left; color: #05305d;
                                     font-weight: 600;">
-                  Resultado de laboratorio <br>
+                  Resultado de Laboratorio <br>
                   {{ statusPaciente?.NOMBRE_PACIENTE }}
                 </h4>
               </div>

@@ -25,7 +25,7 @@ const goTo = async (name) => {
                alt=" icon">
           <br>
         </div>
-        <p class="d-block mt-3 text-icon-color">Mis pacientes
+        <p class="d-block mt-3 text-icon-color">Mis Pacientes
         </p>
       </div>
     </div>
@@ -40,13 +40,14 @@ const goTo = async (name) => {
           <br>
         </div>
         <p class="d-block mt-3 text-icon-color">Resultados de <br>
-          imagen & <br>
-          laboratorio
+          Imagen & <br>
+          Laboratorio
         </p>
       </div>
     </div>
     <div class=" col-6 col-md-3 d-block pb-5 " v-if="authStore.hasRole('PERFIL_MEDICO_BDOCU')">
-      <a class="icon-img" href="https://appdocumentosdirmed.azurewebsites.net/DM/Inicio"
+      <a class="icon-img" style="text-decoration: none"
+         href="https://appdocumentosdirmed.azurewebsites.net/DM/Inicio"
          target="_blank">
         <div class="row d-block img-border">
           <img class="img-icon-color" src="@/assets/biblioteca-blancov2.png" alt=" icon">
@@ -66,7 +67,7 @@ const goTo = async (name) => {
                alt=" icon">
           <br>
         </div>
-        <p class="d-block mt-3 text-icon-color">Mis honorarios
+        <p class="d-block mt-3 text-icon-color">Mis Honorarios
         </p>
       </div>
     </div>

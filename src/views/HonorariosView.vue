@@ -104,7 +104,7 @@ onMounted(async () => {
                 <img class="img-icon-color" style="margin-top: -105px" src="@/assets/estados.png" alt=" icon">
                 <br>
               </div>
-              <p class="d-block text-icon-color mt-3">Estados de cuenta
+              <p class="d-block text-icon-color mt-3">Estados de Cuenta
               </p>
             </div>
           </div>
@@ -115,7 +115,7 @@ onMounted(async () => {
                 <img class="img-icon-color" src="@/assets/audited.png" alt=" icon" style="margin-top: -105px">
                 <br>
               </div>
-              <p class="d-block text-icon-color mt-3">Honorarios auditados
+              <p class="d-block text-icon-color mt-3">Honorarios Auditados
               </p>
             </div>
           </div>

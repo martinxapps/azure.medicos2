@@ -63,81 +63,6 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
     </div>
 
     <div class="container m-auto d-block">
-      <!--            <template v-if="type === 'patient'">-->
-      <!--                <div class="row mb-4 mt-md-5 mt-0 mb-md-2 justify-content-center">-->
-      <!--                    &lt;!&ndash;columna de iconos&ndash;&gt;-->
-      <!--                    <div class=" col-6 col-md-3 d-block pb-5 ">-->
-      <!--                        <div class="icon-img cursor-pointer" @click="goTo('agendar-cita')">-->
-      <!--                            <div class="row d-block img-border">-->
-      <!--                                <span class="color-active"><i class="fa fa-circle" aria-hidden="true"></i></span>-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/agendar-blanco.png'" alt=" icon">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/agendar.png'" alt=" icon">-->
-      <!--                                <br>-->
-      <!--                            </div>-->
-      <!--                            <p class="d-block text-icon-color mt-3">-->
-      <!--                                Agendar cita-->
-      <!--                            </p>-->
-      <!--                        </div>-->
-      <!--                    </div>-->
-      <!--                    <div class=" col-6 col-md-3 d-block pb-5 ">-->
-      <!--                        <div class="icon-img cursor-pointer" @click="goTo('ruta-del-paciente')">-->
-      <!--                            <div class="row d-block img-border">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/ruta-del-paciente-blanco.png'"-->
-      <!--                                     alt=" icon">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/ruta-del-paciente.png'"-->
-      <!--                                     alt=" icon">-->
-      <!--                                <br>-->
-      <!--                            </div>-->
-      <!--                            <p class="dd-block text-icon-color mt-3">-->
-      <!--                                Ruta del paciente-->
-      <!--                            </p>-->
-      <!--                        </div>-->
-      <!--                    </div>-->
-      <!--                    <div class=" col-6 col-md-3 d-block pb-5 ">-->
-      <!--                        <div class="icon-img cursor-pointer" @click="goTo('resultados-imagen-y-laboratorio')">-->
-      <!--                            <div class="row d-block img-border">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/resultados-blancos.png'"-->
-      <!--                                     alt=" icon">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/resultados.png'" alt=" icon">-->
-      <!--                                <br>-->
-      <!--                            </div>-->
-      <!--                            <p class="d-block mt-3 text-icon-color">-->
-      <!--                                Resultados de <br>-->
-      <!--                                imagen & <br>-->
-      <!--                                laboratorio-->
-      <!--                            </p>-->
-
-      <!--                        </div>-->
-      <!--                    </div>-->
-      <!--                    <div class=" col-6 col-md-3 d-block pb-5">-->
-      <!--                        <div class="icon-img cursor-pointer" @click="goTo('mis-facturas')">-->
-      <!--                            <div class="row d-block img-border">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/facturas-blanco.png'" alt=" icon">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/facturas.png'" alt=" icon">-->
-      <!--                                <br>-->
-      <!--                            </div>-->
-      <!--                            <p class="d-block mt-3 text-icon-color">Mis facturas-->
-      <!--                            </p>-->
-      <!--                        </div>-->
-      <!--                    </div>-->
-
-      <!--                </div>-->
-      <!--                <div class="row mb-4 mb-md-2">-->
-      <!--                    &lt;!&ndash;columna de iconos&ndash;&gt;-->
-      <!--                    <div class=" col-6 col-md-3 d-block pb-5">-->
-      <!--                        <div class="icon-img cursor-pointer" @click="goTo('buzon-de-sugerencias')">-->
-      <!--                            <div class="row d-block img-border">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/buzon-blanco.png'" alt=" icon">-->
-      <!--                                <img class="img-icon-color" :src="'@/assets/buzon.png'" alt=" icon">-->
-      <!--                                <br>-->
-      <!--                            </div>-->
-      <!--                            <p class="d-block mt-3 text-icon-color">Buzón<br>-->
-      <!--                                de sugerencias-->
-      <!--                            </p>-->
-      <!--                        </div>-->
-      <!--                    </div>-->
-      <!--                </div>-->
-      <!--            </template>-->
       <div class="row my-1 my-md-5 justify-content-center">
         <!--columna de iconos-->
         <div class=" col-6 col-md-3 d-block pb-5 "
@@ -149,7 +74,7 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
               <img class="img-icon-color" src="@/assets/mis-pacientes.png" style="margin-top: -105px" alt=" icon">
               <br>
             </div>
-            <p class="d-block text-icon-color mt-3">Mis pacientes
+            <p class="d-block text-icon-color mt-3">Mis Pacientes
             </p>
           </div>
         </div>
@@ -162,8 +87,8 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
               <br>
             </div>
             <p class="d-block mt-3 text-icon-color">Resultados de <br>
-              imagen & <br>
-              laboratorio
+              Imagen & <br>
+              Laboratorio
             </p>
           </div>
         </div>
@@ -189,7 +114,7 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
               <img class="img-icon-color" src="@/assets/honorarios.png" style="margin-top: -105px" alt=" icon">
               <br>
             </div>
-            <p class="d-block mt-3 text-icon-color">Mis honorarios
+            <p class="d-block mt-3 text-icon-color">Mis Honorarios
             </p>
           </div>
         </div>
@@ -200,7 +125,7 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
           <div class="row mt-2 mt-md-5 justify-content-center">
             <a href="https://www.hospitalmetropolitano.org/es/terminos-condiciones-y-uso-de-medios" target="_blank">
               <h5 class="title-terminos">
-                Términos y condiciones
+                Términos y Condiciones
               </h5>
             </a>
           </div>
@@ -209,7 +134,7 @@ const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "1234
           <div class="row mt-2 mt-md-5 justify-content-center">
             <a href="https://www.hospitalmetropolitano.org/es/politicas-de-privacidad" target="_blank">
               <h5 class="title-terminos">
-                Políticas de privacidad
+                Políticas de Privacidad
               </h5>
             </a>
           </div>

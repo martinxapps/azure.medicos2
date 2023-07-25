@@ -87,7 +87,7 @@ onMounted(async () => {
                             color: #05305d;
                             text-align:left;
                             font-weight: 600;">
-                  Mis pacientes
+                  Mis Pacientes
                 </h4>
               </div>
             </div>

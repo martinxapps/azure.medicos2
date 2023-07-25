@@ -301,7 +301,7 @@ onMounted(async () => {
                 <br>
                 <h4 class="d-flex text-headerv2 mt-1"
                     style="text-align:left; color: #05305d; font-weight: 600;">
-                  Resultados de imagen y laboratorio<br>
+                  Resultados de Imagen y Laboratorio<br>
                   {{ patient?.NOMBRES }} {{ patient?.APELLIDOS }}
                 </h4>
               </div>
@@ -384,7 +384,7 @@ onMounted(async () => {
                               <div class="flex cursor-pointer" @click="labResult.isOpen = !labResult.isOpen">
                                 <font-awesome-icon class="px-1"
                                                    :icon="['fas', 'list' ]" />
-                                Exámenes solicitados
+                                Exámenes Solicitados
                                 <font-awesome-icon class="px-2"
                                                    :icon="['fas', labResult.isOpen ?  'chevron-up':'chevron-down' ]" />
                               </div>
@@ -515,7 +515,7 @@ onMounted(async () => {
                         <template v-else>
                           <div @click.exact="goToZeroCtrl()" @click.ctrl="goToZeroCtrl()"
                                class=" my-1 p-4 row text-left border-result hover-list-element cursor-pointer">
-                            <p class="title-results m-4"><b>Ver exámenes (Zero FootPrint GE)</b>
+                            <p class="title-results m-4"><b>Ver Exámenes (Zero FootPrint GE)</b>
                             </p>
                           </div>
                           <div @click="seeImages = true;"

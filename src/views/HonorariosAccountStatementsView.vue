@@ -47,7 +47,7 @@ onMounted(async () => {
                 <br>
                 <h4 class="d-flex text-headerv2 mt-3"
                     style="text-align:left; color: #05305d; font-weight: 600;">
-                  Estados de cuenta
+                  Estados de Cuenta
                 </h4>
               </div>
             </div>

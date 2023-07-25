@@ -574,7 +574,7 @@ onMounted(async () => {
                             color: #05305d;
                             text-align:left;
                             font-weight: 600;">
-                  Detalle del paciente
+                  Detalle del Paciente
                 </h4>
               </div>
             </div>
@@ -657,7 +657,7 @@ onMounted(async () => {
                         @click="myPatientsStore.activeTabPaciente = 1"
                         data-target="#evolutions" type="button"
                         role="tab" aria-controls="evolutions" aria-selected="false">
-                  Evoluciones y prescripciones
+                  Evoluciones y Prescripciones
                 </button>
               </li>
               <li class="nav-item tab-hm" role="presentation">
@@ -819,12 +819,12 @@ onMounted(async () => {
                                         }}
                                       </p>
                                       <p class="title-results title-colapse">
-                                        <b>Número historia clínica: </b>{{
+                                        <b>Número Historia Clínica: </b>{{
                                           statusPaciente?.HC
                                         }}
                                       </p>
                                       <p class="title-results title-colapse">
-                                        <b>Número de atención: </b>{{
+                                        <b>Número de Atención: </b>{{
                                           evPaciente[0]?.ADM
                                         }}
                                       </p>
@@ -1029,7 +1029,7 @@ onMounted(async () => {
                         <template v-else>
                           <div @click.exact="goToZeroCtrl()" @click.ctrl="goToZeroCtrl()"
                                class=" my-1 p-4 row text-left border-result hover-list-element cursor-pointer">
-                            <p class="title-results m-4"><b>Ver exámenes (Zero FootPrint GE)</b>
+                            <p class="title-results m-4"><b>Ver Exámenes (Zero FootPrint GE)</b>
                             </p>
                           </div>
                           <div @click="seeImages = true;"

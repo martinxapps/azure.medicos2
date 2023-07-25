@@ -161,7 +161,7 @@ onMounted(async () => {
                 <br>
                 <h4 class="d-flex text-headerv2 mt-3"
                     style="text-align:left; color: #05305d; font-weight: 600;">
-                  Honorarios auditados
+                  Honorarios Auditados
                 </h4>
               </div>
             </div>
@@ -223,7 +223,7 @@ onMounted(async () => {
                             <th scope="col">Descripción</th>
                             <th scope="col">Cantidad</th>
                             <!--<th scope="col">Valor Descuento</th>-->
-                            <th scope="col">Porcentaje cálculo</th>
+                            <th scope="col">Porcentaje Cálculo</th>
                             <th scope="col">Valor Neto</th>
                           </tr>
                           </thead>
@@ -280,7 +280,7 @@ onMounted(async () => {
                             <th scope="col">Descripción</th>
                             <th scope="col">Cantidad</th>
                             <th scope="col">Valor Descuento</th>
-                            <th scope="col">Porcentaje cálculo</th>
+                            <th scope="col">Porcentaje Cálculo</th>
                             <th scope="col">Valor Honorario</th>
                           </tr>
                           </thead>

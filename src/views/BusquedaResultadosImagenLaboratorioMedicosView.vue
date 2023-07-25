@@ -37,8 +37,6 @@ const goToPatientResults = async (patient) => {
   console.log("patient", patient);
   await router.push({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: patient.PK_NHCL } });
 };
-const scrollToTop = () => {
-};
 onMounted(() => {
   searchType.value = search_type.value;
 });
@@ -67,13 +65,14 @@ onMounted(() => {
             <div class="d-block py-1">
               <div class="d-flex justify-content-end">
                 <div class="img-div">
-                  <img class="img-header-icon ml-3" src="@/assets/resultados.png" alt=" icon">
+                  <img class="img-header-icon ml-3 mt-2" src="@/assets/resultados.png" alt=" icon">
                 </div>
                 <br>
                 <h4 class="d-flex text-headerv2 mt-1"
                     style="text-align:left; color: #05305d; font-weight: 600;">
-                  Resultados de imagen <br>
-                  y laboratorio
+                  Búsqueda de <br>
+                  Resultados de Imagen <br>
+                  y Laboratorio
                 </h4>
               </div>
             </div>
@@ -160,9 +159,9 @@ onMounted(() => {
               </template>
               <template v-else>
                 <div class=" my-1 p-3  text-center">
-                  <h3 class="center text-search">
-                    No hay pacientes
-                  </h3>
+                  <h4 class="center text-search">
+                    No se encontraron pacientes
+                  </h4>
                 </div>
               </template>
             </template>
