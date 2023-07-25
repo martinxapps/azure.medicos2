@@ -53,7 +53,7 @@ onMounted(() => {
            alt="perfil">
       <span
         class="">{{
-          language === "es" ? "Mi perfil" : "My profile"
+          language === "es" ? "Mi Perfil" : "My Profile"
         }}</span>
     </div>
     <template v-if="user">
@@ -64,7 +64,7 @@ onMounted(() => {
              src="@/assets/icon-menu-pacientes.png"
              width="30" height="32" alt="Phone">
         <span class="inside-item p-2 mx-2">{{
-            language === "es" ? "Mis pacientes" : "My patients"
+            language === "es" ? "Mis Pacientes" : "My Patients"
           }}</span>
       </div>
       <div @click="goTo('resultados-imagen-y-laboratorio-medicos')"
@@ -74,7 +74,7 @@ onMounted(() => {
              src="@/assets/icon-menu-rersultados.png"
              width="22" height="25" alt="Phone">
         <span class="inside-item p-2 mx-2">{{
-            language === "es" ? "Resultados de imagen y laboratorio" : "Image and lab results"
+            language === "es" ? "Resultados de Imagen y Laboratorio" : "Image and Lab Results"
           }}</span>
       </div>
       <a v-if="authStore.hasRole('PERFIL_MEDICO_BDOCU')"
@@ -85,7 +85,7 @@ onMounted(() => {
              src="@/assets/icon-menu-biblioteca.png"
              width="22" height="25" alt="Phone">
         <span class="inside-item p-2 mx-2 text-white">{{
-            language === "es" ? "Biblioteca de credenciales" : "Bibliotecs"
+            language === "es" ? "Biblioteca de Credenciales" : "Credential Library"
           }}</span>
       </a>
       <div @click="goTo('honorarios')" v-if="authStore.hasRole('PERFIL_MEDICO_HONORARIOS')"
@@ -95,7 +95,7 @@ onMounted(() => {
              width="25" height="28" alt="Phone">
         <span
           class="inside-item p-2 mx-2">{{
-            language === "es" ? "Mis honorarios" : "My fees"
+            language === "es" ? "Mis Honorarios" : "My Fees"
           }}</span>
       </div>
       <div @click="logout()"
@@ -105,7 +105,7 @@ onMounted(() => {
              src="@/assets/icon-menu-logout.png"
              width="22" height="25" alt="Phone">
         <span class="inside-item p-2 mx-2">{{
-            language === "es" ? "Cerrar sesión" : "Log out"
+            language === "es" ? "Cerrar Sesión" : "Log Out"
           }}</span>
       </div>
     </template>
@@ -116,7 +116,7 @@ onMounted(() => {
              src="@/assets/icon-menu-pacientes.png"
              width="30" height="32" alt="Phone">
         <span class="inside-item p-2 mx-2">{{
-            language === "es" ? "Mis pacientes" : "My patients"
+            language === "es" ? "Mis Pacientes" : "My Patients"
           }}</span>
       </div>
       <div @click="goTo('resultados-imagen-y-laboratorio-medicos')"
@@ -125,7 +125,7 @@ onMounted(() => {
              src="@/assets/icon-menu-rersultados.png"
              width="22" height="25" alt="Phone">
         <span class="inside-item p-2 mx-2">{{
-            language === "es" ? "Resultados de imagen y laboratorio" : "Image and lab results"
+            language === "es" ? "Resultados de Imagen y Laboratorio" : "Image and Lab Results"
           }}</span>
       </div>
       <div @click="goTo('dashboard')"
@@ -134,7 +134,7 @@ onMounted(() => {
              src="@/assets/icon-menu-biblioteca.png"
              width="22" height="25" alt="Phone">
         <span class="inside-item p-2 mx-2">{{
-            language === "es" ? "Biblioteca de credenciales" : "Bibliotecs"
+            language === "es" ? "Biblioteca de Credenciales" : "Credential Library"
           }}</span>
       </div>
       <div @click="goTo('honorarios')"
@@ -144,7 +144,7 @@ onMounted(() => {
              width="23" height="26" alt="Phone">
         <span
           class="inside-item p-2 mx-2">{{
-            language === "es" ? "Mis honorarios" : "My fees"
+            language === "es" ? "Mis Honorarios" : "My Fees"
           }}</span>
       </div>
     </template>
