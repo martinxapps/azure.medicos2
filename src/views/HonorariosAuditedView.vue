@@ -240,7 +240,7 @@ onMounted(async () => {
                           </thead>
                           <tbody>
                           <tr v-for="(detail, detailKey) in details" :key="detailKey"
-                              v-bind:class="{ 'accent' : detail?.DESCRIPCION === 'DEVOLUCIÓN'}">
+                              v-bind:class="{ 'accent' : detail?.TIPO === 'Devolucion'}">
                             <!--<th scope="row">{{detail.CARGO}}</th>-->
                             <!--<td>{{detail.FECHA}}</td>-->
                             <td>{{ detail.CPT }}</td>
@@ -297,7 +297,7 @@ onMounted(async () => {
                           </thead>
                           <tbody>
                           <tr v-for="(attention, attentionKey) in attentions" :key="attentionKey"
-                              v-bind:class="{ 'accent' : attention?.DESCRIPCION === 'DEVOLUCIÓN'}">
+                              v-bind:class="{ 'accent' : attention?.TIPO === 'Devolucion'}">
 <!--                            <th scope="row">{{ attention.CARGO }}</th>-->
                             <td>{{ attention.FECHA }}</td>
                             <td>{{ attention.CPT }}</td>
@@ -404,7 +404,7 @@ onMounted(async () => {
                     <p class="title-results ">
                       <b>N° de Prefactura: {{ auditedFee?.PREFACTURA }}
                         <span class="p-2 mx-2 pill"
-                              :class="{'gray':auditedFee.AUDITADO === 'S', 'orange':auditedFee.AUDITADO === null || auditedFee.AUDITADO === 'N', 'green':auditedFee.AUDITADO === 'F'}">{{ getWord(auditedFee.AUDITADO)
+                              :class="{'gray':auditedFee.AUDITADO === 'S', 'orange':auditedFee.AUDITADO === null || auditedFee.AUDITADO === 'N' || auditedFee.AUDITADO === 'P' || auditedFee.AUDITADO === 'X' || auditedFee.AUDITADO === 'A', 'green':auditedFee.AUDITADO === 'F'}">{{ getWord(auditedFee.AUDITADO)
                           }}</span>
                       </b>
                     </p>
@@ -413,7 +413,7 @@ onMounted(async () => {
                     <p class="text-results"><b>NHC:</b> {{ auditedFee?.HCL }} <b>ADM:</b> {{ auditedFee?.ADM }}</p>
                     <p class="text-results"><b>Paciente:</b> {{ auditedFee?.NOMBRES }}</p>
                     <p class="text-results"><b>Plan:</b> {{ auditedFee?.DCTO }}</p>
-                    <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }} <b>Factura:</b> {{ auditedFee?.SERIE}} {{ auditedFee?.NO_DOC }}</p>
+                    <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }} <b>Factura:</b> {{ auditedFee?.SERIE_DOCUMENTO}} {{ auditedFee?.NO_DOCUMENTO }}</p>
                     <p class="text-results"><b>Origen de la Atención:</b> {{ auditedFee?.ORIGEN }}</p>
                   </div>
                   <!--                  <div class="col-3 d-flex justify-content-center">-->
