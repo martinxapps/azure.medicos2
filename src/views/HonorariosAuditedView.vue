@@ -28,10 +28,19 @@ const attentions = ref([]);
 const successAttention = ref(false);
 const selectedItem = ref(null);
 const statuses = ref([
-  'Pendiente de Gestión HM',
-  'Pendiente de Factura de Médico',
-  'Facturado por Médico',
-  'Factura de Médico Recibida',
+  {
+    key: 'X',
+    label: 'Paciente sin alta clínica',
+  },{
+    key: 'A',
+    label: 'Paciente con alta clínica y en proceso de auditoría del honorario',
+  },{
+    key: 'P',
+    label: 'Solicitud de emisión de factura enviada pero aún no emitida por el médico',
+  },{
+    key: 'F',
+    label: 'Factura emitida por el médico y recibida por el hospital',
+  },
 ]);
 let isLoading = ref(false);
 const router = useRouter();
@@ -351,7 +360,7 @@ onMounted(async () => {
             <label class="text-label " style="margin-top: -30px; display: block;">Estado:</label>
             <select  class="mt-1 form-control p-2"  v-model="status">
               <option :value="null">Seleccione estado</option>
-              <option :value="st" v-for="(st, stkey) in statuses" v-bind:key="stkey">{{st}}</option>
+              <option :value="st.key" v-for="(st, stkey) in statuses" v-bind:key="stkey">{{st.label}}</option>
             </select>
 
           </div>
