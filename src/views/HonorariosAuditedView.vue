@@ -277,7 +277,7 @@ onMounted(async () => {
                           <thead>
                           <tr>
 <!--                            <th scope="col">Cargo</th>-->
-<!--                            <th scope="col">Fecha</th>-->
+                            <th scope="col">Fecha</th>
                             <th scope="col">CPT</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Cantidad</th>
@@ -290,7 +290,7 @@ onMounted(async () => {
                           <tr v-for="(attention, attentionKey) in attentions" :key="attentionKey"
                               v-bind:class="{ 'accent' : detail.DESCRIPCION === 'DEVOLUCIÓN'}">
 <!--                            <th scope="row">{{ attention.CARGO }}</th>-->
-<!--                            <td>{{ attention.FECHA }}</td>-->
+                            <td>{{ attention.FECHA }}</td>
                             <td>{{ attention.CPT }}</td>
                             <td>{{ attention.DESCRIPCION }}</td>
                             <td>{{ attention.CANTIDAD }}</td>
@@ -404,6 +404,7 @@ onMounted(async () => {
                     <p class="text-results"><b>NHC:</b> {{ auditedFee?.HCL }} <b>ADM:</b> {{ auditedFee?.ADM }}</p>
                     <p class="text-results"><b>Paciente:</b> {{ auditedFee?.NOMBRES }}</p>
                     <p class="text-results"><b>Plan:</b> {{ auditedFee?.DCTO }}</p>
+                    <p class="text-results"><b>Factura:</b> {{ auditedFee?.SERIE}} {{ auditedFee?.NO_DOC }}</p>
                     <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }}</p>
                     <p class="text-results"><b>Origen de la Atención:</b> {{ auditedFee?.ORIGEN }}</p>
                   </div>
