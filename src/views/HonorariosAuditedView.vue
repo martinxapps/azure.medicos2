@@ -340,7 +340,7 @@ onMounted(async () => {
                 <input type="text" v-model="searchTerm"
                        class=" special form-control"
                        required
-                       placeholder="Busca honorarios auditados"
+                       placeholder="Busqueda por NHC, Paciente o Aseguradora"
                        @keyup.enter="search()">
               </div>
               <div class="col-12 col-md-3 mt-3">
@@ -400,7 +400,7 @@ onMounted(async () => {
                      :key="auditedFeeKey" @click="openDetailModal(auditedFee)"
                      :title="`Ver detalles`"
                 >
-                  <div class="col-9 my-3">
+                  <div class="col-12 my-3">
                     <p class="title-results ">
                       <b>N° de Prefactura: {{ auditedFee?.PREFACTURA }}
                         <span class="p-2 mx-2 pill"
@@ -416,12 +416,6 @@ onMounted(async () => {
                     <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }} <b>Factura:</b> {{ auditedFee?.SERIE_DOCUMENTO}} {{ auditedFee?.NO_DOCUMENTO }}</p>
                     <p class="text-results"><b>Origen de la Atención:</b> {{ auditedFee?.ORIGEN }}</p>
                   </div>
-                  <!--                  <div class="col-3 d-flex justify-content-center">-->
-                  <!--                    <div class="p-0 p-md-4 py-md-6">-->
-                  <!--                      <font-awesome-icon :icon="['fas', 'eye']" size="2x"-->
-                  <!--                                         class="icon-device" />-->
-                  <!--                    </div>-->
-                  <!--                  </div>-->
                 </div>
               </template>
               <template v-else>
