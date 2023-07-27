@@ -18,10 +18,6 @@ const nhc = ref(props.nhc);
 const currentPage = ref(1);
 const numPages = ref(1);
 
-onMounted(() => {
-  console.log("props", props.url);
-  console.log("src", src.value);
-});
 const numPagesEvent = (e) => {
   console.log("numPagesEvent", e);
   numPages.value = e;
@@ -91,16 +87,16 @@ const printPdf = async () => {
 onMounted(async () => {
   switch (pageType.value) {
     case 'laboratorio':
-      subject.value = 'MetroVirtual%20Resultado%20de%20laboratorio'
-      stringVal.value = 'resultado%20de%20laboratorio'
+      subject.value = 'MetroVirtual%20Resultado%20de%20Laboratorio'
+      stringVal.value = 'Resultado%20de%20Laboratorio'
       break;
      case 'imagen':
-       subject.value = 'MetroVirtual%20Resultado%20de%20imagen'
-       stringVal.value = 'resultado%20de%20imagen'
+       subject.value = 'MetroVirtual%20Resultado%20de%20Imagen'
+       stringVal.value = 'Resultado%20de%20Imagen'
        break;
       default:
         subject.value = 'MetroVirtual%20Resultado'
-        stringVal.value = 'resultado'
+        stringVal.value = 'Resultado'
         break;
   }
 });
