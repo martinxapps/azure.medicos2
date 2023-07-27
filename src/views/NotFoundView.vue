@@ -13,18 +13,21 @@ const goTo = async (name) => {
 </script>
 <template>
   <div>
-    <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center py-1"
-         style="background-color: #f8f9fc;">
+    <teleport to="#page-title">
+      <title>No Encontrado - Metrovirtual - Hospital Metropolitano</title>
+    </teleport>
+    <div class="justify-content-center py-5" style="background-color: #f8f9fc; height: 100%">
       <!--login section-->
-      <div class="container m-auto ml-2">
-        <div class="row mb-4 mb-md-2 justify-content-center">
-
-          <!--columna de iframe-->
-          <div class="col-12 ">
-            <div class="px-2 mt-5 pt-8">
-              <h2 style="text-align: center;">No encontrado</h2>
-              <button @click="goTo('ingreso')">Ir a login medicos</button>
+      <div class="container m-auto d-block">
+        <div class="row justify-content-center">
+          <div class="col-10 col-md-3">
+            <div class=" my-5 py-5  text-center">
+              <h4 class="center text-search">
+                Pagina no encontrada
+              </h4>
             </div>
+            <button class="text-center cursor-pointer py-4 btn-loginv3 " style="margin: auto"
+                    @click="goTo('ingreso')">Ingresar</button>
           </div>
         </div>
       </div>
