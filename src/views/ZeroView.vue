@@ -1,8 +1,6 @@
 <script setup>
-import FooterMedico from "../components/FooterMedico.vue";
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { statusPacienteEmergencia } from "../services/patient";
 import IframeViewer from "../components/IframeViewer.vue";
 
 const route = useRoute();
@@ -11,14 +9,10 @@ const router = useRouter();
 const isLoading = ref(false);
 const props = defineProps(["nhc"]);
 const nhc = ref(props.nhc);
-const statusPaciente = ref(null);
-const name = ref("Zero FootPrint GE");
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
 const shareLink = computed(() => `https://medicos2.hospitalmetropolitano.org/compartir/zerofootprint/${nhc.value}`);
 onMounted(() => {});
 
-const shareWhatsapp = () => {}
-const shareEmail = () => {}
 
 const goBack = () => {
   window.close();

@@ -47,7 +47,7 @@ onMounted(() => {
       name.value = "Control de hemoglucotest";
       break;
   }
-  title.value = `${name.value} - Metrovirtual / Hospital Metropolitano`;
+  title.value = `${name.value} - Metrovirtual - Hospital Metropolitano`;
   getUrl(props.type, props.na);
   getPatientDetails(props.nhc);
 });

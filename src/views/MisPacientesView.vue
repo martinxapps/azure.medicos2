@@ -6,7 +6,7 @@ import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const authStore = useAuthStore();
-// const user = computed(() => authStore.user);
+const user = computed(() => authStore.user);
 // const type = computed(() => authStore.type);
 const myPatientsStore = useMyPatientsStore();
 const dealer_patients = computed(() => myPatientsStore.dealer_patients);
@@ -60,7 +60,7 @@ onMounted(async () => {
 <template>
   <div>
     <teleport to="#page-title">
-      <title>Mis pacientes - MetroVirtual - Hospital Metropolitano</title>
+      <title>Mis Pacientes - MetroVirtual - Hospital Metropolitano</title>
     </teleport>
     <div class="justify-content-center py-1" style="background-color: rgb(229 237 241);">
       <!--login section-->

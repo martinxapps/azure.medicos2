@@ -17,6 +17,9 @@ const goBack = async () => {
 </script>
 <template>
     <div>
+      <teleport to="#page-title">
+        <title>Mi Perfil - MetroVirtual - Hospital Metropolitano</title>
+      </teleport>
         <div class="justify-content-center py-1" style="background-color: rgb(229 237 241);">
             <!--login section-->
             <div class="container m-auto d-block">

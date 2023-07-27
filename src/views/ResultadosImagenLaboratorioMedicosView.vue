@@ -1,7 +1,7 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
-//import {useAuthStore} from "../stores/auth";
-import { ref, onMounted } from "vue";
+import {useAuthStore} from "../stores/auth";
+import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { resultadosImagenPaciente, resultadosLaboratorioPaciente, urlDocumento } from "../services/patient";
 import { searchPatients } from "../services/searchPatients";
@@ -11,9 +11,8 @@ import { usePatientsListStore } from "../stores/patientsList";
 
 
 const { notify } = useNotification();
-// const authStore = useAuthStore();
-// const user = computed(() => authStore.user);
-// const type = computed(() => authStore.type);
+const authStore = useAuthStore();
+const user = computed(() => authStore.user);
 const lab_results = ref([]);
 const image_results = ref([]);
 const seeImages = ref(false);

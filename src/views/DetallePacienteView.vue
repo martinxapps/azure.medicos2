@@ -53,7 +53,7 @@ const isLoadingSV = ref(false);
 const isLoadingForms = ref(false);
 const isLoadingLab = ref(false);
 const isLoadingImage = ref(false);
-const title = ref("Paciente - MetroVirtual - Hospital Metropolitano");
+const title = ref("Detalle del Paciente - MetroVirtual - Hospital Metropolitano");
 const route = useRoute();
 const router = useRouter();
 

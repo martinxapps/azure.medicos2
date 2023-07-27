@@ -21,7 +21,7 @@ const src = ref(null);
 const statusPaciente = ref(null);
 const nhc = ref(props.nhc);
 const url = ref(props.url);
-const title = ref("Resultado de Laboratorio - Metrovirtual / Hospital Metropolitano");
+const title = ref("Resultado de Laboratorio - Metrovirtual - Hospital Metropolitano");
 
 onMounted(() => {
   getUrl(url.value);

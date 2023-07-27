@@ -100,7 +100,7 @@ onMounted(async () => {
 <template>
   <div>
     <teleport to="#page-title">
-      <title>MetroVirtual - Hospital Metropolitano</title>
+      <title>Ingreso - MetroVirtual - Hospital Metropolitano</title>
     </teleport>
     <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center py-1"
          style="background-color: #f8f9fc;">
