@@ -1,11 +1,11 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
 import ModalBox from "../components/ModalBox.vue";
-import { useAuthStore } from "../stores/auth";
-import { useMyAuditedFeesStore } from "../stores/myAuditedFees";
-import { computed, ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { misHonorariosAuditadosAtencion, misHonorariosAuditadosDetalle } from "../services/fees";
+import {useAuthStore} from "../stores/auth";
+import {useMyAuditedFeesStore} from "../stores/myAuditedFees";
+import {computed, ref, onMounted} from "vue";
+import {useRouter} from "vue-router";
+import {misHonorariosAuditadosAtencion, misHonorariosAuditadosDetalle} from "../services/fees";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -29,15 +29,18 @@ const successAttention = ref(false);
 const selectedItem = ref(null);
 const statuses = ref([
   {
+    key: 'N',
+    label: 'Paciente Auditado',
+  }, {
     key: 'X',
     label: 'Paciente sin alta clínica',
-  },{
+  }, {
     key: 'A',
     label: 'Paciente con alta clínica y en proceso de auditoría del honorario',
-  },{
+  }, {
     key: 'P',
     label: 'Solicitud de emisión de factura enviada pero aún no emitida por el médico',
-  },{
+  }, {
     key: 'F',
     label: 'Factura emitida por el médico y recibida por el hospital',
   },
@@ -130,6 +133,9 @@ const closeModal = () => {
 };
 const getWord = (key) => {
   switch (key) {
+    case "N":
+    case null:
+      return "Paciente auditado";
     case "X":
       return "Paciente sin alta clínica";
     case "A":
@@ -158,7 +164,7 @@ onMounted(async () => {
           <div class=" col-6 " @click="goBack()">
             <div class="row mt-3">
               <h5 class="cursor-pointer ml-3" style=" color: #0f4470; font-size: 16px;">
-                <font-awesome-icon :icon="['fas', 'chevron-left']" />
+                <font-awesome-icon :icon="['fas', 'chevron-left']"/>
                 Regresar
               </h5>
             </div>
@@ -188,7 +194,7 @@ onMounted(async () => {
             <div aria-label="close" class="p-2 cursor-pointer"
                  @click="closeModal">
               <font-awesome-icon :icon="['fas', 'close']" size="2x"
-                                 class="icon-device" />
+                                 class="icon-device"/>
             </div>
           </div>
           <ul class="nav nav-tabs" id="invoiceTab" role="tablist">
@@ -285,12 +291,12 @@ onMounted(async () => {
                         <table class="table table-bordered table-striped table-hover">
                           <thead>
                           <tr>
-<!--                            <th scope="col">Cargo</th>-->
+                            <!--                            <th scope="col">Cargo</th>-->
                             <th scope="col">Fecha</th>
                             <th scope="col">CPT</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Cantidad</th>
-<!--                            <th scope="col">Valor Descuento</th>-->
+                            <!--                            <th scope="col">Valor Descuento</th>-->
                             <th scope="col">Porcentaje Cálculo</th>
                             <th scope="col">Valor Neto</th>
                           </tr>
@@ -298,12 +304,12 @@ onMounted(async () => {
                           <tbody>
                           <tr v-for="(attention, attentionKey) in attentions" :key="attentionKey"
                               v-bind:class="{ 'accent' : attention?.TIPO === 'Devolucion'}">
-<!--                            <th scope="row">{{ attention.CARGO }}</th>-->
+                            <!--                            <th scope="row">{{ attention.CARGO }}</th>-->
                             <td>{{ attention.FECHA }}</td>
                             <td>{{ attention.CPT }}</td>
                             <td>{{ attention.DESCRIPCION }}</td>
                             <td>{{ attention.CANTIDAD }}</td>
-<!--                            <td>{{ attention.VALOR_DESCUENTO }}</td>-->
+                            <!--                            <td>{{ attention.VALOR_DESCUENTO }}</td>-->
                             <td>{{ attention.PORCENTAJE_CALCULO }} %</td>
                             <td>$ {{ attention.VALOR_HONORARIO }}</td>
                           </tr>
@@ -358,9 +364,9 @@ onMounted(async () => {
           </div>
           <div class="col-12 col-md-3">
             <label class="text-label " style="margin-top: -30px; display: block;">Estado:</label>
-            <select  class="mt-1 form-control p-2"  v-model="status">
+            <select class="mt-1 form-control p-2" v-model="status">
               <option :value="null">Seleccione estado</option>
-              <option :value="st.key" v-for="(st, stkey) in statuses" v-bind:key="stkey">{{st.label}}</option>
+              <option :value="st.key" v-for="(st, stkey) in statuses" v-bind:key="stkey">{{ st.label }}</option>
             </select>
 
           </div>
@@ -404,7 +410,8 @@ onMounted(async () => {
                     <p class="title-results ">
                       <b>N° de Prefactura: {{ auditedFee?.PREFACTURA }}
                         <span class="p-2 mx-2 pill"
-                              :class="{'gray':auditedFee.AUDITADO === 'S', 'orange':auditedFee.AUDITADO === null || auditedFee.AUDITADO === 'N' || auditedFee.AUDITADO === 'P' || auditedFee.AUDITADO === 'X' || auditedFee.AUDITADO === 'A', 'green':auditedFee.AUDITADO === 'F'}">{{ getWord(auditedFee.AUDITADO)
+                              :class="{'gray':auditedFee.AUDITADO === 'S', 'orange':auditedFee.AUDITADO === null || auditedFee.AUDITADO === 'N' || auditedFee.AUDITADO === 'P' || auditedFee.AUDITADO === 'X', 'green':auditedFee.AUDITADO === 'F', 'yellow': auditedFee.AUDITADO === 'A'}">{{
+                            getWord(auditedFee.AUDITADO)
                           }}</span>
                       </b>
                     </p>
@@ -413,7 +420,8 @@ onMounted(async () => {
                     <p class="text-results"><b>NHC:</b> {{ auditedFee?.HCL }} <b>ADM:</b> {{ auditedFee?.ADM }}</p>
                     <p class="text-results"><b>Paciente:</b> {{ auditedFee?.NOMBRES }}</p>
                     <p class="text-results"><b>Plan:</b> {{ auditedFee?.DCTO }}</p>
-                    <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }} <b>Factura:</b> {{ auditedFee?.SERIE_DOCUMENTO}} {{ auditedFee?.NO_DOCUMENTO }}</p>
+                    <p class="text-results"><b>Valor:</b> $ {{ auditedFee?.VALOR }} <b>Factura:</b>
+                      {{ auditedFee?.SERIE_DOCUMENTO }} {{ auditedFee?.NO_DOCUMENTO }}</p>
                     <p class="text-results"><b>Origen de la Atención:</b> {{ auditedFee?.ORIGEN }}</p>
                   </div>
                 </div>
@@ -429,7 +437,7 @@ onMounted(async () => {
 
           </div>
         </div>
-        <FooterMedico />
+        <FooterMedico/>
       </div>
 
     </div>
@@ -455,8 +463,12 @@ onMounted(async () => {
 .green {
   background-color: #16c119;
 }
+.yellow {
+  background-color: #f5e100;
+}
+
 .btn-loginv3 {
-  background: linear-gradient(90deg, rgba(11,114,216,1) 0%, rgba(42,157,255,1) 0%, rgba(11,114,216,1) 100%) !important;
+  background: linear-gradient(90deg, rgba(11, 114, 216, 1) 0%, rgba(42, 157, 255, 1) 0%, rgba(11, 114, 216, 1) 100%) !important;
   width: 100%;
   color: #fff;
   padding: 9px 20px;
@@ -465,7 +477,8 @@ onMounted(async () => {
   border-radius: 20px;
   border: none;
 }
-.accent{
+
+.accent {
   background-color: #ffda96;
 }
 </style>

@@ -1,11 +1,11 @@
 <script setup>
 import auth from "../services/auth";
-import { useAuthStore } from "../stores/auth";
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useNotification } from "@kyvg/vue3-notification";
+import {useAuthStore} from "../stores/auth";
+import {onMounted, ref} from "vue";
+import {useRouter} from "vue-router";
+import {useNotification} from "@kyvg/vue3-notification";
 
-const { notify } = useNotification();
+const {notify} = useNotification();
 const router = useRouter();
 
 const authStore = useAuthStore();
@@ -68,7 +68,7 @@ const newLogin = async () => {
     }
     let token = await auth.acquireToken();
     await authStore.login(userResult, "medic", token);
-    await router.push({ name: "dashboard" });
+    await router.push({name: "dashboard"});
   } catch (e) {
     console.log("error in login", e);
     location.value = "login";
@@ -127,8 +127,10 @@ onMounted(async () => {
                   <b>{{ language === "es" ? "Aquí encontrarás:" : "Here you will find:" }}</b></h5>
                 <ul class="ul-option">
                   <li class="li-option">
-                    {{ language === "es" ? "Detalle de pacientes hospitalizados a su cargo o como interconsulta" :
-                    "Detail of hospitalized patients under your care or as interconsultation" }}
+                    {{
+                      language === "es" ? "Detalle de pacientes hospitalizados a su cargo o como interconsulta" :
+                          "Detail of hospitalized patients under your care or as interconsultation"
+                    }}
                   </li>
                   <li class="li-option">
                     {{ language === "es" ? "Resultados de imagen y laboratorio" : "Image and lab results" }}
@@ -207,33 +209,25 @@ onMounted(async () => {
               <div class="row my-1 ">
                 <div class="col-12 col-md-7">
                   <p class="text-center my-2">
-                    disponible en
+                    <b>disponible en:</b>
                   </p>
-                  <a class="d-flex justify-content-center cursor-pointer"
-                     href="https://play.google.com/store/apps/details?id=com.metrovirtual.medics" target="_blank">
-                    <img src="@/assets/google_play.png" alt="Mundometro icon"
-                         width="60%" height="auto ">
-                  </a>
+                  <div class="row">
+                    <div class="col-6">
+                      <a class="d-flex justify-content-center cursor-pointer"
+                         href="https://play.google.com/store/apps/details?id=com.metrovirtual.medics" target="_blank">
+                        <img src="@/assets/google_play.png" alt="Mundometro icon"
+                             width="100%" height="auto ">
+                      </a>
+                    </div>
+                    <div class="col-6">
+                      <a class="d-flex justify-content-center cursor-pointer" href="#" target="_blank">
+                        <img src="@/assets/app_store.png" alt="Mundometro icon"
+                             width="100%" height="auto ">
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="row my-1 ">
-                <div class="col-12 col-md-7">
-                  <a class="d-flex justify-content-center cursor-pointer" href="" target="_blank">
-                    <img src="@/assets/app_store.png" alt="Mundometro icon"
-                         width="60%" height="auto ">
-                  </a>
-
-                </div>
-              </div>
-              <!--                            <div class="row my-1">-->
-              <!--                                <div class="col-12 col-md-6 col-lg-6 cursor-pointer"-->
-              <!--                                     @click="forgetUser">-->
-              <!--                                    <p class="text-right recover-password cursor-pointer text-reset-password"-->
-              <!--                                       translate>-->
-              <!--                                        Olvidar usuario en este navegador-->
-              <!--                                    </p>-->
-              <!--                                </div>-->
-              <!--                            </div>-->
             </template>
 
 
