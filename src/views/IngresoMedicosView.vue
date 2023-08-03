@@ -204,6 +204,27 @@ onMounted(async () => {
                   </div>
                 </div>
               </div>
+              <div class="row my-1 ">
+                <div class="col-12 col-md-7">
+                  <p class="text-center my-2">
+                    disponible en
+                  </p>
+                  <a class="d-flex justify-content-center cursor-pointer"
+                     href="https://play.google.com/store/apps/details?id=com.metrovirtual.medics" target="_blank">
+                    <img src="@/assets/google_play.png" alt="Mundometro icon"
+                         width="60%" height="auto ">
+                  </a>
+                </div>
+              </div>
+              <div class="row my-1 ">
+                <div class="col-12 col-md-7">
+                  <a class="d-flex justify-content-center cursor-pointer" href="" target="_blank">
+                    <img src="@/assets/app_store.png" alt="Mundometro icon"
+                         width="60%" height="auto ">
+                  </a>
+
+                </div>
+              </div>
               <!--                            <div class="row my-1">-->
               <!--                                <div class="col-12 col-md-6 col-lg-6 cursor-pointer"-->
               <!--                                     @click="forgetUser">-->
@@ -230,13 +251,22 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <div class="mb-4 mb-md-2 justify-content-center  pb-5 mt-5 my-5">
+    <div class="row mb-4 mb-md-2 justify-content-center  pb-5 mt-5 my-5">
       <!--columna de text-->
-      <div class="termi">
-        <div class="mt-2 mt-md-5 justify-content-center">
+      <div class=" col-12 col-md-4">
+        <div class="row mt-2 mt-md-5 justify-content-center">
           <a href="https://www.hospitalmetropolitano.org/es/terminos-condiciones-y-uso-de-medios" target="_blank">
             <h5 class="title-terminos">
-              Términos y condiciones
+              Términos y Condiciones
+            </h5>
+          </a>
+        </div>
+      </div>
+      <div class=" col-12 col-md-4">
+        <div class="row mt-2 mt-md-5 justify-content-center">
+          <a href="https://www.hospitalmetropolitano.org/es/politicas-de-privacidad" target="_blank">
+            <h5 class="title-terminos">
+              Políticas de Privacidad
             </h5>
           </a>
         </div>
