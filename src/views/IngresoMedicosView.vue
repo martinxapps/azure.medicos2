@@ -206,7 +206,7 @@ onMounted(async () => {
                   </div>
                 </div>
               </div>
-              <div class="row my-1 ">
+              <div class="row my-1 mt-4">
                 <div class="col-12 col-md-7">
                   <p class="text-center my-2">
                     <b>disponible en:</b>

@@ -3,11 +3,13 @@ import FooterMedico from "../components/FooterMedico.vue";
 import { useAuthStore } from "../stores/auth";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import dayjs from "dayjs";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
 const startDate = ref(null);
 const endDate = ref(null);
+const isLoading = ref(false);
 const router = useRouter();
 
 
@@ -16,7 +18,9 @@ const goBack = async () => {
 };
 
 onMounted(async () => {
-
+  const now = dayjs();
+  endDate.value = now.format('YYYY-MM-DD');
+  startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');
 });
 
 </script>

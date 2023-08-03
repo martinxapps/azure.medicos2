@@ -46,7 +46,7 @@ const close = () => {
   border-radius: 20px;
   border: black 1px solid;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  max-width: 60rem;
+  max-width: 90rem;
   width: 100%;
   max-height: 70%;
   z-index: 99999;

@@ -4,6 +4,7 @@ import { useAuthStore } from "../stores/auth";
 import { useMyTransactionsStore } from "../stores/myTransactions";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import dayjs from "dayjs";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -31,6 +32,9 @@ const goBack = async () => {
   await router.back();
 };
 onMounted(async () => {
+  const now = dayjs();
+  endDate.value = now.format('YYYY-MM-DD');
+  startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');
   searchType.value = search_type.value;
   isLoading.value = true;
   let payload = {

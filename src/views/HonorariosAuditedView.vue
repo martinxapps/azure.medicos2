@@ -5,6 +5,8 @@ import {useAuthStore} from "../stores/auth";
 import {useMyAuditedFeesStore} from "../stores/myAuditedFees";
 import {computed, ref, onMounted} from "vue";
 import {useRouter} from "vue-router";
+import dayjs from "dayjs";
+import { utils, writeFileXLSX } from 'xlsx';
 import {misHonorariosAuditadosAtencion, misHonorariosAuditadosDetalle} from "../services/fees";
 
 const authStore = useAuthStore();
@@ -21,9 +23,11 @@ const status = ref(null);
 const showDetailModal = ref(false);
 const activeTab = ref(0);
 const isLoadingDetail = ref(false);
+const isLoadingDetailExcel = ref(false);
 const details = ref([]);
 const successDetail = ref(false);
 const isLoadingAttention = ref(false);
+const isLoadingAttentionExcel = ref(false);
 const attentions = ref([]);
 const successAttention = ref(false);
 const selectedItem = ref(null);
@@ -121,6 +125,26 @@ const getAttention = async (item) => {
   attentions.value = response.data;
   isLoadingAttention.value = false;
 };
+const downloadAtencionesExcel = () => {
+  if( isLoadingAttentionExcel.value) return;
+  isLoadingAttentionExcel.value = true;
+  const wb = utils.book_new();
+  const ws = utils.json_to_sheet(attentions.value);
+  utils.book_append_sheet(wb, ws, selectedItem.value.PREFACTURA);
+  writeFileXLSX(wb, `atenciones${selectedItem.value.PREFACTURA}_${new Date().getTime()}.xlsx`);
+  isLoadingAttentionExcel.value = false;
+
+}
+const downloadDetailsExcel = () => {
+  if( isLoadingDetailExcel.value) return;
+  isLoadingDetailExcel.value = true;
+  const wb = utils.book_new();
+  const ws = utils.json_to_sheet(details.value);
+  utils.book_append_sheet(wb, ws, selectedItem.value.PREFACTURA);
+  writeFileXLSX(wb, `detalles${selectedItem.value.PREFACTURA}_${new Date().getTime()}.xlsx`);
+  isLoadingDetailExcel.value = false;
+
+}
 
 const closeModal = () => {
   showDetailModal.value = false;
@@ -147,6 +171,9 @@ const getWord = (key) => {
   }
 };
 onMounted(async () => {
+  const now = dayjs();
+  endDate.value = now.format('YYYY-MM-DD');
+  startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');
   await search();
 });
 
@@ -259,7 +286,19 @@ onMounted(async () => {
                           </tbody>
                         </table>
                       </div>
+                      <div class="d-flex justify-content-end">
 
+                        <div class="btn btn-success" @click="downloadDetailsExcel()">
+                          <template v-if="isLoadingDetailExcel">
+                            Descargando....
+                          </template>
+                          <template v-else>
+                            <font-awesome-icon class="mx-1" :icon="['far', 'file-excel']"/>
+                            Descargar
+                          </template>
+
+                        </div>
+                      </div>
                     </template>
                     <template v-else>
                       <p class="text-results">No hay detalles</p>
@@ -297,8 +336,9 @@ onMounted(async () => {
                             <th scope="col">Descripción</th>
                             <th scope="col">Cantidad</th>
                             <!--                            <th scope="col">Valor Descuento</th>-->
-                            <th scope="col">Porcentaje Cálculo</th>
+                            <th scope="col">Porcentaje<br>Cálculo</th>
                             <th scope="col">Valor Neto</th>
+                            <th scope="col">Factura Médico</th>
                           </tr>
                           </thead>
                           <tbody>
@@ -312,9 +352,23 @@ onMounted(async () => {
                             <!--                            <td>{{ attention.VALOR_DESCUENTO }}</td>-->
                             <td>{{ attention.PORCENTAJE_CALCULO }} %</td>
                             <td>$ {{ attention.VALOR_HONORARIO }}</td>
+                            <td>{{ attention.FACT_MEDICO }}</td>
                           </tr>
                           </tbody>
                         </table>
+                      </div>
+                      <div class="d-flex justify-content-end">
+
+                        <div class="btn btn-success" @click="downloadAtencionesExcel()">
+                          <template v-if="isLoadingAttentionExcel">
+                            Descargando....
+                          </template>
+                          <template v-else>
+                            <font-awesome-icon class="mx-1" :icon="['far', 'file-excel']"/>
+                            Descargar
+                          </template>
+
+                        </div>
                       </div>
 
                     </template>
@@ -464,7 +518,7 @@ onMounted(async () => {
   background-color: #16c119;
 }
 .yellow {
-  background-color: #f5e100;
+  background-color: #dfce00;
 }
 
 .btn-loginv3 {
