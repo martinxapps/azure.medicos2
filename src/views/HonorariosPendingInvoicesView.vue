@@ -1,9 +1,9 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
 //import {useAuthStore} from "../stores/auth";
-import { useMyPendingInvoicesStore } from "../stores/myPendingInvoices";
-import { computed, ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import {useMyPendingInvoicesStore} from "../stores/myPendingInvoices";
+import {computed, ref, onMounted} from "vue";
+import {useRouter} from "vue-router";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -23,7 +23,7 @@ const search = async () => {
 
 const goBack = async () => {
   await myPendingInvoicesStore.clearPendingInvoices();
-  await router.push({ name: "honorarios" });
+  await router.push({name: "honorarios"});
 };
 
 const scrollToTop = () => {
@@ -50,7 +50,7 @@ onMounted(async () => {
           <div class=" col-6 " @click="goBack()">
             <div class="row mt-3">
               <h5 class="cursor-pointer ml-3" style=" color: #0f4470; font-size: 16px;">
-                <font-awesome-icon :icon="['fas', 'chevron-left']" />
+                <font-awesome-icon :icon="['fas', 'chevron-left']"/>
                 Regresar
               </h5>
             </div>
@@ -76,7 +76,8 @@ onMounted(async () => {
       <div class="container m-auto d-block" style="background: #f8f9fc;">
         <div class="row justify-content-center mt-3">
           <div class="col-12 col-md-5 col-lg-4 mt-1">
-            <label class="text-label" style="text-align: center;display: block;">Puedes buscar por:</label>
+            <label class="my-2" style="text-align: center;display: block; color: #05305d; font-weight: 600;">Puedes
+              buscar por:</label>
             <select style="text-align: center; border-radius: 50px;" class="form-control bg-white select-result"
                     v-model="searchType"
                     @change="search">
@@ -111,17 +112,17 @@ onMounted(async () => {
                     <p class="text-results"><b>Saldo:</b> $ {{ pendingInvoice?.SALDO }}</p>
                     <p class="text-results"><b>Cliente:</b> {{ pendingInvoice?.CLIENTE }}</p>
                   </div>
-<!--                                                      <div class="col-3 d-flex justify-content-center">-->
-<!--                                                          <a  :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.codMedico}&fecha_transaccion=${pendingInvoice.FECHA}&numero_transaccion=${pendingInvoice.NO_TRANSACCION}&tipo_imprime=PAGOS`"-->
-<!--                                                              target="_blank" download-->
-<!--                                                              class="cursor-pointer"-->
-<!--                                                              :title="`Descargar factura`">-->
-<!--                                                              <div class="p-0 p-md-4 py-md-6">-->
-<!--                                                                <font-awesome-icon :icon="['fas', 'download']" size="2x"-->
-<!--                                                                                   class="icon-device" />-->
-<!--                                                              </div>-->
-<!--                                                          </a>-->
-<!--                                                      </div>-->
+                  <!--                                                      <div class="col-3 d-flex justify-content-center">-->
+                  <!--                                                          <a  :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.codMedico}&fecha_transaccion=${pendingInvoice.FECHA}&numero_transaccion=${pendingInvoice.NO_TRANSACCION}&tipo_imprime=PAGOS`"-->
+                  <!--                                                              target="_blank" download-->
+                  <!--                                                              class="cursor-pointer"-->
+                  <!--                                                              :title="`Descargar factura`">-->
+                  <!--                                                              <div class="p-0 p-md-4 py-md-6">-->
+                  <!--                                                                <font-awesome-icon :icon="['fas', 'download']" size="2x"-->
+                  <!--                                                                                   class="icon-device" />-->
+                  <!--                                                              </div>-->
+                  <!--                                                          </a>-->
+                  <!--                                                      </div>-->
 
                 </div>
               </template>
@@ -136,7 +137,7 @@ onMounted(async () => {
 
           </div>
         </div>
-        <FooterMedico />
+        <FooterMedico/>
       </div>
 
     </div>

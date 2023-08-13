@@ -4,6 +4,7 @@ import { useAuthStore } from "../stores/auth";
 import { useMyPayedInvoicesStore } from "../stores/myPayedInvoices";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import dayjs from "dayjs";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -21,14 +22,14 @@ const router = useRouter();
 const search = async () => {
   isLoading.value = true;
   let payload = {
-    searchField: searchTerm.value
+    searchField: searchTerm.value,
+    type: searchType.value,
+    start: 0,
+    end: 1000,
+    startDate: startDate.value,
+    endDate: endDate.value,
   };
-  if (searchType.value === 3) {
-    payload.searchField = "";
-    await myPayedInvoicesStore.searchPayedInvoicesByDate(searchType.value, 0, 1000, startDate.value, endDate.value, payload);
-  } else {
-    await myPayedInvoicesStore.searchPayedInvoices(searchType.value, 0, 1000, payload);
-  }
+  await myPayedInvoicesStore.searchPayedInvoices(payload);
   isLoading.value = false;
 };
 
@@ -40,10 +41,18 @@ const goBack = async () => {
 onMounted(async () => {
   searchType.value = search_type.value;
   isLoading.value = true;
+  const now = dayjs();
+  endDate.value = now.format('YYYY-MM-DD');
+  startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');
   let payload = {
-    searchField: searchTerm.value
+    searchField: searchTerm.value,
+    type: searchType.value,
+    start: 0,
+    end: 1000,
+    startDate: startDate.value,
+    endDate: endDate.value,
   };
-  await myPayedInvoicesStore.searchPayedInvoices(searchType.value, 0, 1000, payload);
+  await myPayedInvoicesStore.searchPayedInvoices(payload);
   isLoading.value = false;
 });
 
@@ -87,7 +96,7 @@ onMounted(async () => {
       <div class="container m-auto d-block" style="background: #f8f9fc;">
         <div class="row justify-content-center mt-3">
           <div class="col-12 col-md-4 col-lg-3 mt-1">
-            <label class="text-label my-1">Puedes buscar por:</label>
+            <label class="text-label my-1" style="color: #05305d; font-weight: 600;">Puedes buscar por:</label>
             <select class="form-control bg-white select-result " style="border-radius: 50px;"
                     v-model="searchType">
               <option :value="4">Por Apellidos y Nombres</option>
@@ -160,7 +169,7 @@ onMounted(async () => {
                   </div>
                   <div class="col-3 d-flex justify-content-center">
                     <a
-                      :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.codMedico}&fecha_transaccion=${payedInvoice.FECHA}&numero_transaccion=${payedInvoice.NO_TRANSACCION}&tipo_imprime=PAGOS`"
+                      :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.username.split('@')[0]}&fecha_transaccion=${payedInvoice.FECHA}&numero_transaccion=${payedInvoice.NO_TRANSACCION}&tipo_imprime=PAGOS`"
                       target="_blank" download
                       class="cursor-pointer"
                       :title="`Descargar factura`">

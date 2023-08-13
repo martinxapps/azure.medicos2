@@ -82,7 +82,7 @@ onMounted(async () => {
               </div>
               <div class="col-12 col-md-3 mt-3">
                 <a class="text-center cursor-pointer pt-2 btn-logindownload btn-logindownloadmobile"
-                   :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_estado_cuenta.php?proveedor=${user.codMedico}&fecha_desde=${startDate}&fecha_hasta=${endDate}&tipo_imprime=PAGOS`"
+                   :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_estado_cuenta.php?proveedor=${user.username.split('@')[0]}&fecha_desde=${startDate}&fecha_hasta=${endDate}&tipo_imprime=PAGOS`"
                    target="_blank" download>
                   Descargar
                 </a>

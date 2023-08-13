@@ -135,7 +135,7 @@ onMounted(async () => {
                   </div>
                   <div class="col-3 d-flex justify-content-center">
                     <a
-                      :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.codMedico}&fecha_transaccion=${transaction.FECHA}&numero_transaccion=${transaction.NO_TRANSACCION}&tipo_imprime=PAGOS`"
+                      :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.username.split('@')[0]}&fecha_transaccion=${transaction.FECHA}&numero_transaccion=${transaction.NO_TRANSACCION}&tipo_imprime=PAGOS`"
                       target="_blank" download
                       class="cursor-pointer"
                       :title="`Descargar factura`">

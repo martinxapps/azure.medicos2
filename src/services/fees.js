@@ -6,13 +6,16 @@ export function misFacturasPendientes(filter) {
     const patients = mande(`${baseURLV2}/medicos/mis-facturas-pendientes?typeFilter=${filter}`);
     return patients.post({});
 }
-export function misFacturasPagadas(filter, start, length, payload) {
-    const patients = mande(`${baseURLV2}/medicos/mis-facturas-pagadas?typeFilter=${filter}&start=${start}&length=${length}`);
-    return patients.post(payload);
-}
-
-export function misFacturasPagadasPorFecha(filter, start, length, dateStart, dateEnd, payload) {
-    const patients = mande(`${baseURLV2}/medicos/mis-facturas-pagadas?typeFilter=${filter}&start=${start}&length=${length}&fechaDesde=${dateStart}&fechaHasta=${dateEnd}`);
+export function misFacturasPagadas(payload) {
+    let url = `${baseURLV2}/medicos/mis-facturas-pagadas?typeFilter=${payload.type}&start=${payload.start}&length=${payload.end}`;
+    if(payload.startDate && payload.type === 3){
+        url += `&fechaDesde=${payload.startDate}`;
+    }
+    if(payload.endDate && payload.type === 3){
+        url += `&fechaHasta=${payload.endDate}`;
+    }
+    console.log('url', url);
+    const patients = mande(url);
     return patients.post(payload);
 }
 
