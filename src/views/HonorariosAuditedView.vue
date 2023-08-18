@@ -8,6 +8,7 @@ import {useRouter} from "vue-router";
 import dayjs from "dayjs";
 import { utils, writeFileXLSX } from 'xlsx';
 import {misHonorariosAuditadosAtencion, misHonorariosAuditadosDetalle} from "../services/fees";
+import {event, screenview} from "vue-gtag";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -85,6 +86,8 @@ const goBack = async () => {
 
 const openDetailModal = async (item) => {
   console.log("item", item);
+  event('see_audited_fees_detail');
+  screenview('Detalle de Honorarios Auditados');
   showDetailModal.value = true;
   selectedItem.value = item;
   getDetail(item);
@@ -171,6 +174,7 @@ const getWord = (key) => {
   }
 };
 onMounted(async () => {
+  screenview(`Honorarios Auditados`);
   const now = dayjs();
   endDate.value = now.format('YYYY-MM-DD');
   startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');

@@ -9,6 +9,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 //import './registerServiceWorker';
+import VueGtag from 'vue-gtag';
 import router from './router';
 import { createPinia } from 'pinia';
 import Notifications from '@kyvg/vue3-notification';
@@ -19,4 +20,10 @@ app.use(createPinia());
 app.use(router);
 app.use(Notifications);
 app.component('font-awesome-icon', FontAwesomeIcon);
+app.use(VueGtag, {
+    appName: 'MetroVirtual Médicos',
+    pageTrackerScreenviewEnabled: true,
+    config: { id: 'G-1LBKDPD80P' },
+    enabled: true
+}, router)
 app.mount('#app');

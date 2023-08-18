@@ -31,6 +31,7 @@ import {
 import { useNotification } from "@kyvg/vue3-notification";
 import Form005Viewer from "../components/Form005Viewer.vue";
 import { useMyPatientsStore } from "../stores/myPatients";
+import {event, screenview} from 'vue-gtag';
 
 const { notify } = useNotification();
 
@@ -72,6 +73,7 @@ const getPatientDetails = (nhc) => {
         statusPaciente.value = response.data;
         console.log("statusPaciente.value", statusPaciente.value);
         title.value = `Paciente ${statusPaciente.value.NOMBRE_PACIENTE} - MetroVirtual - Hospital Metropolitano`;
+        screenview(`Detalle del Paciente ${statusPaciente.value.NOMBRE_PACIENTE}`);
       } else {
         notify({
           title: "No existen datos registrados para este paciente",
@@ -364,6 +366,9 @@ const downloadLabFile = (labResult) => {
           text: "Resultado de imagen descargado",
           type: "success"
         });
+        event('file_download', {
+          value: 'laboratorio'
+        });
       } else {
         notify({
           title: "El archivo no esta disponible",
@@ -397,6 +402,9 @@ const downloadImageFile = (imageResult) => {
           text: "Resultado de imagen descargado",
           type: "success"
         });
+        event('file_download', {
+          value: 'imagen'
+        });
       } else {
         notify({
           title: "El archivo no esta disponible",
@@ -415,6 +423,10 @@ const goToLabResult = async (result) => {
   //   query: { prev: "detalle-paciente" }
   // });
   // window.open(url.href, "_blank");
+  event('see_lab_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  });
   await router.push({
     name: "medic-patient-lab-result-view",
     params: { url: split[3], nhc: nhc.value },
@@ -423,6 +435,10 @@ const goToLabResult = async (result) => {
 };
 const goToLabResultCtrl = async (result) => {
   let split = result.deep_link.split("/");
+  event('see_lab_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  });
   let url = router.resolve({
     name: "medic-patient-lab-result-view",
     params: { url: split[3], nhc: nhc.value },
@@ -435,23 +451,35 @@ const goToLabResultCtrl = async (result) => {
   //   query: { prev: "detalle-paciente" }
   // });
 };
-const goToGraphic = async (type, na) => {
+const goToGraphic = async (type, item) => {
   // let url = router.resolve({
   //   name: "medic-patient-curva-view",
   //   params: { type, na, nhc: nhc.value },
   //   query: { prev: "detalle-paciente" }
   // });
   // window.open(url.href, "_blank");
+  console.log('see_graph', {
+    value: item.SIGNO,
+  });
+  event('see_graph', {
+    value: item.SIGNO,
+  });
   await router.push({
     name: "medic-patient-curva-view",
-    params: { type, na, nhc: nhc.value },
+    params: { type, na: item.ATENCION, nhc: nhc.value },
     query: { prev: "detalle-paciente" }
   });
 };
-const goToGraphicCtrl = async (type, na) => {
+const goToGraphicCtrl = async (type, item) => {
+  console.log('see_graph', {
+    value: item.SIGNO,
+  });
+  event('see_graph', {
+    value: item.SIGNO,
+  });
   let url = router.resolve({
     name: "medic-patient-curva-view",
-    params: { type, na, nhc: nhc.value },
+    params: { type, na: item.ATENCION, nhc: nhc.value },
     query: { prev: "detalle-paciente" }
   });
   window.open(url.href, "_blank");
@@ -471,6 +499,10 @@ const goToZero = async () => {
   });
 };
 const goToZeroCtrl = async () => {
+  event('see_zerofootprint', {
+    nhc: nhc.value
+  });
+
   let url = router.resolve({
     name: "medic-patient-zerofootprint-view",
     params: { nhc: nhc.value },
@@ -480,6 +512,10 @@ const goToZeroCtrl = async () => {
   //await router.push({name: 'medic-patient-curva-view', params: {type, na, nhc: nhc.value}});
 };
 const goToZeroCtrlItem = async (item) => {
+  event('see_zerofootprint', {
+    nhc: nhc.value,
+    id: item.ID_ESTUDIO
+  });
   let url = router.resolve({
     name: "medic-patient-zerofootprint-item-view",
     params: { id: item.ID_ESTUDIO },
@@ -506,6 +542,10 @@ const goToImageResult = async (result) => {
   //   query: { prev: "detalle-paciente" }
   // });
   // window.open(url.href, "_blank");
+  event('see_image_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  });
   await router.push({
     name: "medic-patient-image-result-view",
     params: { url: split[3], nhc: nhc.value },
@@ -514,6 +554,10 @@ const goToImageResult = async (result) => {
 };
 const goToImageResultCtrl = async (result) => {
   let split = result.deep_link.split("/");
+  event('see_image_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  });
   let url = router.resolve({
     name: "medic-patient-image-result-view",
     params: { url: split[3], nhc: nhc.value },
@@ -724,8 +768,8 @@ onMounted(async () => {
                                 </div>
                                 <div class="col-12">
                                   <template v-if="item.SIGNO === 'TEMPERATURA'">
-                                    <div @click.exact="goToGraphic('TEMP', item.ATENCION)"
-                                         @click.ctrl="goToGraphicCtrl('TEMP', item.ATENCION)"
+                                    <div @click.exact="goToGraphic('TEMP', item)"
+                                         @click.ctrl="goToGraphicCtrl('TEMP', item)"
                                          class="cursor-pointer text-center">
                                       <p class="title-paciente"
                                          style="text-decoration: underline;">
@@ -735,8 +779,8 @@ onMounted(async () => {
                                   </template>
                                   <template
                                     v-if="item.SIGNO === 'PRESION ARTERIAL SISTOLICA' || item.SIGNO === 'PRESION ARTERIAL DIASTOLICA'">
-                                    <div @click.exact="goToGraphic('PSD', item.ATENCION)"
-                                         @click.ctrl="goToGraphicCtrl('PSD', item.ATENCION)"
+                                    <div @click.exact="goToGraphic('PSD', item)"
+                                         @click.ctrl="goToGraphicCtrl('PSD', item)"
                                          class="cursor-pointer text-center">
                                       <p class="title-paciente"
                                          style="text-decoration: underline; color: black;">
@@ -746,8 +790,8 @@ onMounted(async () => {
                                   </template>
                                   <template
                                     v-if="item.SIGNO === 'FRECUENCIA CARDIACA'">
-                                    <div @click.exact="goToGraphic('FC', item.ATENCION)"
-                                         @click.ctrl="goToGraphicCtrl('FC', item.ATENCION)"
+                                    <div @click.exact="goToGraphic('FC', item)"
+                                         @click.ctrl="goToGraphicCtrl('FC', item)"
                                          class="cursor-pointer text-center">
                                       <p class="title-paciente"
                                          style="text-decoration: underline; color: black;">
@@ -757,8 +801,8 @@ onMounted(async () => {
                                   </template>
                                   <template
                                     v-if="item.SIGNO === 'GLICEMIA CAPILAR'">
-                                    <div @click.exact="goToGraphic('GLUC', item.ATENCION)"
-                                         @click.ctrl="goToGraphicCtrl('GLUC', item.ATENCION)"
+                                    <div @click.exact="goToGraphic('GLUC', item)"
+                                         @click.ctrl="goToGraphicCtrl('GLUC', item)"
                                          class="cursor-pointer text-center">
                                       <p class="title-paciente"
                                          style="text-decoration: underline; color: black;">

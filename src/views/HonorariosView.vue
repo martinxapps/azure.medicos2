@@ -2,6 +2,7 @@
 //import {useAuthStore} from "../stores/auth";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
+import {event, screenview} from "vue-gtag";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -19,7 +20,7 @@ const goTo = async (name) => {
 };
 
 onMounted(async () => {
-
+  screenview('Mis Honorarios');
 });
 </script>
 <template>

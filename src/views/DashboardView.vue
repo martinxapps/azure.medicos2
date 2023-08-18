@@ -1,12 +1,11 @@
 <script setup>
 
 import { useAuthStore } from "../stores/auth";
-import { computed } from "vue";
+import {computed, onMounted} from "vue";
 import { useRouter } from "vue-router";
-
+import { set, screenview, event } from 'vue-gtag'
 //const route = useRoute();
 const router = useRouter();
-
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
 
@@ -28,6 +27,18 @@ const hashCode = (string) => {
   return hash;
 };
 const hash = computed(() => hashCode(user.value?.name ? user.value?.name : "123456"));
+
+onMounted(async () => {
+  console.log('user', user.value);
+  set({
+    user_email: user.value.username,
+    user_id: user.value.localAccountId,
+    user_display_name: user.value.name,
+    user_type: 'AZURE AD'
+  });
+  screenview('Dashbooard');
+});
+
 </script>
 <template>
   <div class="justify-content-center py-1"

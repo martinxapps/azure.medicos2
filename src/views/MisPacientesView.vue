@@ -1,9 +1,10 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
-import { useAuthStore } from "../stores/auth";
-import { useMyPatientsStore } from "../stores/myPatients";
-import { computed, ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import {useAuthStore} from "../stores/auth";
+import {useMyPatientsStore} from "../stores/myPatients";
+import {computed, ref, onMounted} from "vue";
+import {useRouter} from "vue-router";
+import {event, screenview} from 'vue-gtag';
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -18,6 +19,7 @@ let isLoadingDealers = ref(false);
 let isLoadingConsulted = ref(false);
 const router = useRouter();
 
+
 const search = async () => {
   isLoadingDealers.value = true;
   isLoadingConsulted.value = true;
@@ -29,7 +31,7 @@ const search = async () => {
 const goBack = async () => {
   await myPatientsStore.clearPatients();
   if (window.history.state.back === null) {
-    await router.replace({ name: "dashboard" });
+    await router.replace({name: "dashboard"});
   } else {
     router.back();
   }
@@ -38,13 +40,25 @@ const goBack = async () => {
 
 const goToPatientDetail = async (patient) => {
   try {
-    router.push({ name: "detalle-paciente", params: { nhc: patient.HC } }).catch((e) => console.log("e", e));
+    console.log('see_patient', {
+      patient_name: patient.NOMBRE_PACIENTE,
+      patient_nhc: patient.HC,
+      user_name: user.value.name
+    });
+    event('see_patient', {
+      patient_name: patient.NOMBRE_PACIENTE,
+      patient_nhc: patient.HC,
+      user_name: user.value.name
+    });
+    router.push({name: "detalle-paciente", params: {nhc: patient.HC}}).catch((e) => console.log("e", e));
   } catch (e) {
     console.log("e", e);
   }
 };
 
 onMounted(async () => {
+  screenview('Mis Pacientes');
+  event('search_patients');
   if (dealer_patients.value.length < 1) {
     isLoadingDealers.value = true;
   }
@@ -70,7 +84,7 @@ onMounted(async () => {
           <div class=" col-6 " @click="goBack()">
             <div class="row mt-2">
               <h5 class="cursor-pointer ml-3" style=" color: #0f4470; font-size: 16px;">
-                <font-awesome-icon :icon="['fas', 'chevron-left']" />
+                <font-awesome-icon :icon="['fas', 'chevron-left']"/>
                 Regresar
               </h5>
             </div>
@@ -169,8 +183,8 @@ onMounted(async () => {
                       <template v-else>
                         <template v-if="dealer_patients.length > 0">
                           <template
-                            v-for="(dealerPatient, dealerPatientKey) in dealer_patients"
-                            :key="dealerPatientKey">
+                              v-for="(dealerPatient, dealerPatientKey) in dealer_patients"
+                              :key="dealerPatientKey">
                             <div @click="goToPatientDetail(dealerPatient)"
                                  title="Ver Paciente"
                                  class=" my-1 py-2 row cursor-pointer text-left border-result hover-list-element">
@@ -191,11 +205,14 @@ onMounted(async () => {
                                 </p>
                                 <p class="text-pacientes">
                                   <b>Fecha de Admisión:</b>
-                                  {{ dealerPatient?.FECHA_ADMISION ? dealerPatient?.FECHA_ADMISION + " " + dealerPatient?.HORA_ADMISION : "No registrado"
+                                  {{
+                                    dealerPatient?.FECHA_ADMISION ? dealerPatient?.FECHA_ADMISION + " " + dealerPatient?.HORA_ADMISION : "No registrado"
                                   }}
                                 </p>
                                 <p class="text-pacientes">
-                                  <b>Edad:</b> {{ dealerPatient?.EDAD ? dealerPatient?.EDAD + ' Años' : "No registrado" }}
+                                  <b>Edad:</b> {{
+                                    dealerPatient?.EDAD ? dealerPatient?.EDAD + ' Años' : "No registrado"
+                                  }}
                                   <b>Habitación:</b> {{
                                     dealerPatient?.NRO_HABITACION ? dealerPatient?.NRO_HABITACION : "No registrado"
                                   }}
@@ -204,7 +221,7 @@ onMounted(async () => {
                               <div class="col-2 d-flex row justify-content-end">
                                 <div class="p-0 p-md-4 my-4">
                                   <font-awesome-icon :icon="['fas', 'eye']" :size="'2x'"
-                                                     class="icon-device" />
+                                                     class="icon-device"/>
                                 </div>
                               </div>
                             </div>
@@ -244,8 +261,8 @@ onMounted(async () => {
                       <template v-else>
                         <template v-if="consulted_patients.length > 0">
                           <template
-                            v-for="(consultedPatient, consultedPatientKey) in consulted_patients"
-                            :key="consultedPatientKey">
+                              v-for="(consultedPatient, consultedPatientKey) in consulted_patients"
+                              :key="consultedPatientKey">
                             <div @click="goToPatientDetail(consultedPatient)"
                                  title="Ver Paciente"
                                  class=" my-1 py-2 row cursor-pointer text-left border-result hover-list-element">
@@ -277,7 +294,7 @@ onMounted(async () => {
                               <div class="col-2 d-flex row justify-content-end">
                                 <div class="p-0 p-md-5 my-4">
                                   <font-awesome-icon :icon="['fas', 'eye']" :size="'2x'"
-                                                     class="icon-device" />
+                                                     class="icon-device"/>
                                 </div>
                               </div>
                             </div>
@@ -307,7 +324,7 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <FooterMedico />
+        <FooterMedico/>
       </div>
 
     </div>
