@@ -43,7 +43,7 @@ onMounted(async () => {
   });
   screenview('Dashbooard');
   event('logged_user_email', {
-    user_email: user.value.username,
+    value: user.value.username,
   });
   event('logged_user_id', {
     value: user.value.localAccountId,
