@@ -37,7 +37,7 @@ onMounted(async () => {
   console.log('user', user.value);
   set({
     user_email: user.value.username,
-    user_id: user.value.localAccountId,
+    user_id: user.value.username,
     user_display_name: user.value.name,
     user_type: 'AZURE AD'
   });
@@ -46,7 +46,7 @@ onMounted(async () => {
     value: user.value.username,
   });
   event('logged_user_id', {
-    value: user.value.localAccountId,
+    value: user.value.username,
   });
   event('logged_user_display_name', {
     value: user.value.name,
