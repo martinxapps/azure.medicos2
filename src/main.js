@@ -25,5 +25,5 @@ app.use(VueGtag, {
     pageTrackerScreenviewEnabled: true,
     config: { id: 'G-1LBKDPD80P' },
     enabled: true
-}, router)
+}, router);
 app.mount('#app');

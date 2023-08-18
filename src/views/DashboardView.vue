@@ -42,10 +42,18 @@ onMounted(async () => {
     user_type: 'AZURE AD'
   });
   screenview('Dashbooard');
-  event('logged_user_email', user.value.username);
-  event('logged_user_id', user.value.localAccountId);
-  event('logged_user_display_name', user.value.name);
-  event('logged_user_type', 'AZURE AD');
+  event('logged_user_email', {
+    user_email: user.value.username,
+  });
+  event('logged_user_id', {
+    value: user.value.localAccountId,
+  });
+  event('logged_user_display_name', {
+    value: user.value.name,
+  });
+  event('logged_user_type', {
+    value: 'AZURE AD',
+  });
 });
 
 </script>
