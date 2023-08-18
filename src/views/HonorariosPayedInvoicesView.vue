@@ -5,6 +5,7 @@ import { useMyPayedInvoicesStore } from "../stores/myPayedInvoices";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
+import {screenview} from "vue-gtag";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -39,6 +40,7 @@ const goBack = async () => {
 };
 
 onMounted(async () => {
+  screenview('Facturas Pagadas');
   searchType.value = search_type.value;
   isLoading.value = true;
   const now = dayjs();

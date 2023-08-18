@@ -5,6 +5,7 @@ import { useRoute, useRouter } from "vue-router";
 import { statusPacienteEmergencia, urlDocumento } from "../services/patient";
 import PdfViewer from "../components/PdfViewer.vue";
 import { useNotification } from "@kyvg/vue3-notification";
+import {screenview} from "vue-gtag";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -22,8 +23,10 @@ const statusPaciente = ref(null);
 const nhc = ref(props.nhc);
 const url = ref(props.url);
 onMounted(() => {
+  screenview('Resultado de Imagen');
   getUrl(url.value);
   getPatientDetails(nhc.value);
+
 });
 
 const goBack = () => {

@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { statusPacienteEmergencia, urlDocumento } from "../services/patient";
 import PdfViewer from "../components/PdfViewer.vue";
 import { useNotification } from "@kyvg/vue3-notification";
+import {screenview} from "vue-gtag";
 const { notify } = useNotification();
 
 const isLoading = ref(false);
@@ -17,6 +18,7 @@ const statusPaciente = ref(null);
 onMounted(() => {
   getUrl(url.value);
   getPatientDetails(nhc.value);
+  screenview('Compartir Resultado de Imagen');
 });
 const getPatientDetails = (nhc) => {
   try {

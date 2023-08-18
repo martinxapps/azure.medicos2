@@ -4,6 +4,7 @@ import pdf from "@jbtje/vite-vue3pdf";
 import printJS from "print-js";
 
 import { useNotification } from "@kyvg/vue3-notification";
+import {event} from "vue-gtag";
 
 const { notify } = useNotification();
 const pdfRef = ref(null);
@@ -14,6 +15,7 @@ const id = ref(props.id);
 const name = ref(props.name);
 const pageType = ref(props.type);
 const nhc = ref(props.nhc);
+const type = ref(props.type);
 
 const currentPage = ref(1);
 const numPages = ref(1);
@@ -62,6 +64,9 @@ const downloadPdf = () => {
       text: "Resultado descargado",
       type: "success"
     });
+    event('file_download', {
+      value: type.value
+    })
   } catch (e) {
     console.log("e", e);
     notify({
@@ -76,6 +81,7 @@ const printPdf = async () => {
     console.log("src", src.value);
     let resPrint = await printJS({ printable: src.value, type: "pdf", showModal: true });
     console.log("res", resPrint);
+    event('print');
   } catch (e) {
     console.log("e", e);
     notify({
@@ -84,6 +90,20 @@ const printPdf = async () => {
     });
   }
 };
+const registerWhatsappShare = () => {
+  event('share', {
+    content_type: 'link',
+    content_id: type.value,
+    method: 'whatsapp'
+  })
+};
+const registerEmailShare = () => {
+  event('share', {
+    content_type: 'link',
+    content_id: type.value,
+    method: 'email'
+  })
+}
 onMounted(async () => {
   switch (pageType.value) {
     case 'laboratorio':
@@ -113,6 +133,7 @@ onMounted(async () => {
       <div class="row justify-content-end my-1 row-img">
         <div class="col-2 col-md-1 col-img">
           <a class="icon-img cursor-pointer" title="Compartir por whatsapp" target="_blank"
+             @click="registerWhatsappShare()"
              :href="`https://api.whatsapp.com/send?text=Te%20comparto%20mi%20${stringVal}%20en%20el%20siguiente%20enlace:%20${shareLink}`">
             <div class="row img-borderv4">
               <img class="img-icon-colorv3" src="@/assets/whatsapp.png" alt=" icon">
@@ -123,7 +144,7 @@ onMounted(async () => {
         </div>
         <div class="col-2 col-md-1 col-img">
 
-          <a class="icon-img cursor-pointer" title="Compartir por email" target="_blank"
+          <a class="icon-img cursor-pointer" title="Compartir por email" target="_blank" @click="registerEmailShare()"
              :href="`mailto:an@email.com?subject=${subject}&body=Te%20comparto%20mi%20${stringVal}%20en%20el%20siguiente%20enlace:%20${shareLink}`">
             <div class="row img-borderv4">
               <img class="img-icon-colorv3" src="@/assets/email.png" alt=" icon">

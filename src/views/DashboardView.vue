@@ -15,6 +15,11 @@ const goTo = async (name) => {
   await router.push({ name: name });
 
 };
+const registerCredentials = async () => {
+  screenview('Biblioteca de Credenciales');
+  event('see_credentials');
+
+};
 const hashCode = (string) => {
   let hash = 0,
     i, chr;
@@ -37,6 +42,10 @@ onMounted(async () => {
     user_type: 'AZURE AD'
   });
   screenview('Dashbooard');
+  event('logged_user_email', user.value.username);
+  event('logged_user_id', user.value.localAccountId);
+  event('logged_user_display_name', user.value.name);
+  event('logged_user_type', 'AZURE AD');
 });
 
 </script>
@@ -106,7 +115,7 @@ onMounted(async () => {
         <div class=" col-6 col-md-3 d-block pb-5 " v-if="authStore.hasRole('PERFIL_MEDICO_BDOCU')">
           <a class="icon-img" style="text-decoration: none"
              :href="`https://appdocumentosdirmed.azurewebsites.net/app/access/${user?.username.split('@')[0]}/a29bcf0f-e889-4181-b2d5-62d630d502ee`"
-             target="_blank">
+             target="_blank" @click="registerCredentials()">
             <div class="row d-block img-border">
               <img class="img-icon-color" src="@/assets/biblioteca-blancov2.png"
                    alt=" icon">

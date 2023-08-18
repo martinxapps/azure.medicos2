@@ -6,6 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 import { statusPacienteEmergencia, urlCurva } from "../services/patient";
 import pdf from "@jbtje/vite-vue3pdf";
 import { useNotification } from "@kyvg/vue3-notification";
+import {screenview} from "vue-gtag";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -48,6 +49,7 @@ onMounted(() => {
       break;
   }
   title.value = `${name.value} - Metrovirtual - Hospital Metropolitano`;
+  screenview(`Gráfico ${name.value}`);
   getUrl(props.type, props.na);
   getPatientDetails(props.nhc);
 });

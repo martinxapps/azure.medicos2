@@ -3,6 +3,7 @@ import {ref, onMounted} from "vue";
 import { statusPacienteEmergencia, urlDocumento } from "../services/patient";
 import PdfViewer from "../components/PdfViewer.vue";
 import { useNotification } from "@kyvg/vue3-notification";
+import {screenview} from "vue-gtag";
 const { notify } = useNotification();
 
 const isLoading = ref(false);
@@ -14,6 +15,7 @@ const url = ref(props.url);
 const statusPaciente = ref(null);
 const title = ref("Resultado de Laboratorio - Metrovirtual - Hospital Metropolitano");
 onMounted(() => {
+  screenview('Compartir Resultado de Laboratorio');
     getUrl(url.value);
   getPatientDetails(nhc.value);
 });

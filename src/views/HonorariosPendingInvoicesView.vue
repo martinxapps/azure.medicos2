@@ -4,6 +4,7 @@ import FooterMedico from "../components/FooterMedico.vue";
 import {useMyPendingInvoicesStore} from "../stores/myPendingInvoices";
 import {computed, ref, onMounted} from "vue";
 import {useRouter} from "vue-router";
+import {screenview} from "vue-gtag";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -29,7 +30,7 @@ const goBack = async () => {
 const scrollToTop = () => {
 };
 onMounted(async () => {
-  scrollToTop();
+  screenview('Facturas Pendientes');
   searchType.value = search_type.value;
   isLoading.value = true;
   await myPendingInvoicesStore.searchPendingInvoices(searchType.value);

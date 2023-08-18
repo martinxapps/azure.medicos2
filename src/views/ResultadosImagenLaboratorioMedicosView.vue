@@ -8,6 +8,7 @@ import { searchPatients } from "../services/searchPatients";
 import { useNotification } from "@kyvg/vue3-notification";
 import dayjs from "dayjs";
 import { usePatientsListStore } from "../stores/patientsList";
+import {event, screenview} from "vue-gtag";
 
 
 const { notify } = useNotification();
@@ -58,6 +59,10 @@ const goToLabResult = async (result) => {
   //   query: { prev: "resultados" }
   // });
   // window.open(url.href, "_blank");
+  event('see_lab_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  });
   await router.push({
     name: "medic-lab-result-view",
     params: { url: split[3], nhc: nhc.value },
@@ -66,6 +71,10 @@ const goToLabResult = async (result) => {
 };
 const goToLabResultCtrl = async (result) => {
   let split = result.deep_link.split("/");
+  event('see_lab_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  });
   let url = router.resolve({
     name: "medic-lab-result-view",
     params: { url: split[3], nhc: nhc.value },
@@ -89,6 +98,9 @@ const goToZero = async () => {
   });
 };
 const goToZeroCtrl = async () => {
+  event('see_zerofootprint', {
+    nhc: nhc.value
+  });
   let url = router.resolve({
     name: "medic-patient-zerofootprint-view",
     params: { nhc: nhc.value },
@@ -98,6 +110,10 @@ const goToZeroCtrl = async () => {
   //await router.push({name: 'medic-patient-curva-view', params: {type, na, nhc: nhc.value}});
 };
 const goToZeroCtrlItem = async (item) => {
+  event('see_zerofootprint', {
+    nhc: nhc.value,
+    id: item.ID_ESTUDIO
+  });
   let url = router.resolve({
     name: "medic-patient-zerofootprint-item-view",
     params: { id: item.ID_ESTUDIO },
@@ -109,6 +125,10 @@ const goToZeroCtrlItem = async (item) => {
 
 const goToImageResult = async (result) => {
   let split = result.deep_link.split("/");
+  event('see_image_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  });
   // let url = router.resolve({
   //   name: "medic-image-result-view",
   //   params: { url: split[3], nhc: nhc.value },
@@ -123,6 +143,10 @@ const goToImageResult = async (result) => {
 };
 const goToImageResultCtrl = async (result) => {
   let split = result.deep_link.split("/");
+  event('see_image_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  });
   let url = router.resolve({
     name: "medic-image-result-view",
     params: { url: split[3], nhc: nhc.value },
@@ -184,6 +208,7 @@ const getPatientDetails = (nhc) => {
     if (response.status) {
       patient.value = response.data[0];
       title.value = `Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS} - MetroVirtual - Hospital Metropolitano`;
+      screenview(`Resultados Imagen y Laboratorio de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS}`);
     } else {
       notify({
         title: "El paciente no existe",
@@ -218,6 +243,9 @@ const downloadImageFile = (imageResult) => {
           text: "Resultado de imagen descargado",
           type: "success"
         });
+        event('file_download', {
+          value: 'imagen'
+        });
       } else {
         notify({
           title: "El archivo no esta disponible",
@@ -251,6 +279,9 @@ const downloadLabFile = (labResult) => {
           text: "Resultado de imagen descargado",
           type: "success"
         });
+        event('file_download', {
+          value: 'laboratorio'
+        });
       } else {
         notify({
           title: "El archivo no esta disponible",
@@ -263,6 +294,7 @@ const downloadLabFile = (labResult) => {
 };
 
 onMounted(async () => {
+
   const nhc = props.nhc;
   console.log("nhc", nhc);
   if (nhc) {

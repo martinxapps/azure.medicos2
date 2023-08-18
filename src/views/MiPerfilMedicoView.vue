@@ -1,8 +1,9 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
 import {useAuthStore} from "../stores/auth";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
+import {event, screenview} from "vue-gtag";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -13,7 +14,10 @@ const router = useRouter();
 const goBack = async () => {
     await router.push({name: 'dashboard'});
 };
-
+onMounted(async () => {
+  screenview('Mi Perfil');
+  event('see_my_profile');
+});
 </script>
 <template>
     <div>

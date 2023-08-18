@@ -5,6 +5,7 @@ import { useMyTransactionsStore } from "../stores/myTransactions";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
+import {screenview} from "vue-gtag";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -32,6 +33,7 @@ const goBack = async () => {
   await router.back();
 };
 onMounted(async () => {
+  screenview('Transacciones');
   const now = dayjs();
   endDate.value = now.format('YYYY-MM-DD');
   startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');

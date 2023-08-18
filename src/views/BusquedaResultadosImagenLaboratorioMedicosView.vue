@@ -4,6 +4,7 @@ import FooterMedico from "../components/FooterMedico.vue";
 import { usePatientsListStore } from "../stores/patientsList";
 import { computed, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import {event, screenview} from "vue-gtag";
 
 //const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -35,9 +36,14 @@ const goBack = () => {
 
 const goToPatientResults = async (patient) => {
   console.log("patient", patient);
+  event('view_patient_results', {
+    patient: `${patient.APELLIDOS} ${patient.NOMBRES}`
+  });
   await router.push({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: patient.PK_NHCL } });
 };
 onMounted(() => {
+  screenview('Búsqueda de Resultados de Imagen y Laboratorio');
+  event('view_search_results');
   searchType.value = search_type.value;
 });
 

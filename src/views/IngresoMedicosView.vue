@@ -4,6 +4,7 @@ import {useAuthStore} from "../stores/auth";
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useNotification} from "@kyvg/vue3-notification";
+import {event, screenview} from "vue-gtag";
 
 const {notify} = useNotification();
 const router = useRouter();
@@ -68,6 +69,9 @@ const newLogin = async () => {
     }
     let token = await auth.acquireToken();
     await authStore.login(userResult, "medic", token);
+    event('login', {
+      method: 'AZURE AD'
+    });
     await router.push({name: "dashboard"});
   } catch (e) {
     console.log("error in login", e);
@@ -94,7 +98,7 @@ const newLogin = async () => {
 
 
 onMounted(async () => {
-
+  screenview('Ingreso (login)');
 });
 </script>
 <template>

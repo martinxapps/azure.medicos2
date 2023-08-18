@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import IframeViewer from "../components/IframeViewer.vue";
+import {screenview} from "vue-gtag";
 
 const route = useRoute();
 const router = useRouter();
@@ -11,7 +12,9 @@ const props = defineProps(["id"]);
 const exam_id = ref(props.id);
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
 
-onMounted(() => {});
+onMounted(() => {
+  screenview(`Compartir ZerofootPrint Imagen ${exam_id.value}`);
+});
 
 const goBack = () => {
   window.close();
