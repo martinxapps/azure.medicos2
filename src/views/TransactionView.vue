@@ -63,7 +63,7 @@ const getUrl = async () => {
     let response = await transaccion(payload);
     console.log("response", response);
     if (response.status) {
-      src.value = response.data;
+      src.value = response.url;
       isAvailable.value = true;
     } else {
       isAvailable.value = false;
