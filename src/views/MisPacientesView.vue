@@ -21,6 +21,7 @@ const router = useRouter();
 
 
 const search = async () => {
+  if(isLoadingDealers.value || isLoadingConsulted.value) return;
   isLoadingDealers.value = true;
   isLoadingConsulted.value = true;
   await myPatientsStore.searchPatients(0, 1000, searchTerm.value);
@@ -147,27 +148,38 @@ onMounted(async () => {
         </div>
         <div class="row my-2 pb-5 pt-2">
           <div class="col-sm-12 mt-3">
-            <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
-              <li class="nav-item tab-hm" role="presentation">
-                <button class="nav-link nav-hm pl-0" id="lab-tab" data-toggle="tab"
-                        :class="{'active': myPatientsStore.activeTab === 0}" @click="myPatientsStore.activeTab = 0"
-                        data-target="#lab" type="button" role="tab" aria-controls="lab"
-                        aria-selected="true">{{
-                    authStore.hasRole("PERFIL_MEDICO_RESIDENTES") ? "Emergencia" : "Tratante"
-                  }} <span class="bg-number">{{ total_dealer_patients }}</span>
-                </button>
-              </li>
-              <li class="nav-item tab-hm" role="presentation">
-                <button class="nav-link nav-hm pl-0" id="image-tab" data-toggle="tab"
-                        :class="{'active': myPatientsStore.activeTab === 1}" @click="myPatientsStore.activeTab = 1"
-                        data-target="#image" type="button" role="tab" aria-controls="image"
-                        aria-selected="false">
-                  {{ authStore.hasRole("PERFIL_MEDICO_RESIDENTES") ? "Hospitalización" : "Interconsultado" }}
-                  <span class="bg-number">{{ total_consulted_patients }}</span>
-                </button>
-              </li>
+            <div class="row">
+              <div class="col-10">
+                <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
+                  <li class="nav-item tab-hm" role="presentation">
+                    <button class="nav-link nav-hm pl-0" id="lab-tab" data-toggle="tab"
+                            :class="{'active': myPatientsStore.activeTab === 0}" @click="myPatientsStore.activeTab = 0"
+                            data-target="#lab" type="button" role="tab" aria-controls="lab"
+                            aria-selected="true">{{
+                        authStore.hasRole("PERFIL_MEDICO_RESIDENTES") ? "Emergencia" : "Tratante"
+                      }} <span class="bg-number">{{ total_dealer_patients }}</span>
+                    </button>
+                  </li>
+                  <li class="nav-item tab-hm" role="presentation">
+                    <button class="nav-link nav-hm pl-0" id="image-tab" data-toggle="tab"
+                            :class="{'active': myPatientsStore.activeTab === 1}" @click="myPatientsStore.activeTab = 1"
+                            data-target="#image" type="button" role="tab" aria-controls="image"
+                            aria-selected="false">
+                      {{ authStore.hasRole("PERFIL_MEDICO_RESIDENTES") ? "Hospitalización" : "Interconsultado" }}
+                      <span class="bg-number">{{ total_consulted_patients }}</span>
+                    </button>
+                  </li>
 
-            </ul>
+                </ul>
+              </div>
+              <div class="col-2 d-flex justify-content-end">
+                <h5 class="cursor-pointer p-3" style=" color: #0f4470; font-size: 16px;" @click="search()">
+                  <font-awesome-icon :icon="['fas', 'refresh']" class="mx-1"/>
+                  <p class="m-0 d-none d-md-inline-block">Actualizar</p>
+                </h5>
+              </div>
+            </div>
+
             <div class="tab-content" id="ResultsTabContent">
               <div class="tab-pane fade" id="lab" role="tabpanel"
                    :class="{'active': myPatientsStore.activeTab === 0, 'show': myPatientsStore.activeTab === 0}"

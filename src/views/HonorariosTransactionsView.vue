@@ -5,7 +5,7 @@ import { useMyTransactionsStore } from "../stores/myTransactions";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
-import {screenview} from "vue-gtag";
+import {event, screenview} from "vue-gtag";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -32,11 +32,24 @@ const goBack = async () => {
   await myTransactionsStore.clearTransactions();
   await router.back();
 };
+const goToDetail = async (item) => {
+  console.log('item transaction', item);
+  event('see_transaction', {
+    account: item.CTA_BANCARIA,
+    user_name: user.value.name
+  });
+  router.push({
+    name: "honorarios-transaccion", params: {
+      title: item.CTA_BANCARIA,
+      id: item.NO_TRANSACCION,
+    }
+  }).catch((e) => console.log("e", e));
+};
 onMounted(async () => {
   screenview('Transacciones');
   const now = dayjs();
   endDate.value = now.format('YYYY-MM-DD');
-  startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');
+  startDate.value = now.subtract(10, 'day').format('YYYY-MM-DD');
   searchType.value = search_type.value;
   isLoading.value = true;
   let payload = {
@@ -136,16 +149,24 @@ onMounted(async () => {
                     <p class="text-results"><b>Retención:</b> $ {{ transaction?.RETENCION }}</p>
                   </div>
                   <div class="col-3 d-flex justify-content-center">
-                    <a
-                      :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.username.split('@')[0]}&fecha_transaccion=${transaction.FECHA}&numero_transaccion=${transaction.NO_TRANSACCION}&tipo_imprime=PAGOS`"
-                      target="_blank" download
+<!--                    <a-->
+<!--                      :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.username.split('@')[0]}&fecha_transaccion=${transaction.FECHA}&numero_transaccion=${transaction.NO_TRANSACCION}&tipo_imprime=PAGOS`"-->
+<!--                      target="_blank" download-->
+<!--                      class="cursor-pointer"-->
+<!--                      :title="`Descargar factura`">-->
+<!--                      <div class="p-0 p-md-4 py-md-6">-->
+<!--                        <font-awesome-icon :icon="['fas', 'download']" size="2x"-->
+<!--                                           class="icon-device" />-->
+<!--                      </div>-->
+<!--                    </a>-->
+                    <div @click="goToDetail(transaction)"
                       class="cursor-pointer"
                       :title="`Descargar factura`">
                       <div class="p-0 p-md-4 py-md-6">
-                        <font-awesome-icon :icon="['fas', 'download']" size="2x"
+                        <font-awesome-icon :icon="['fas', 'eye']" size="2x"
                                            class="icon-device" />
                       </div>
-                    </a>
+                    </div>
                   </div>
                 </div>
               </template>

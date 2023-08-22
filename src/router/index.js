@@ -21,6 +21,9 @@ import DetallePacienteView from "../views/DetallePacienteView.vue";
 import MisPacientesView from "../views/MisPacientesView.vue";
 import HonorariosView from "../views/HonorariosView.vue";
 import HonorariosPayedInvoicesView from "../views/HonorariosPayedInvoicesView.vue";
+import PayedInvoiceView from "../views/PayedInvoiceView.vue";
+import TransactionView from "../views/TransactionView.vue";
+import AccountStatementView from "../views/AccountStatementView.vue";
 import HonorariosPendingInvoicesView from "../views/HonorariosPendingInvoicesView.vue";
 import HonorariosTransactionsView from "../views/HonorariosTransactionsView.vue";
 import HonorariosAuditedView from "../views/HonorariosAuditedView.vue";
@@ -266,6 +269,18 @@ const router = createRouter({
         roles: ["PERFIL_MEDICO_HONORARIOS"]
       }
     },
+    // factura pagada view
+    {
+      path: language === "es" ? "/mis-honorarios/factura-pagada/:title/:id" : "/mis-honorarios/payed-invoice/:title/:id",
+      name: "honorarios-factura-pagada",
+      component: PayedInvoiceView,
+      props: true,
+      meta: {
+        authRequired: true,
+        userType: "medic",
+        roles: ["PERFIL_MEDICO_HONORARIOS"]
+      }
+    },
     // //honorarios facturas pendientes
     {
       path: language === "es" ? "/mis-honorarios/facturas-pendientes" : "/my-fees/pending-invoices",
@@ -288,6 +303,18 @@ const router = createRouter({
         roles: ["PERFIL_MEDICO_HONORARIOS"]
       }
     },
+    // transaccion view
+    {
+      path: language === "es" ? "/mis-honorarios/transaccion/:title/:id" : "/mis-honorarios/transaction/:title/:id",
+      name: "honorarios-transaccion",
+      component: TransactionView,
+      props: true,
+      meta: {
+        authRequired: true,
+        userType: "medic",
+        roles: ["PERFIL_MEDICO_HONORARIOS"]
+      }
+    },
     // //honorarios auditados
     {
       path: language === "es" ? "/mis-honorarios/honorarios-auditados" : "/my-fees/audited-fees",
@@ -304,6 +331,19 @@ const router = createRouter({
       path: language === "es" ? "/mis-honorarios/estados-de-cuenta" : "/my-fees/account-statements",
       name: "honorarios-estados-de-cuenta",
       component: HonorariosAccountStatementsView,
+      meta: {
+        authRequired: true,
+        userType: "medic",
+        roles: ["PERFIL_MEDICO_HONORARIOS"]
+      }
+    },
+
+    // account statemenet view
+    {
+      path: language === "es" ? "/mis-honorarios/estado-de-cuenta/:start/:end" : "/mis-honorarios/account-statement/:start/:end",
+      name: "honorarios-account-statement",
+      component: AccountStatementView,
+      props: true,
       meta: {
         authRequired: true,
         userType: "medic",

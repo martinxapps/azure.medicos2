@@ -1,11 +1,11 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
-import { useAuthStore } from "../stores/auth";
-import { useMyPayedInvoicesStore } from "../stores/myPayedInvoices";
-import { computed, ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import {useAuthStore} from "../stores/auth";
+import {useMyPayedInvoicesStore} from "../stores/myPayedInvoices";
+import {computed, ref, onMounted} from "vue";
+import {useRouter} from "vue-router";
 import dayjs from "dayjs";
-import {screenview} from "vue-gtag";
+import {event, screenview} from "vue-gtag";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -39,13 +39,28 @@ const goBack = async () => {
   await router.back();
 };
 
+
+const goToDetail = async (item) => {
+  console.log('item invoice', item);
+  event('see_payed_invoice', {
+    invoice: item.FACTURA,
+    user_name: user.value.name
+  });
+  router.push({
+    name: "honorarios-factura-pagada", params: {
+      title: item.FACTURA,
+      id: item.NO_TRANSACCION,
+    }
+  }).catch((e) => console.log("e", e));
+};
+
 onMounted(async () => {
   screenview('Facturas Pagadas');
   searchType.value = search_type.value;
   isLoading.value = true;
   const now = dayjs();
   endDate.value = now.format('YYYY-MM-DD');
-  startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');
+  startDate.value = now.subtract(10, 'day').format('YYYY-MM-DD');
   let payload = {
     searchField: searchTerm.value,
     type: searchType.value,
@@ -72,7 +87,7 @@ onMounted(async () => {
           <div class=" col-6 " @click="goBack()">
             <div class="row mt-3">
               <h5 class="cursor-pointer ml-3" style=" color: #0f4470; font-size: 16px;">
-                <font-awesome-icon :icon="['fas', 'chevron-left']" />
+                <font-awesome-icon :icon="['fas', 'chevron-left']"/>
                 Regresar
               </h5>
             </div>
@@ -170,16 +185,23 @@ onMounted(async () => {
                     <p class="text-results"><b>Monto Pago:</b> $ {{ payedInvoice?.CANCELA }}</p>
                   </div>
                   <div class="col-3 d-flex justify-content-center">
-                    <a
-                      :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.username.split('@')[0]}&fecha_transaccion=${payedInvoice.FECHA}&numero_transaccion=${payedInvoice.NO_TRANSACCION}&tipo_imprime=PAGOS`"
-                      target="_blank" download
-                      class="cursor-pointer"
-                      :title="`Descargar factura`">
+                    <!--                    <a-->
+                    <!--                      :href="`https://api.hospitalmetropolitano.org/h2/v0/controlador/descarga_documentos/preparar_planilla_pago.php?proveedor=${user.username.split('@')[0]}&fecha_transaccion=${payedInvoice.FECHA}&numero_transaccion=${payedInvoice.NO_TRANSACCION}&tipo_imprime=PAGOS`"-->
+                    <!--                      target="_blank" download-->
+                    <!--                      class="cursor-pointer"-->
+                    <!--                      :title="`Descargar factura`">-->
+                    <!--                      <div class="p-0 p-md-4 py-md-6">-->
+                    <!--                        <font-awesome-icon :icon="['fas', 'download']" size="2x"-->
+                    <!--                                           class="icon-device" />-->
+                    <!--                      </div>-->
+                    <!--                    </a>-->
+                    <div class="cursor-pointer" @click="goToDetail(payedInvoice)"
+                         :title="`Descargar factura`">
                       <div class="p-0 p-md-4 py-md-6">
-                        <font-awesome-icon :icon="['fas', 'download']" size="2x"
-                                           class="icon-device" />
+                        <font-awesome-icon :icon="['fas', 'eye']" size="2x"
+                                           class="icon-device"/>
                       </div>
-                    </a>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -194,7 +216,7 @@ onMounted(async () => {
 
           </div>
         </div>
-        <FooterMedico />
+        <FooterMedico/>
       </div>
 
     </div>

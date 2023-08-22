@@ -18,6 +18,18 @@ export function misFacturasPagadas(payload) {
     const patients = mande(url);
     return patients.post(payload);
 }
+export function facturaPagada(data) {
+    const patients = mande(  `${baseURLV2}/medicos/honorarios/reportes?idReport=PP`);
+    return patients.post(data);
+}
+export function transaccion(data) {
+    const patients = mande(  `${baseURLV2}/medicos/honorarios/reportes?idReport=PPM`);
+    return patients.post(data);
+}
+export function estadoDeCuenta(data) {
+    const patients = mande(  `${baseURLV2}/medicos/honorarios/reportes?idReport=EC`);
+    return patients.post(data);
+}
 
 export function misTransacciones(filter, start, length, payload) {
     const patients = mande(`${baseURLV2}/medicos/mis-transferencias?typeFilter=${filter}&start=${start}&length=${length}`);

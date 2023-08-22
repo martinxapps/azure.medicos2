@@ -177,7 +177,7 @@ onMounted(async () => {
   screenview(`Honorarios Auditados`);
   const now = dayjs();
   endDate.value = now.format('YYYY-MM-DD');
-  startDate.value = now.subtract(15, 'day').format('YYYY-MM-DD');
+  startDate.value = now.subtract(10, 'day').format('YYYY-MM-DD');
   await search();
 });
 
