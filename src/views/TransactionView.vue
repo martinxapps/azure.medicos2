@@ -1,11 +1,9 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
-//import {useAuthStore} from "../stores/auth";
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { statusPacienteEmergencia, urlCurva } from "../services/patient";
+import {ref, onMounted} from "vue";
+import {useRoute, useRouter} from "vue-router";
 import pdf from "@jbtje/vite-vue3pdf";
-import { useNotification } from "@kyvg/vue3-notification";
+import {useNotification} from "@kyvg/vue3-notification";
 import {event, screenview} from "vue-gtag";
 import {transaccion} from "../services/fees";
 import printJS from "print-js";
@@ -15,7 +13,7 @@ import printJS from "print-js";
 // const type = computed(() => authStore.type);
 const route = useRoute();
 const router = useRouter();
-const { notify } = useNotification();
+const {notify} = useNotification();
 const numPagesEvent = (e) => {
   console.log("numPagesEvent", e);
   numPages.value = e;
@@ -32,16 +30,18 @@ const props = defineProps(["title", "id"]);
 const src = ref(null);
 const name = ref(props.title);
 const id = ref(props.id);
+const pdfRef = ref(null);
 const title = ref(`Transacción ${name.value} - MetroVirtual - Hospital Metropolitano`);
 
 
 onMounted(() => {
+  screenview(`Transacción ${name.value}`);
   getUrl();
 });
 const goBack = () => {
   console.log("route query", route.query);
   if (window.history.state.back === null) {
-    router.replace({ name: "honorarios-facturas-pagadas" });
+    router.replace({name: "honorarios-facturas-pagadas"});
   } else {
     router.back();
   }
@@ -89,7 +89,7 @@ const getUrl = async () => {
 const printPdf = async () => {
   try {
     console.log("src", src.value);
-    let resPrint = await printJS({ printable: src.value, type: "pdf", showModal: true });
+    let resPrint = await printJS({printable: src.value, type: "pdf", showModal: true});
     console.log("res", resPrint);
     event('print');
   } catch (e) {
@@ -116,7 +116,7 @@ const printPdf = async () => {
           <div class=" col-6 " @click="goBack()">
             <div class="row mt-2">
               <h5 class="cursor-pointer ml-3" style=" color: #0f4470; font-size: 16px;">
-                <font-awesome-icon :icon="['fas', 'chevron-left']" />
+                <font-awesome-icon :icon="['fas', 'chevron-left']"/>
                 Regresar
               </h5>
             </div>
@@ -129,7 +129,7 @@ const printPdf = async () => {
                 </div>
                 <h4 class="d-flex text-headerv2 mt-1" style="text-align:left; color: #05305d;
                                     font-weight: 600;">
-                  Transaccion No.<br>
+                  Transacción No.<br>
                   {{ name }}
                 </h4>
               </div>
@@ -192,19 +192,20 @@ const printPdf = async () => {
                   </div>
                 </div>
                 <pdf
-                  :src="'data:application/pdf;base64,'+src"
-                  @num-pages="numPagesEvent"
-                  @page-loaded="pageLoadedEvent"
-                  :page="currentPage"
+                    ref="pdfRef"
+                    :src="src"
+                    @num-pages="numPagesEvent"
+                    @page-loaded="pageLoadedEvent"
+                    :page="currentPage"
                 ></pdf>
               </template>
               <template v-else>
-                <p class="text-center text-search">transacción No. {{ name }} no disponible</p>
+                <p class="text-center text-search">Transacción No. {{ name }} no disponible</p>
               </template>
             </template>
           </div>
         </div>
-        <FooterMedico />
+        <FooterMedico/>
       </div>
     </div>
   </div>
