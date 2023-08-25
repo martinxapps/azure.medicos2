@@ -271,7 +271,7 @@ const router = createRouter({
     },
     // factura pagada view
     {
-      path: language === "es" ? "/mis-honorarios/factura-pagada/:title/:id" : "/mis-honorarios/payed-invoice/:title/:id",
+      path: language === "es" ? "/mis-honorarios/factura-pagada/:title/:id/:fecha" : "/mis-honorarios/payed-invoice/:title/:id/:fecha",
       name: "honorarios-factura-pagada",
       component: PayedInvoiceView,
       props: true,
@@ -305,7 +305,7 @@ const router = createRouter({
     },
     // transaccion view
     {
-      path: language === "es" ? "/mis-honorarios/transaccion/:title/:id" : "/mis-honorarios/transaction/:title/:id",
+      path: language === "es" ? "/mis-honorarios/transaccion/:title/:id/:fecha" : "/mis-honorarios/transaction/:title/:id/:fecha",
       name: "honorarios-transaccion",
       component: TransactionView,
       props: true,

@@ -42,6 +42,7 @@ const goToDetail = async (item) => {
     name: "honorarios-transaccion", params: {
       title: item.CTA_BANCARIA,
       id: item.NO_TRANSACCION,
+      fecha: item.FECHA,
     }
   }).catch((e) => console.log("e", e));
 };

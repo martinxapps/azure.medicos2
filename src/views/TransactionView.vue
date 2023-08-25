@@ -26,16 +26,17 @@ const currentPage = ref(1);
 const numPages = ref(1);
 const isLoading = ref(false);
 const isAvailable = ref(false);
-const props = defineProps(["title", "id"]);
+const props = defineProps(["title", "id", 'fecha']);
 const src = ref(null);
 const name = ref(props.title);
 const id = ref(props.id);
+const fecha = ref(props.fecha);
 const pdfRef = ref(null);
-const title = ref(`Transacción ${name.value} - MetroVirtual - Hospital Metropolitano`);
+const title = ref(`Transacción ${id.value} - MetroVirtual - Hospital Metropolitano`);
 
 
 onMounted(() => {
-  screenview(`Transacción ${name.value}`);
+  screenview(`Transacción ${id.value}`);
   getUrl();
 });
 const goBack = () => {
@@ -57,6 +58,7 @@ const getUrl = async () => {
   try {
     let payload = {
       no_trasaccion: id.value,
+      fecha: fecha.value,
     };
     isLoading.value = true;
     console.log("payload", payload);
@@ -130,7 +132,7 @@ const printPdf = async () => {
                 <h4 class="d-flex text-headerv2 mt-1" style="text-align:left; color: #05305d;
                                     font-weight: 600;">
                   Transacción No.<br>
-                  {{ name }}
+                  {{ id }}
                 </h4>
               </div>
             </div>
@@ -200,7 +202,7 @@ const printPdf = async () => {
                 ></pdf>
               </template>
               <template v-else>
-                <p class="text-center text-search">Transacción No. {{ name }} no disponible</p>
+                <p class="text-center text-search">Transacción No. {{ id }} no disponible</p>
               </template>
             </template>
           </div>

@@ -27,10 +27,11 @@ const currentPage = ref(1);
 const numPages = ref(1);
 const isLoading = ref(false);
 const isAvailable = ref(false);
-const props = defineProps(["title", "id"]);
+const props = defineProps(["title", "id", 'fecha']);
 const src = ref(null);
 const name = ref(props.title);
 const id = ref(props.id);
+const fecha = ref(props.fecha);
 const title = ref(`Factura ${name.value} - MetroVirtual - Hospital Metropolitano`);
 const pdfRef = ref(null);
 
@@ -57,6 +58,7 @@ const getUrl = async () => {
   try {
     let payload = {
       no_trasaccion: id.value,
+      fecha: fecha.value,
     };
     isLoading.value = true;
     console.log("payload", payload);
