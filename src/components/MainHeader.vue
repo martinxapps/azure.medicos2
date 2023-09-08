@@ -13,9 +13,6 @@ import MainDropDown from "@/components/MainDropDown.vue";
         </div>
       </div>
     </div>
-    <div class="bottom-header">
-
-    </div>
   </header>
 </template>
 

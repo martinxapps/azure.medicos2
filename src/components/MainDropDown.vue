@@ -53,7 +53,6 @@ const user = computed(() => authStore.user);
   }
   .btn-header {
     background: #259ddb !important;
-    border: 1px solid white !important;
   }
 
 }
