@@ -430,7 +430,7 @@ p.black-colorv2 {
     height: 35px;
 }
 p.span-text {
-    font-size: 12px;
+    font-size: 14px;
 }
 
 @media screen and (max-width: 600px) {
