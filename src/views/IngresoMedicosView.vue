@@ -200,12 +200,12 @@ onMounted(async () => {
                            alt="microsift icon" width="30px" height="28px">
                       {{ language === "es" ? "Ingreso seguro" : "Log In" }}
                     </button>
-                    <span class="span-text mt-4">
+                    <p class="span-text mt-4">
                       <br>
                       Ingrese con el usuario proporcionado por el hospital seguido de @hmetro.med.ec <br>
                       Su contraseña es la misma proporcionada por el hospital.<br>
                       Ej: Si su usario es pperez ustede deberá ingresar pperez@hmetro.med.ec
-                    </span>
+                    </p>
                   </div>
                   <div class="col-3 col-lg-2">
                   </div>
