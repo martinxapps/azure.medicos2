@@ -12,12 +12,16 @@ const user = computed(() => authStore.user);
   <div class="d-flex">
     <p class="text-white d-none d-md-block my-2 mx-3">Servicios Virtuales</p>
     <div class="dropdown">
-      <button class="btn-header dropdown-toggle mx-2 p-3 px-md-5 py-md-2 text-white d-flex justify-content-center"
+      <button class="btn-header mx-2 p-3 px-md-5 py-md-2 text-white d-flex justify-content-center"
               type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-        <img class="icon icon--small mx-2 d-block"
+        <img class="icon icon--small mx-2 my-2 d-block"
              src="@/assets/icon-medicos-blanco.png" width="28"
              alt="perfil">
-        <span class="text-white d-none d-md-block">{{ user ? "Dr. " + user.name : "Médicos" }}</span>
+        <span class="text-white d-none d-md-block  mx-1 my-2">{{ user ? "Dr. " + user.name : "Médicos" }}</span>
+        <font-awesome-icon class="icon icon--small mx-2 my-2 d-block d-md-none" :icon="['fas', 'bars']"
+                           style="width: 28px; height: 28px;"/>
+        <font-awesome-icon class="icon icon--small mx-2 my-2 d-none d-md-block" :icon="['fas', 'chevron-down']"
+                           style="width: 22px; height: 22px;"/>
         <!--        <span class="text-white d-none d-md-block">{{ user ? 'Dr. ' + user.name : 'MÉDICOS' }}</span>-->
       </button>
       <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">

@@ -300,6 +300,11 @@ span.bg-number {
     margin-top: 1px;
 }
 
+
+.color-margin {
+    margin-top: -105px;
+}
+
 .img-icon-colorvp {
     width: 85px;
     height: 85px;
@@ -461,13 +466,19 @@ p.span-text {
         right: 15px;
     }
 
-
     .img-border {
-        padding: 5px 5px;
-        width: 120px;
-        height: 120px;
+        padding: 10px 5px;
+        width: 100px;
+        height: 100px;
     }
 
+    .img-icon-color {
+        width: 80px;
+        height: 80px;
+    }
+    .color-margin {
+        margin-top: -80px;
+    }
     li.nav-item.tab-hm {
         min-width: 140px;
         word-wrap: normal;

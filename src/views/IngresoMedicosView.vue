@@ -111,7 +111,7 @@ onMounted(async () => {
       <div class="container m-auto ml-2">
         <div class="row mb-5 mb-md-2 justify-content-center">
           <!--columna de inputs-->
-          <form class=" col-12 col-md-7 px-3 mb-0 mb-md-4">
+          <form class=" col-12 col-md-7 px-4 mb-0 mb-md-4">
             <div class=" my-4 row">
               <div class="col-md-8 col-lg-6 col-10 mt-4">
                 <img class="img-metrovirtualv1" src="@/assets/metrovirtual_logo.svg" alt="Mundometro icon"
@@ -152,55 +152,17 @@ onMounted(async () => {
               </div>
             </template>
             <template v-if="location === 'login'">
-              <!--                            <div class="form-group my-2 ">-->
-              <!--                                <div class="row no-gutters no-margin">-->
-              <!--                                    <div class="col-12 col-md-7 col-lg-6">-->
-              <!--                                        <input type="text"-->
-              <!--                                               v-model="loginForm.user"-->
-              <!--                                               class="m-0 p-0 pl-3 form-control"-->
-              <!--                                               style="border-radius: 50px"-->
-              <!--                                               required-->
-              <!--                                               name="user"-->
-              <!--                                               :disabled="showLoading"-->
-              <!--                                               :placeholder="language === 'es' ? 'Ingresa tu usuario' : 'Enter your user'">-->
-              <!--                                    </div>-->
-              <!--                                    <div class="col-3 col-lg-2">-->
-              <!--                                    </div>-->
-              <!--                                </div>-->
-              <!--                            </div>-->
-              <!--                            <div class="form-group my-2 ">-->
-              <!--                                <div class="row no-gutters no-margin">-->
-              <!--                                    <div class="col-12 col-md-7 col-lg-6">-->
-              <!--                                        <input type="password"-->
-              <!--                                               v-model="loginForm.pass"-->
-              <!--                                               class="m-0 p-0 pl-3 form-control"-->
-              <!--                                               style="border-radius: 50px"-->
-              <!--                                               required name="password"-->
-              <!--                                               :disabled="showLoading"-->
-              <!--                                               :placeholder="language === 'es' ? 'Ingresa tu contraseña' : 'Enter your password'"-->
-              <!--                                               @keyup.enter="login()">-->
-              <!--                                    </div>-->
-              <!--                                    <div class="col-3 col-lg-2">-->
-              <!--                                    </div>-->
-              <!--                                </div>-->
-              <!--                            </div>-->
+
               <div class="form-group my-2">
                 <div class="row no-gutters no-margin">
                   <div class="col-12 col-md-7 col-lg-7 mt-2">
-                    <!--                                        <button class="text-center cursor-pointer pt-2"-->
-                    <!--                                                :class="[-->
-                    <!--                                                     loginForm.user && loginForm.pass ? 'btn-loginv3' : 'left-button'-->
-                    <!--                                                     ]"-->
-                    <!--                                                @click="login()">-->
-                    <!--                                            {{language === 'es' ? 'Ingresar' : 'Log In'}}-->
-                    <!--                                        </button>-->
                     <button class="text-center cursor-pointer pt-2 my-2 btn-loginv3"
                             @click="newLogin()">
                       <img class="icono-user mt-1" src="@/assets/MICROSOFT.png"
                            alt="microsift icon" width="30px" height="28px">
                       {{ language === "es" ? "Ingreso seguro" : "Log In" }}
                     </button>
-                    <p class="span-text my-2">
+                    <p class="span-text my-4">
                       Ingrese con el usuario proporcionado por el hospital seguido de @hmetro.med.ec <br>
                       Su contraseña es la misma proporcionada por el hospital.<br>
                       Ej: Si su usario es pperez ustede deberá ingresar pperez@hmetro.med.ec
@@ -224,7 +186,8 @@ onMounted(async () => {
                       </a>
                     </div>
                     <div class="col-6">
-                      <a class="d-flex justify-content-center cursor-pointer" href="#" target="_blank">
+                      <a class="d-flex justify-content-center cursor-pointer"
+                         href="https://apps.apple.com/us/app/metrovirtual-m%C3%A9dicos/id6449236699" target="_blank">
                         <img src="@/assets/app_store.png" alt="Mundometro icon"
                              width="100%" height="auto ">
                       </a>
