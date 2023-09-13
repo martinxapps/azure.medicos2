@@ -19,6 +19,7 @@ import BuzonDeSugerenciasView from "../views/BuzonDeSugerenciasView.vue";
 import MiPerfilMedicoView from "../views/MiPerfilMedicoView.vue";
 import DetallePacienteView from "../views/DetallePacienteView.vue";
 import MisPacientesView from "../views/MisPacientesView.vue";
+import BibliotecaView from "../views/BibliotecaView.vue";
 import HonorariosView from "../views/HonorariosView.vue";
 import HonorariosPayedInvoicesView from "../views/HonorariosPayedInvoicesView.vue";
 import PayedInvoiceView from "../views/PayedInvoiceView.vue";
@@ -67,6 +68,17 @@ const router = createRouter({
       meta: {
         authRequired: false,
         userType: "generic"
+      }
+    },
+    // //mis pacientes
+    {
+      path: language === "es" ? "/biblioteca" : "/library",
+      name: "biblioteca-de-credenciales",
+      component: BibliotecaView,
+      meta: {
+        authRequired: true,
+        userType: "medic",
+        roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
       }
     },
     // //mis pacientes
