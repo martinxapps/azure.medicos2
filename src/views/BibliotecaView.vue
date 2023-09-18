@@ -65,7 +65,6 @@ const downloadPdf = async (url) => {
       type: "warn"
     });
     if (url) {
-      isLoading.value = true;
       let response = await urlDocumento(url);
       console.log("response", response);
       if (response.status) {
@@ -87,9 +86,7 @@ const downloadPdf = async (url) => {
           text: "Resultado descargado",
           type: "success"
         });
-        event('file_download', {
-          value: type.value
-        })
+
       } else {
 
         notify({
@@ -103,6 +100,7 @@ const downloadPdf = async (url) => {
       console.log("src.value", src.value);
     }
   } catch (e) {
+    isLoading.value = false;
     console.log("e", e);
     notify({
       title: "Hubo un error al descargar",
