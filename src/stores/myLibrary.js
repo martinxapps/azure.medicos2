@@ -12,6 +12,7 @@ useMyLibraryStore = defineStore({
     actions: {
         async getFolders(year, userName) {
             this.isLoading = true;
+            this.total = 0;
             for (let i = 0; i < this.folders.length; i++) {
                 let data = {
                     path: `${year}/${userName}/${this.folders[i].name}`
@@ -50,6 +51,11 @@ useMyLibraryStore = defineStore({
                         isLoading:false,
                     },
                     {
+                        name: 'CREDENCIALES',
+                        data: [],
+                        isLoading:false,
+                    },
+                    {
                         name: 'POLIZA-RESPONZABILIDAD-CIVIL',
                         data: [],
                         isLoading:false,
@@ -78,6 +84,12 @@ useMyLibraryStore = defineStore({
             },
             {
                 name: 'CURSOS-CERTIFICADOS',
+                data: [],
+                isLoading:false,
+            },
+
+            {
+                name: 'CREDENCIALES',
                 data: [],
                 isLoading:false,
             },

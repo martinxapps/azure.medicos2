@@ -10,6 +10,8 @@ import DropZone from "../components/DropZone.vue";
 import {checkFolder, createFolder, uploadFile} from "../services/library";
 import dayjs from "dayjs";
 import {useNotification} from "@kyvg/vue3-notification";
+import {urlDocumento} from "../services/patient";
+
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
 // const type = computed(() => authStore.type);
@@ -22,6 +24,7 @@ const router = useRouter();
 const selectedYear = ref(null);
 const year = ref(null);
 const folder = ref(null);
+const src = ref(null);
 const date = ref(null);
 const dirty = ref(false);
 const fileInput = ref(null);
@@ -53,6 +56,62 @@ const dropFiles = (newFiles) => {
 };
 
 
+const downloadPdf = async (url) => {
+  try {
+    // Create a new link
+    notify({
+      title: "Listo",
+      text: "Se procederá con la descarga en unos segundos",
+      type: "warn"
+    });
+    if (url) {
+      isLoading.value = true;
+      let response = await urlDocumento(url);
+      console.log("response", response);
+      if (response.status) {
+        src.value = response.url;
+        console.log("src", src.value);
+        const anchor = document.createElement("a");
+        anchor.href = src.value;
+        anchor.download = `${name.value}.pdf`;
+        anchor.style.display = "none";
+        console.log("anchor", anchor);
+        // Append to the DOM
+        document.body.appendChild(anchor);
+        // Trigger `click` event
+        anchor.click();
+        // Remove element from DOM
+        document.body.removeChild(anchor);
+        notify({
+          title: "Listo",
+          text: "Resultado descargado",
+          type: "success"
+        });
+        event('file_download', {
+          value: type.value
+        })
+      } else {
+
+        notify({
+          title: "El archivo no esta disponible",
+          text: response.message,
+          type: "error"
+        });
+
+      }
+      isLoading.value = false;
+      console.log("src.value", src.value);
+    }
+  } catch (e) {
+    console.log("e", e);
+    notify({
+      title: "Hubo un error al descargar",
+      type: "error"
+    });
+  }
+};
+
+
 const onInputChange = (e) => {
   console.log('event, ', e);
   addFile(e.target.files[0]);
@@ -63,7 +122,7 @@ const openSelector = () => {
   fileInput.value.click();
 }
 const upload = async () => {
-  try{
+  try {
     dirty.value = true;
     if (year.value === null || folder.value === null || date.value === null) return;
     dirty.value = false;
@@ -95,9 +154,9 @@ const upload = async () => {
         console.log('data upload', dataUpload);
         const responseUpload = await uploadFile(dataUpload);
         console.log('responseUpload', responseUpload);
-        if(responseUpload.status){
+        if (responseUpload.status) {
           console.log('se subio');
-        }else{
+        } else {
           notify({
             title: "Hubo un error",
             text: 'no se pudo subir el archivo',
@@ -116,7 +175,7 @@ const upload = async () => {
       };
       const responseCreate = await createFolder(dataCreate);
       console.log('responseCreate', responseCreate);
-      if(responseCreate.status){
+      if (responseCreate.status) {
         //upload
         const reader = new FileReader();
 
@@ -134,9 +193,9 @@ const upload = async () => {
           console.log('data upload', dataUpload);
           const responseUpload = await uploadFile(dataUpload);
           console.log('responseUpload', responseUpload);
-          if(responseUpload.status){
+          if (responseUpload.status) {
             console.log('se subio');
-          }else{
+          } else {
             notify({
               title: "Hubo un error",
               text: 'no se pudo subir el archivo',
@@ -146,7 +205,7 @@ const upload = async () => {
         };
 
         reader.readAsDataURL(file.value.file);
-      }else{
+      } else {
         //hubo un error
         notify({
           title: "Hubo un error",
@@ -156,7 +215,7 @@ const upload = async () => {
       }
     }
     isLoading.value = false;
-  }catch (e) {
+  } catch (e) {
     console.log('error', e);
     isLoading.value = false;
   }
@@ -257,13 +316,6 @@ class UploadableFile {
               </div>
 
               <div class="col-3 d-flex justify-content-end">
-                <select class="p-2 my-2" v-model="selectedYear" @change="getFolders">
-                  <option :value="null">Seleccionar año</option>
-                  <option v-for="(year, yearKey) in years"
-                          :key="yearKey" :value="year">
-                    {{ year }}
-                  </option>
-                </select>
                 <h5 class="cursor-pointer p-3" style=" color: #0f4470; font-size: 16px;" @click="getFolders()">
                   <font-awesome-icon :icon="['fas', 'refresh']" class="mx-1"/>
                   <span class="m-0 d-none d-md-inline-block">Actualizar</span>
@@ -286,6 +338,19 @@ class UploadableFile {
                       <template v-else>
                         <template v-if="folders.length > 0">
                           <div class="accordion accordion-flush" id="accordionFlush">
+                            <div class="row">
+                              <div class="col-12 col-md-4 p-2">
+                                <label class="my-2 title-text">Seleccionar año</label>
+                                <select class="form-control p-3 my-2" v-model="selectedYear" @change="getFolders">
+                                  <option :value="null">Seleccionar año</option>
+                                  <option v-for="(year, yearKey) in years"
+                                          :key="yearKey" :value="year">
+                                    {{ year }}
+                                  </option>
+                                </select>
+                              </div>
+
+                            </div>
                             <template
                                 v-for="(file, documentKey) in folders"
                                 :key="documentKey">
@@ -294,7 +359,9 @@ class UploadableFile {
                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                           :data-bs-target="'#flush-collapseOne'+documentKey" aria-expanded="false"
                                           :aria-controls="'#flush-collapseOne'+documentKey">
-                                    {{ file.name }}
+                                    {{ selectedYear }}/{{ file.name }} <span class="bg-number mx-2"><b>{{
+                                      file.data.length
+                                    }}</b></span>
                                   </button>
                                 </h2>
                                 <div :id="'flush-collapseOne'+documentKey" class="accordion-collapse collapse"
@@ -307,18 +374,26 @@ class UploadableFile {
                                     </template>
                                     <template v-else>
                                       <template v-if="file.data.length>0">
+                                        <div class="row">
+                                          <div class="col-6 title-text">Nombre</div>
+                                          <div class="col-2 title-text">Tamaño</div>
+                                          <div class="col-2 title-text">Fecha de caducidad</div>
+                                          <div class="col-2 title-text">Acción</div>
+                                        </div>
+                                        <hr>
                                         <div v-for="(archive, archiveKey) in file.data"
-                                             :key="archiveKey" >
-                                          <a target="_blank" :href="archive.Uri" class="row" style="color: #818181 !important">
-                                            <h6 class="col-8">{{ archive.Name }}</h6>
-                                            <h6 class="col-2">{{ archive.Size }} kb</h6>
-                                            <h6 class="col-2">{{ dayjs(archive.TimeCreated).format('DD/MM/YYYY')  }}</h6>
-                                          </a>
+                                             :key="archiveKey" class="row">
+                                          <h6 class="col-6">{{ archive.Name }}</h6>
+                                          <h6 class="col-2">{{ archive.Size }} kb</h6>
+                                          <h6 class="col-2">{{ dayjs(archive.TimeCreated).format('DD/MM/YYYY') }}</h6>
+                                          <div class="col-2" @click="downloadPdf(archive.Uri)">
+                                            <font-awesome-icon :icon="['fas', 'download']"/>
+                                          </div>
 
                                         </div>
                                       </template>
                                       <template v-else>
-                                        <p>No tienes archivos en {{file.name}}</p>
+                                        <p>No tienes archivos en {{ file.name }}</p>
                                       </template>
                                     </template>
 
@@ -395,11 +470,11 @@ class UploadableFile {
                               </p>
                             </div>
                             <div class="files row justify-content-center">
-                              <div class="col-12 col-md-6">
-                                <div class="p-2 mx-2">
-                                  <img src="@/assets/biblioteca.png" alt=" icon" style="width: 50%">
+                              <div class="col-12 col-md-10">
+                                <div class="d-flex">
+                                  <font-awesome-icon :icon="['fas', 'file']"/>
+                                  <input class="form-control p-3" type="text" v-model="file.name">
                                 </div>
-                                <input class="form-control p-3" type="text" v-model="file.name">
                                 <div class="d-flex justify-content-center">
                                   <button class="py-2 px-4 mx-2 my-2 upload-button" @click="upload">Subir</button>
                                 </div>
