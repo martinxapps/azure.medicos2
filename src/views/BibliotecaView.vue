@@ -1,16 +1,14 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
 import {useAuthStore} from "../stores/auth";
-import {useMyPatientsStore} from "../stores/myPatients";
 import {computed, ref, onMounted} from "vue";
 import {useRouter} from "vue-router";
 import {event, screenview} from 'vue-gtag';
 import {useMyLibraryStore} from "../stores/myLibrary";
 import DropZone from "../components/DropZone.vue";
 import {checkFolder, createFolder, uploadFile} from "../services/library";
-import dayjs from "dayjs";
 import {useNotification} from "@kyvg/vue3-notification";
-import {postDocumento, urlDocumento} from "../services/patient";
+import SmallBox from "../components/SmallBox.vue";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -19,7 +17,6 @@ const token = computed(() => authStore.token);
 const myLibraryStore = useMyLibraryStore();
 const folders = computed(() => myLibraryStore.folders);
 const total_documents = computed(() => myLibraryStore.total);
-const searchTerm = ref("");
 let isLoading = ref(false);
 const router = useRouter();
 const selectedYear = ref(null);
@@ -31,8 +28,18 @@ const dirty = ref(false);
 const fileInput = ref(null);
 const years = ref([]);
 const file = ref(null);
+const showDeleteModal = ref(false);
+const selectedArchive = ref(null);
 const {notify} = useNotification();
 
+const closeModal = () => {
+  showDeleteModal.value = false;
+  selectedArchive.value = null;
+}
+const deleteArchive = () => {
+  showDeleteModal.value = false;
+  selectedArchive.value = null;
+}
 
 const goBack = async () => {
   await myLibraryStore.clearFolders();
@@ -402,33 +409,36 @@ class UploadableFile {
                                           <div class="col-4 title-text">Nombre</div>
                                           <div class=" title-text"
                                                :class="{
-                                            'col-5': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
-                                            'col-7': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
+                                            'col-4': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
+                                            'col-6': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
                                           }">Descripción
                                           </div>
                                           <div class="col-2 title-text"
                                                v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
                                             Fecha de caducidad
                                           </div>
-                                          <div class="col-1 title-text">Acción</div>
+                                          <div class="col-2 title-text">Acciones</div>
                                         </div>
                                         <hr>
                                         <div v-for="(archive, archiveKey) in file.data"
                                              :key="archiveKey" class="row">
                                           <h6 class="col-4 text-left">{{ archive.Name }}</h6>
                                           <h6 class="text-left" :class="{
-                                            'col-5': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
-                                            'col-7': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
+                                            'col-4': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
+                                            'col-6': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
                                           }">{{ archive.Description }} </h6>
                                           <h6 class="col-2 text-left"
                                               v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
                                             {{ archive.TimeExpired }}</h6>
-                                          <div class="col-1 d-flex justify-content-start">
+                                          <div class="col-2 d-flex justify-content-start">
                                             <!--                                            <font-awesome-icon class="p-2 px-3 mx-2 cursor-pointer"-->
                                             <!--                                                               :icon="['far', 'eye']"/>-->
-                                            <font-awesome-icon class="p-4 py-2 cursor-pointer"
+                                            <font-awesome-icon class="p-2 px-3 cursor-pointer"
                                                                :icon="['fas', 'download']"
                                                                @click="downloadPdf(archive)"/>
+                                            <font-awesome-icon class="p-2 px-3 cursor-pointer"
+                                                               :icon="['fas', 'trash']" style="color: red;"
+                                                               @click="selectedArchive = archive; showDeleteModal = true;"/>
                                             <!--                                            <a target="_blank" :href="archive.Uri">-->
                                             <!--                                             -->
                                             <!--                                            </a>-->
@@ -584,6 +594,20 @@ class UploadableFile {
       </div>
 
     </div>
+    <SmallBox :showing="showDeleteModal" @close="closeModal">
+      <div class="p-4">
+        <h6><b>¿Estás seguro de eliminar el archivo {{ selectedArchive.Name }}?</b></h6>
+        <p>Esta acción no podrá ser revertida</p>
+        <div class="d-flex justify-content-end">
+          <button class="py-2 px-4 mx-2 my-2 cancel-button" @click="closeModal">
+            <b>Cancelar</b>
+          </button>
+          <button class="py-2 px-4 mx-2 my-2 delete-button" @click="deleteArchive">
+            <b>Eliminar</b>
+          </button>
+        </div>
+      </div>
+    </SmallBox>
   </div>
 </template>
 <style scoped>
@@ -636,6 +660,20 @@ class UploadableFile {
   border-radius: 10px;
   color: white;
   background-color: #0d2c65;
+}
+
+.delete-button {
+  border-radius: 10px;
+  color: white;
+  border: white 1px solid;
+  background-color: red;
+}
+
+.cancel-button {
+  border-radius: 10px;
+  color: white;
+  border: white 1px solid;
+  background-color: grey;
 }
 
 .error-text {
