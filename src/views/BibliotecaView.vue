@@ -151,6 +151,7 @@ const upload = async () => {
           fileContent: base64String,
           user: userName,
           fileType: file.value.type,
+          description: file.value.description,
           expireDate: date.value
         };
         console.log('data upload', dataUpload);
@@ -158,6 +159,16 @@ const upload = async () => {
         console.log('responseUpload', responseUpload);
         if (responseUpload.status) {
           console.log('se subio');
+          folder.value = null;
+          date.value = null;
+          file.value = null;
+          notify({
+            title: "Archivo subido correctamente",
+            text: 'El archivo ha sido subido y puedes verlo en Mis Documentos',
+            type: "success"
+          });
+          getFolders();
+
         } else {
           notify({
             title: "Hubo un error",
@@ -165,6 +176,7 @@ const upload = async () => {
             type: "error"
           });
         }
+        isLoading.value = false;
       };
 
       reader.readAsDataURL(file.value.file);
@@ -197,6 +209,15 @@ const upload = async () => {
           console.log('responseUpload', responseUpload);
           if (responseUpload.status) {
             console.log('se subio');
+            folder.value = null;
+            date.value = null;
+            file.value = null;
+            notify({
+              title: "Archivo subido correctamente",
+              text: 'El archivo ha sido subido y puedes verlo en Mis Documentos',
+              type: "success"
+            });
+            getFolders();
           } else {
             notify({
               title: "Hubo un error",
@@ -204,6 +225,7 @@ const upload = async () => {
               type: "error"
             });
           }
+          isLoading.value = false;
         };
 
         reader.readAsDataURL(file.value.file);
@@ -214,9 +236,10 @@ const upload = async () => {
           text: 'no se pudo subir el archivo',
           type: "error"
         });
+        isLoading.value = false;
       }
     }
-    isLoading.value = false;
+
   } catch (e) {
     console.log('error', e);
     isLoading.value = false;
@@ -502,7 +525,7 @@ class UploadableFile {
                               <div class="d-flex">
                                 <font-awesome-icon class="p-4" :icon="['fas', 'book-bookmark']" size="2x"/>
                                 <textarea class="form-control p-3" rows="8" v-model="file.description" maxlength="100"
-                                          placeholder="Descripción del archivo de máximo 10 caracteres"></textarea>
+                                          placeholder="Descripción del archivo de máximo 100 caracteres"></textarea>
 
                               </div>
                               <div class="d-flex justify-content-start">
