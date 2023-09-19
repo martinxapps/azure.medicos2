@@ -1,5 +1,4 @@
 import {defineStore} from 'pinia';
-import {getMyPatients, searchMyPatients} from '@/services/myPatients';
 import {useNotification} from '@kyvg/vue3-notification';
 import {getFolders} from "../services/library";
 
@@ -17,20 +16,13 @@ useMyLibraryStore = defineStore({
                 let data = {
                     path: `${year}/${userName}/${this.folders[i].name}`
                 };
-                console.log('data'+i, data);
+                console.log('data' + i, data);
                 this.folders[i].isLoading = true;
                 let response = await getFolders(data);
-                console.log('response'+i, response);
+                console.log('response' + i, response);
                 if (response.status) {
                     this.folders[i].data = response.data;
-                    this.total +=  this.folders[i].data.length;
-                } else {
-                    // no se pudo
-                    notify({
-                        title: "Hubo un error",
-                        text: `no se pudo cargar datos para ${year}/${userName}/${this.folders[i].name}`,
-                        type: "error"
-                    });
+                    this.total += this.folders[i].data.length;
                 }
                 this.folders[i].isLoading = false;
             }
@@ -44,32 +36,32 @@ useMyLibraryStore = defineStore({
                         name: 'BLS',
                         label: 'BLS',
                         data: [],
-                        isLoading:false,
+                        isLoading: true,
                     },
                     {
                         name: 'Cursos-Certificados',
                         label: 'Cursos/Certificados',
                         data: [],
-                        isLoading:false,
+                        isLoading: true,
                     },
 
                     {
                         name: 'Credenciales',
                         label: 'Credenciales',
                         data: [],
-                        isLoading:false,
+                        isLoading: true,
                     },
                     {
                         name: 'Poliza-Responsabilidad-Civil',
                         label: 'Póliza de Responsabilidad Civil',
                         data: [],
-                        isLoading:false,
+                        isLoading: true,
                     },
                     {
                         name: 'Publicaciones',
-                        label:'Publicaciones',
+                        label: 'Publicaciones',
                         data: [],
-                        isLoading:false,
+                        isLoading: true,
                     },
                 ];
                 this.total = 0;
@@ -87,32 +79,32 @@ useMyLibraryStore = defineStore({
                 name: 'BLS',
                 label: 'BLS',
                 data: [],
-                isLoading:false,
+                isLoading: true,
             },
             {
                 name: 'Cursos-Certificados',
                 label: 'Cursos/Certificados',
                 data: [],
-                isLoading:false,
+                isLoading: true,
             },
 
             {
                 name: 'Credenciales',
                 label: 'Credenciales',
                 data: [],
-                isLoading:false,
+                isLoading: true,
             },
             {
                 name: 'Poliza-Responsabilidad-Civil',
                 label: 'Póliza de Responsabilidad Civil',
                 data: [],
-                isLoading:false,
+                isLoading: true,
             },
             {
                 name: 'Publicaciones',
-                label:'Publicaciones',
+                label: 'Publicaciones',
                 data: [],
-                isLoading:false,
+                isLoading: true,
             },
         ],
         total: 0,

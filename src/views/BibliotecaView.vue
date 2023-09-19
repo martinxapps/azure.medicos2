@@ -10,7 +10,7 @@ import DropZone from "../components/DropZone.vue";
 import {checkFolder, createFolder, uploadFile} from "../services/library";
 import dayjs from "dayjs";
 import {useNotification} from "@kyvg/vue3-notification";
-import {postDocumento} from "../services/patient";
+import {postDocumento, urlDocumento} from "../services/patient";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -64,41 +64,25 @@ const downloadPdf = async (url) => {
       text: "Se procederá con la descarga en unos segundos",
       type: "warn"
     });
-    if (url) {
-      let response = await postDocumento(url);
-      console.log("response", response);
-      if (response.status) {
-        src.value = response.url;
-        console.log("src", src.value);
-        const anchor = document.createElement("a");
-        anchor.href = src.value;
-        anchor.download = `${name.value}.pdf`;
-        anchor.style.display = "none";
-        console.log("anchor", anchor);
-        // Append to the DOM
-        document.body.appendChild(anchor);
-        // Trigger `click` event
-        anchor.click();
-        // Remove element from DOM
-        document.body.removeChild(anchor);
-        notify({
-          title: "Listo",
-          text: "Resultado descargado",
-          type: "success"
-        });
-
-      } else {
-
-        notify({
-          title: "El archivo no esta disponible",
-          text: response.message,
-          type: "error"
-        });
-
-      }
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.target = '_blank';
+    anchor.download = `${name.value}.pdf`;
+    anchor.style.display = "none";
+    console.log("anchor", anchor);
+    // Append to the DOM
+    document.body.appendChild(anchor);
+    // Trigger `click` event
+    anchor.click();
+    // Remove element from DOM
+    document.body.removeChild(anchor);
+    notify({
+      title: "Listo",
+      text: "Resultado descargado",
+      type: "success"
+    });
       isLoading.value = false;
-      console.log("src.value", src.value);
-    }
+
   } catch (e) {
     isLoading.value = false;
     console.log("e", e);
@@ -404,21 +388,37 @@ class UploadableFile {
                                       <template v-if="file.data.length>0">
                                         <div class="row">
                                           <div class="col-6 title-text">Nombre</div>
-                                          <div class="col-2 title-text">Descripción</div>
-                                          <div class="col-2 title-text">Fecha de caducidad</div>
+                                          <div class=" title-text"
+                                               :class="{
+                                            'col-2': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
+                                            'col-4': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
+                                          }">Descripción
+                                          </div>
+                                          <div class="col-2 title-text"
+                                               v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
+                                            Fecha de caducidad
+                                          </div>
                                           <div class="col-2 title-text">Acción</div>
                                         </div>
                                         <hr>
                                         <div v-for="(archive, archiveKey) in file.data"
                                              :key="archiveKey" class="row">
                                           <h6 class="col-6">{{ archive.Name }}</h6>
-                                          <h6 class="col-2">{{ archive.Description }} </h6>
-                                          <h6 class="col-2">{{ archive.TimeExpired }}</h6>
-                                          <div class="col-2 d-flex justify-content-evenly"
-                                               @click="downloadPdf(archive.Uri)">
-                                            <font-awesome-icon class="p-2 px-3 mx-2 cursor-pointer"
-                                                               :icon="['far', 'eye']"/>
-                                            <font-awesome-icon class="p-2 cursor-pointer" :icon="['fas', 'download']"/>
+                                          <h6 :class="{
+                                            'col-2': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
+                                            'col-4': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
+                                          }">{{ archive.Description }} </h6>
+                                          <h6 class="col-2"
+                                              v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
+                                            {{ archive.TimeExpired }}</h6>
+                                          <div class="col-2 d-flex justify-content-start">
+                                            <!--                                            <font-awesome-icon class="p-2 px-3 mx-2 cursor-pointer"-->
+                                            <!--                                                               :icon="['far', 'eye']"/>-->
+                                            <font-awesome-icon class="p-4 py-2 cursor-pointer" :icon="['fas', 'download']"
+                                                               @click="downloadPdf(archive.Uri)"/>
+<!--                                            <a target="_blank" :href="archive.Uri">-->
+<!--                                             -->
+<!--                                            </a>-->
                                           </div>
 
                                         </div>
