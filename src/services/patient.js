@@ -44,6 +44,9 @@ export function formularioPaciente(nhc, adm) {
 export function urlDocumento(url) {
   const patients = mande(  url);
   return patients.get('');
+}export function postDocumento(url) {
+  const patients = mande(  url);
+  return patients.post({});
 }
 export function urlCurva(data) {
   const patients = mande(  `${baseURLV2}/medicos/reportes`);

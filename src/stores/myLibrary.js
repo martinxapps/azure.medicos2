@@ -42,26 +42,32 @@ useMyLibraryStore = defineStore({
                 this.folders = [
                     {
                         name: 'BLS',
+                        label: 'BLS',
                         data: [],
                         isLoading:false,
                     },
                     {
-                        name: 'CURSOS-CERTIFICADOS',
+                        name: 'Cursos-Certificados',
+                        label: 'Cursos/Certificados',
+                        data: [],
+                        isLoading:false,
+                    },
+
+                    {
+                        name: 'Credenciales',
+                        label: 'Credenciales',
                         data: [],
                         isLoading:false,
                     },
                     {
-                        name: 'CREDENCIALES',
+                        name: 'Poliza-Responsabilidad-Civil',
+                        label: 'Póliza de Responsabilidad Civil',
                         data: [],
                         isLoading:false,
                     },
                     {
-                        name: 'POLIZA-RESPONZABILIDAD-CIVIL',
-                        data: [],
-                        isLoading:false,
-                    },
-                    {
-                        name: 'PUBLICACIONES',
+                        name: 'Publicaciones',
+                        label:'Publicaciones',
                         data: [],
                         isLoading:false,
                     },
@@ -79,27 +85,32 @@ useMyLibraryStore = defineStore({
         folders: [
             {
                 name: 'BLS',
+                label: 'BLS',
                 data: [],
                 isLoading:false,
             },
             {
-                name: 'CURSOS-CERTIFICADOS',
+                name: 'Cursos-Certificados',
+                label: 'Cursos/Certificados',
                 data: [],
                 isLoading:false,
             },
 
             {
-                name: 'CREDENCIALES',
+                name: 'Credenciales',
+                label: 'Credenciales',
                 data: [],
                 isLoading:false,
             },
             {
-                name: 'POLIZA-RESPONZABILIDAD-CIVIL',
+                name: 'Poliza-Responsabilidad-Civil',
+                label: 'Póliza de Responsabilidad Civil',
                 data: [],
                 isLoading:false,
             },
             {
-                name: 'PUBLICACIONES',
+                name: 'Publicaciones',
+                label:'Publicaciones',
                 data: [],
                 isLoading:false,
             },

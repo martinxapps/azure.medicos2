@@ -10,7 +10,7 @@ import DropZone from "../components/DropZone.vue";
 import {checkFolder, createFolder, uploadFile} from "../services/library";
 import dayjs from "dayjs";
 import {useNotification} from "@kyvg/vue3-notification";
-import {urlDocumento} from "../services/patient";
+import {postDocumento} from "../services/patient";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -65,7 +65,7 @@ const downloadPdf = async (url) => {
       type: "warn"
     });
     if (url) {
-      let response = await urlDocumento(url);
+      let response = await postDocumento(url);
       console.log("response", response);
       if (response.status) {
         src.value = response.url;
@@ -122,7 +122,11 @@ const openSelector = () => {
 const upload = async () => {
   try {
     dirty.value = true;
-    if (year.value === null || folder.value === null || date.value === null) return;
+    if (year.value === null || folder.value === null) return;
+    if (folder.value === 'BLS' || folder.value === 'Poliza-Responsabilidad-Civil') {
+      if (date.value === null) return;
+    }
+    if (file.value.name === null || file.value.description === null || file.value.name === '' || file.value.description === '' || file.value.description?.length > 100) return;
     dirty.value = false;
     isLoading.value = true;
     //check if folder exist
@@ -229,6 +233,7 @@ onMounted(async () => {
   // Obtén el año actual
   const actual = new Date().getFullYear();
   selectedYear.value = actual;
+  year.value = actual;
 // Crea un array de años desde 2020 hasta el año actual
   for (let i = 2020; i <= actual; i++) {
     years.value.push(i);
@@ -241,11 +246,11 @@ class UploadableFile {
     this.id = `${file.name}-${file.size}-${file.lastModified}-${file.type}`;
     this.file = file;
     this.name = file.name;
+    this.description = null;
     this.size = file.size;
     this.lastModified = file.lastModified;
     this.type = file.type;
     this.url = URL.createObjectURL(file);
-
   }
 }
 </script>
@@ -339,13 +344,15 @@ class UploadableFile {
                             <div class="row">
                               <div class="col-12 col-md-4 p-2">
                                 <label class="my-2 title-text">Seleccionar año</label>
-                                <select class="form-control p-3 my-2" v-model="selectedYear" @change="getFolders">
+                                <select class="form-control form-select p-3 my-2"
+                                        v-model="selectedYear" @change="getFolders">
                                   <option :value="null">Seleccionar año</option>
                                   <option v-for="(year, yearKey) in years"
                                           :key="yearKey" :value="year">
                                     {{ year }}
                                   </option>
                                 </select>
+
                               </div>
 
                             </div>
@@ -357,7 +364,7 @@ class UploadableFile {
                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                           :data-bs-target="'#flush-collapseOne'+documentKey" aria-expanded="false"
                                           :aria-controls="'#flush-collapseOne'+documentKey">
-                                    {{ selectedYear }}/{{ file.name }} <span class="bg-number mx-2"><b>{{
+                                    {{ selectedYear }}/{{ file.label }} <span class="bg-number mx-2"><b>{{
                                       file.data.length
                                     }}</b></span>
                                   </button>
@@ -374,7 +381,7 @@ class UploadableFile {
                                       <template v-if="file.data.length>0">
                                         <div class="row">
                                           <div class="col-6 title-text">Nombre</div>
-                                          <div class="col-2 title-text">Tamaño</div>
+                                          <div class="col-2 title-text">Descripción</div>
                                           <div class="col-2 title-text">Fecha de caducidad</div>
                                           <div class="col-2 title-text">Acción</div>
                                         </div>
@@ -382,10 +389,13 @@ class UploadableFile {
                                         <div v-for="(archive, archiveKey) in file.data"
                                              :key="archiveKey" class="row">
                                           <h6 class="col-6">{{ archive.Name }}</h6>
-                                          <h6 class="col-2">{{ archive.Size }} kb</h6>
-                                          <h6 class="col-2">{{ dayjs(archive.TimeCreated).format('DD/MM/YYYY') }}</h6>
-                                          <div class="col-2" @click="downloadPdf(archive.Uri)">
-                                            <font-awesome-icon :icon="['fas', 'download']"/>
+                                          <h6 class="col-2">{{ archive.Description }} </h6>
+                                          <h6 class="col-2">{{ archive.TimeExpired }}</h6>
+                                          <div class="col-2 d-flex justify-content-evenly"
+                                               @click="downloadPdf(archive.Uri)">
+                                            <font-awesome-icon class="p-2 px-3 mx-2 cursor-pointer"
+                                                               :icon="['far', 'eye']"/>
+                                            <font-awesome-icon class="p-2 cursor-pointer" :icon="['fas', 'download']"/>
                                           </div>
 
                                         </div>
@@ -431,7 +441,7 @@ class UploadableFile {
                         <div class="row">
                           <div class="col-12 col-md-4 p-2">
                             <label class="my-2 title-text">Año</label>
-                            <select class="form-control p-3 my-2" v-model="year">
+                            <select class="form-control form-select p-3 my-2" v-model="year">
                               <option :value="null">Seleccionar año</option>
                               <option v-for="(year, yearKey) in years"
                                       :key="yearKey" :value="year">
@@ -442,16 +452,17 @@ class UploadableFile {
                           </div>
                           <div class="col-12 col-md-4 p-2">
                             <label class="my-2 title-text">Carpeta</label>
-                            <select class="form-control p-3 my-2" v-model="folder">
+                            <select class="form-control p-3 my-2 form-select" v-model="folder">
                               <option :value="null">Seleccionar carpeta</option>
                               <option v-for="(folder, folderKey) in folders"
                                       :key="folderKey" :value="folder.name">
-                                {{ folder.name }}
+                                {{ folder.label }}
                               </option>
                             </select>
                             <p v-if="folder === null && dirty" class="mx-1 error-text">La carpeta es requerida</p>
                           </div>
-                          <div class="col-12 col-md-4 p-2">
+                          <div class="col-12 col-md-4 p-2"
+                               v-if="folder === 'BLS' || folder === 'Poliza-Responsabilidad-Civil'">
                             <label class="my-2 title-text">Fecha de Caducidad</label>
                             <input class="form-control p-3 my-2 " type="date" v-model="date">
                             <p v-if="date === null && dirty" class="mx-1 error-text">La fecha de caducidad es
@@ -467,15 +478,42 @@ class UploadableFile {
                                 Volver a seleccionar
                               </p>
                             </div>
-                            <div class="files row justify-content-center">
-                              <div class="col-12 col-md-10">
-                                <div class="d-flex">
-                                  <font-awesome-icon :icon="['fas', 'file']"/>
-                                  <input class="form-control p-3" type="text" v-model="file.name">
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                  <button class="py-2 px-4 mx-2 my-2 upload-button" @click="upload">Subir</button>
-                                </div>
+                            <div class="files ">
+                              <div class="d-flex justify-content-start">
+                                <label class="my-2 title-text">Nombre:</label>
+                              </div>
+
+                              <div class="d-flex">
+                                <font-awesome-icon class="p-4" :icon="['fas', 'file']" size="2x"/>
+                                <input class="form-control p-1" type="text" v-model="file.name"
+                                       placeholder="Nombre del Archivo">
+
+                              </div>
+                              <div class="d-flex justify-content-start">
+                                <p v-if="(file.name === null || file.name === '') && dirty"
+                                   class="mx-5 my-2 error-text">La descripción es requerida</p>
+                              </div>
+
+
+                              <div class="d-flex justify-content-start">
+                                <label class="my-2 title-text">Descripción:</label>
+                              </div>
+
+                              <div class="d-flex">
+                                <font-awesome-icon class="p-4" :icon="['fas', 'book-bookmark']" size="2x"/>
+                                <textarea class="form-control p-3" rows="8" v-model="file.description" maxlength="100"
+                                          placeholder="Descripción del archivo de máximo 10 caracteres"></textarea>
+
+                              </div>
+                              <div class="d-flex justify-content-start">
+                                <p v-if="(file.description === null || file.description === '') && dirty"
+                                   class="mx-5 my-2 error-text">La descripción es requerida</p>
+                                <p v-if="file.description?.length > 100 && dirty"
+                                   class="mx-5 my-2 error-text">La descripción debe ser de máximo 100 caracteres</p>
+                              </div>
+
+                              <div class="d-flex justify-content-center">
+                                <button class="py-2 px-4 mx-2 my-2 upload-button" @click="upload">Subir</button>
                               </div>
 
                             </div>
@@ -485,6 +523,9 @@ class UploadableFile {
                               <div class="rounded-lg m-2 bg-white dropzone">
                                 <p class="text-md text-center mt-5">Arrastra, y suelta aquí tu archivo</p>
                               </div>
+                              <p><b>Nota: </b>
+                                Se recomienda subir archivos en formato PDF con un máximo de 20mb
+                              </p>
                               <!--eslint-disable-next-line-->
                               <input ref="fileInput" type="file" id="file-input"
                                      @change="onInputChange" class="d-none"/>
