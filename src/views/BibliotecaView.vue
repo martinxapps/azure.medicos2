@@ -14,6 +14,7 @@ import {postDocumento, urlDocumento} from "../services/patient";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
+const token = computed(() => authStore.token);
 // const type = computed(() => authStore.type);
 const myLibraryStore = useMyLibraryStore();
 const folders = computed(() => myLibraryStore.folders);
@@ -56,7 +57,7 @@ const dropFiles = (newFiles) => {
 };
 
 
-const downloadPdf = async (url) => {
+const downloadPdf = async (archive) => {
   try {
     // Create a new link
     notify({
@@ -64,25 +65,35 @@ const downloadPdf = async (url) => {
       text: "Se procederá con la descarga en unos segundos",
       type: "warn"
     });
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.target = '_blank';
-    anchor.download = `${name.value}.pdf`;
-    anchor.style.display = "none";
-    console.log("anchor", anchor);
-    // Append to the DOM
-    document.body.appendChild(anchor);
-    // Trigger `click` event
-    anchor.click();
-    // Remove element from DOM
-    document.body.removeChild(anchor);
+    const response = await fetch(archive.Uri, {
+      method: 'GET',
+      // Puedes agregar encabezados personalizados si es necesario
+      headers: {
+        'Authorization': token.value, // Si es necesario
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('No se pudo obtener el documento');
+    }
+
+    const blob = await response.blob();
+    // Crear un enlace (link) temporal para descargar el archivo
+    const fileUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = fileUrl;
+    a.target = '_blank';
+    a.download = archive.Name; // Cambia esto al nombre deseado
+    document.body.appendChild(a);
+    a.click();
     notify({
       title: "Listo",
       text: "Resultado descargado",
       type: "success"
     });
-      isLoading.value = false;
-
+    window.URL.revokeObjectURL(fileUrl);
+    isLoading.value = false;
   } catch (e) {
     isLoading.value = false;
     console.log("e", e);
@@ -93,16 +104,17 @@ const downloadPdf = async (url) => {
   }
 };
 
-
 const onInputChange = (e) => {
   console.log('event, ', e);
   addFile(e.target.files[0]);
   e.target.value = null;
   // reset so that selecting the same file again will still cause it to fire this change
 };
+
 const openSelector = () => {
   fileInput.value.click();
 }
+
 const upload = async () => {
   try {
     dirty.value = true;
@@ -414,11 +426,12 @@ class UploadableFile {
                                           <div class="col-1 d-flex justify-content-start">
                                             <!--                                            <font-awesome-icon class="p-2 px-3 mx-2 cursor-pointer"-->
                                             <!--                                                               :icon="['far', 'eye']"/>-->
-                                            <font-awesome-icon class="p-4 py-2 cursor-pointer" :icon="['fas', 'download']"
-                                                               @click="downloadPdf(archive.Uri)"/>
-<!--                                            <a target="_blank" :href="archive.Uri">-->
-<!--                                             -->
-<!--                                            </a>-->
+                                            <font-awesome-icon class="p-4 py-2 cursor-pointer"
+                                                               :icon="['fas', 'download']"
+                                                               @click="downloadPdf(archive)"/>
+                                            <!--                                            <a target="_blank" :href="archive.Uri">-->
+                                            <!--                                             -->
+                                            <!--                                            </a>-->
                                           </div>
 
                                         </div>
