@@ -387,31 +387,31 @@ class UploadableFile {
                                     <template v-else>
                                       <template v-if="file.data.length>0">
                                         <div class="row">
-                                          <div class="col-6 title-text">Nombre</div>
+                                          <div class="col-4 title-text">Nombre</div>
                                           <div class=" title-text"
                                                :class="{
-                                            'col-2': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
-                                            'col-4': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
+                                            'col-5': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
+                                            'col-7': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
                                           }">Descripción
                                           </div>
                                           <div class="col-2 title-text"
                                                v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
                                             Fecha de caducidad
                                           </div>
-                                          <div class="col-2 title-text">Acción</div>
+                                          <div class="col-1 title-text">Acción</div>
                                         </div>
                                         <hr>
                                         <div v-for="(archive, archiveKey) in file.data"
                                              :key="archiveKey" class="row">
-                                          <h6 class="col-6">{{ archive.Name }}</h6>
-                                          <h6 :class="{
-                                            'col-2': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
-                                            'col-4': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
+                                          <h6 class="col-4 text-left">{{ archive.Name }}</h6>
+                                          <h6 class="text-left" :class="{
+                                            'col-5': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
+                                            'col-7': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
                                           }">{{ archive.Description }} </h6>
-                                          <h6 class="col-2"
+                                          <h6 class="col-2 text-left"
                                               v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
                                             {{ archive.TimeExpired }}</h6>
-                                          <div class="col-2 d-flex justify-content-start">
+                                          <div class="col-1 d-flex justify-content-start">
                                             <!--                                            <font-awesome-icon class="p-2 px-3 mx-2 cursor-pointer"-->
                                             <!--                                                               :icon="['far', 'eye']"/>-->
                                             <font-awesome-icon class="p-4 py-2 cursor-pointer" :icon="['fas', 'download']"
