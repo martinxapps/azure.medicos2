@@ -279,6 +279,8 @@ class UploadableFile {
     this.url = URL.createObjectURL(file);
   }
 }
+
+
 </script>
 <template>
   <div>
@@ -323,7 +325,7 @@ class UploadableFile {
         <div class="row my-2 pb-5 pt-2">
           <div class="col-sm-12 mt-3">
             <div class="row">
-              <div class="col-9">
+              <div class="col-11 col-md-9">
                 <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
                   <li class="nav-item tab-hm" role="presentation">
                     <button class="nav-link nav-hm pl-0" id="lab-tab" data-toggle="tab"
@@ -344,8 +346,8 @@ class UploadableFile {
                 </ul>
               </div>
 
-              <div class="col-3 d-flex justify-content-end">
-                <h5 class="cursor-pointer p-3" style=" color: #0f4470; font-size: 16px;" @click="getFolders()">
+              <div class="col-1 col-md-3 d-flex justify-content-end">
+                <h5 class="cursor-pointer p-1 pt-3" style=" color: #0f4470; font-size: 16px;" @click="getFolders()">
                   <font-awesome-icon :icon="['fas', 'refresh']" class="mx-1"/>
                   <span class="m-0 d-none d-md-inline-block">Actualizar</span>
                 </h5>
@@ -385,7 +387,7 @@ class UploadableFile {
                             <template
                                 v-for="(file, documentKey) in folders"
                                 :key="documentKey">
-                              <div class="accordion-item p-3">
+                              <div class="accordion-item py-2 px-1">
                                 <h2 class="accordion-header" :id="'flush-heading'+documentKey">
                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                           :data-bs-target="'#flush-collapseOne'+documentKey" aria-expanded="false"
@@ -406,6 +408,53 @@ class UploadableFile {
                                     <template v-else>
                                       <template v-if="file.data.length>0">
                                         <div class="row">
+                                            <table id="dtHorizontalExample" class="table table-striped table-bordered table-sm" cellspacing="0"
+                                                   width="100%">
+                                              <thead>
+                                              <tr>
+                                                <th><div class="title-text">Nombre</div></th>
+                                                <th><div class=" title-text"
+                                                         :class="{
+                                            'col-4': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
+                                            'col-6': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
+                                          }">Descripción
+                                                </div></th>
+                                                <th><div class=" title-text"
+                                                         v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
+                                                  Fecha de caducidad
+                                                </div></th>
+                                                <th><div class="title-text">Acciones</div></th>
+                                              </tr>
+                                              </thead>
+                                              <tbody v-for="(archive, archiveKey) in file.data"
+                                                     :key="archiveKey">
+                                              <tr>
+                                                <td> <h6 class="text-left">{{ archive.Name }}</h6></td>
+                                                <td><h6 class="text-left" :class="{
+                                            'col-4': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
+                                            'col-6': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
+                                          }">{{ archive.Description }} </h6></td>
+                                                <td><h6 class=" text-left"
+                                                        v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
+                                                  {{ archive.TimeExpired }}</h6></td>
+                                                <td> <div class="d-flex justify-content-start">
+                                                  <!--                                            <font-awesome-icon class="p-2 px-3 mx-2 cursor-pointer"-->
+                                                  <!--                                                               :icon="['far', 'eye']"/>-->
+                                                  <font-awesome-icon class="p-2 px-3 cursor-pointer"
+                                                                     :icon="['fas', 'download']"
+                                                                     @click="downloadPdf(archive)"/>
+                                                  <font-awesome-icon class="p-2 px-3 cursor-pointer"
+                                                                     :icon="['fas', 'trash']" style="color: red;"
+                                                                     @click="selectedArchive = archive; showDeleteModal = true;"/>
+                                                  <!--                                            <a target="_blank" :href="archive.Uri">-->
+                                                  <!--                                             -->
+                                                  <!--                                            </a>-->
+                                                </div></td>
+                                              </tr>
+                                              </tbody>
+                                            </table>
+                                        </div>
+<!--                                        <div class="row">
                                           <div class="col-4 title-text">Nombre</div>
                                           <div class=" title-text"
                                                :class="{
@@ -431,20 +480,16 @@ class UploadableFile {
                                               v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
                                             {{ archive.TimeExpired }}</h6>
                                           <div class="col-2 d-flex justify-content-start">
-                                            <!--                                            <font-awesome-icon class="p-2 px-3 mx-2 cursor-pointer"-->
-                                            <!--                                                               :icon="['far', 'eye']"/>-->
+
                                             <font-awesome-icon class="p-2 px-3 cursor-pointer"
                                                                :icon="['fas', 'download']"
                                                                @click="downloadPdf(archive)"/>
                                             <font-awesome-icon class="p-2 px-3 cursor-pointer"
                                                                :icon="['fas', 'trash']" style="color: red;"
                                                                @click="selectedArchive = archive; showDeleteModal = true;"/>
-                                            <!--                                            <a target="_blank" :href="archive.Uri">-->
-                                            <!--                                             -->
-                                            <!--                                            </a>-->
                                           </div>
 
-                                        </div>
+                                        </div>-->
                                       </template>
                                       <template v-else>
                                         <p>No tienes archivos en {{ file.name }}</p>

@@ -439,6 +439,40 @@ p.span-text {
 }
 
 @media screen and (max-width: 600px) {
+
+    .accordion-body {
+        padding: 10px 12px 10px 2px;
+    }
+
+    table#dtHorizontalExample {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+
+    .dtHorizontalExampleWrapper {
+        max-width: 310px;
+        margin: 0 auto;
+    }
+    #dtHorizontalExample th, td {
+        white-space: nowrap;
+    }
+
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_asc_disabled:after,
+    table.dataTable thead .sorting_asc_disabled:before,
+    table.dataTable thead .sorting_desc:after,
+    table.dataTable thead .sorting_desc:before,
+    table.dataTable thead .sorting_desc_disabled:after,
+    table.dataTable thead .sorting_desc_disabled:before {
+        bottom: .5em;
+    }
+
+
     button.btn-loginv2mobile {
         border-radius: 30px !important;
     }
@@ -480,7 +514,7 @@ p.span-text {
         margin-top: -80px;
     }
     li.nav-item.tab-hm {
-        min-width: 140px;
+        min-width: 145px;
         word-wrap: normal;
     }
 
@@ -490,7 +524,7 @@ p.span-text {
         overflow-x: auto;
     }
     .tabs-details button {
-        font-size: 15px !important;
+        font-size: 14px !important;
     }
 
     .tabs-details .nav-link {
