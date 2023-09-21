@@ -622,7 +622,7 @@ class UploadableFile {
                                      @change="onInputChange" class="d-none"/>
                             </DropZone>
                             <div class="d-flex">
-                              <button class="py-2 px-4 mx-2 upload-button" @click="openSelector">Examinar</button>
+                              <button class="py-2 px-4 mx-2 upload-button" @click="openSelector">Cargar Documento</button>
                             </div>
                           </template>
 

@@ -61,9 +61,9 @@ onMounted(async () => {
       <div class="container m-auto d-block" style="background: #f8f9fc;">
         <div class="row mb-5 mt-5 justify-content-center">
           <!--columna de iconos-->
-          <div class=" col-6 col-md-3 d-block pb-5 ">
+          <div class=" col-6 col-md-4 d-block pb-3 ">
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-facturas-pagadas')">
-              <div class="row d-block img-bordervh">
+              <div class="row d-block img-border">
                 <img class="img-icon-color" src="@/assets/facturas-pagadas-blanco.png" alt=" icon">
                 <img class="img-icon-color color-margin" src="@/assets/facturas-pagadas.png" alt=" icon" >
                 <br>
@@ -72,9 +72,9 @@ onMounted(async () => {
               </p>
             </div>
           </div>
-          <div class=" col-6 col-md-3 d-block pb-5 ">
+          <div class=" col-6 col-md-4 d-block pb-3 ">
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-facturas-pendientes')">
-              <div class="row d-block img-bordervh">
+              <div class="row d-block img-border">
                 <img class="img-icon-color" src="@/assets/facturas-pendientes-blanco.png" alt=" icon">
                 <img class="img-icon-color color-margin" src="@/assets/facturas-pendientes.png" alt=" icon" >
                 <br>
@@ -83,9 +83,9 @@ onMounted(async () => {
               </p>
             </div>
           </div>
-          <div class=" col-6 col-md-3 d-block pb-5 ">
+          <div class=" col-6 col-md-4 d-block pb-3 ">
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-transacciones')">
-              <div class="row d-block img-bordervh">
+              <div class="row d-block img-border">
                 <img class="img-icon-color" src="@/assets/facturas-blanco.png" alt=" icon">
                 <img class="img-icon-color color-margin" src="@/assets/facturas.png" alt=" icon" >
                 <br>
@@ -94,12 +94,9 @@ onMounted(async () => {
               </p>
             </div>
           </div>
-
-        </div>
-        <div class="row mb-5 mt-5 justify-content-center">
-          <div class=" col-6 col-md-3 d-block pb-5 ">
+          <div class=" col-6 col-md-4 d-block pb-3 ">
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-estados-de-cuenta')">
-              <div class="row d-block img-bordervh">
+              <div class="row d-block img-border">
                 <img class="img-icon-color" src="@/assets/estados-blanco.png" alt=" icon">
                 <img class="img-icon-color color-margin" src="@/assets/estados.png" alt=" icon">
                 <br>
@@ -108,9 +105,9 @@ onMounted(async () => {
               </p>
             </div>
           </div>
-          <div class=" col-6 col-md-3 d-block pb-5 ">
+          <div class=" col-6 col-md-4 d-block pb-3 ">
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-auditados')">
-              <div class="row d-block img-bordervh">
+              <div class="row d-block img-border">
                 <img class="img-icon-color" src="@/assets/audited-blanco.png" alt=" icon">
                 <img class="img-icon-color color-margin" src="@/assets/audited.png" alt=" icon" >
                 <br>
@@ -119,7 +116,6 @@ onMounted(async () => {
               </p>
             </div>
           </div>
-
         </div>
       </div>
     </div>
