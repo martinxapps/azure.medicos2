@@ -65,7 +65,7 @@ onMounted(async () => {
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-facturas-pagadas')">
               <div class="row d-block img-bordervh">
                 <img class="img-icon-color" src="@/assets/facturas-pagadas-blanco.png" alt=" icon">
-                <img class="img-icon-color" src="@/assets/facturas-pagadas.png" alt=" icon" style="margin-top: -105px">
+                <img class="img-icon-color color-margin" src="@/assets/facturas-pagadas.png" alt=" icon" >
                 <br>
               </div>
               <p class="d-block text-icon-color mt-3 ">Facturas Pagadas
@@ -76,8 +76,7 @@ onMounted(async () => {
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-facturas-pendientes')">
               <div class="row d-block img-bordervh">
                 <img class="img-icon-color" src="@/assets/facturas-pendientes-blanco.png" alt=" icon">
-                <img class="img-icon-color" src="@/assets/facturas-pendientes.png" alt=" icon"
-                     style="margin-top: -105px">
+                <img class="img-icon-color color-margin" src="@/assets/facturas-pendientes.png" alt=" icon" >
                 <br>
               </div>
               <p class="d-block text-icon-color mt-3">Facturas Pendientes
@@ -88,7 +87,7 @@ onMounted(async () => {
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-transacciones')">
               <div class="row d-block img-bordervh">
                 <img class="img-icon-color" src="@/assets/facturas-blanco.png" alt=" icon">
-                <img class="img-icon-color" src="@/assets/facturas.png" alt=" icon" style="margin-top: -105px">
+                <img class="img-icon-color color-margin" src="@/assets/facturas.png" alt=" icon" >
                 <br>
               </div>
               <p class="d-block text-icon-color mt-3">Transacciones
@@ -102,7 +101,7 @@ onMounted(async () => {
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-estados-de-cuenta')">
               <div class="row d-block img-bordervh">
                 <img class="img-icon-color" src="@/assets/estados-blanco.png" alt=" icon">
-                <img class="img-icon-color" style="margin-top: -105px" src="@/assets/estados.png" alt=" icon">
+                <img class="img-icon-color color-margin" src="@/assets/estados.png" alt=" icon">
                 <br>
               </div>
               <p class="d-block text-icon-color mt-3">Estados de Cuenta
@@ -113,7 +112,7 @@ onMounted(async () => {
             <div class="icon-img cursor-pointer" @click="goTo('honorarios-auditados')">
               <div class="row d-block img-bordervh">
                 <img class="img-icon-color" src="@/assets/audited-blanco.png" alt=" icon">
-                <img class="img-icon-color" src="@/assets/audited.png" alt=" icon" style="margin-top: -105px">
+                <img class="img-icon-color color-margin" src="@/assets/audited.png" alt=" icon" >
                 <br>
               </div>
               <p class="d-block text-icon-color mt-3">Honorarios Auditados

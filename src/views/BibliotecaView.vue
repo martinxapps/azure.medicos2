@@ -611,10 +611,10 @@ class UploadableFile {
                           </template>
                           <template v-else>
                             <DropZone @files-dropped="dropFiles">
-                              <div class="rounded-lg m-2 bg-white dropzone">
+                              <div class="rounded-lg m-2 bg-white dropzone d-none d-md-block">
                                 <p class="text-md text-center mt-5">Arrastra, y suelta aquí tu archivo</p>
                               </div>
-                              <p><b>Nota: </b>
+                              <p class="d-none d-md-block"><b>Nota: </b>
                                 Se recomienda subir archivos en formato PDF con un máximo de 20mb
                               </p>
                               <!--eslint-disable-next-line-->
