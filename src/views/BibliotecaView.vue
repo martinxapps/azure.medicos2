@@ -327,14 +327,14 @@ class UploadableFile {
             <div class="row">
               <div class="col-11 col-md-9">
                 <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
-                  <li class="nav-item tab-hm" role="presentation">
+                  <li class="nav-item tab-hmv2" role="presentation">
                     <button class="nav-link nav-hm pl-0" id="lab-tab" data-toggle="tab"
                             :class="{'active': myLibraryStore.activeTab === 0}" @click="myLibraryStore.activeTab = 0"
                             data-target="#lab" type="button" role="tab" aria-controls="lab"
                             aria-selected="true">Mis Documentos <span class="bg-number">{{ total_documents }}</span>
                     </button>
                   </li>
-                  <li class="nav-item tab-hm" role="presentation">
+                  <li class="nav-item tab-hmv2" role="presentation">
                     <button class="nav-link nav-hm pl-0" id="image-tab" data-toggle="tab"
                             :class="{'active': myLibraryStore.activeTab === 1}" @click="myLibraryStore.activeTab = 1"
                             data-target="#image" type="button" role="tab" aria-controls="image"
@@ -347,7 +347,7 @@ class UploadableFile {
               </div>
 
               <div class="col-1 col-md-3 d-flex justify-content-end">
-                <h5 class="cursor-pointer p-1 pt-3" style=" color: #0f4470; font-size: 16px;" @click="getFolders()">
+                <h5 class="cursor-pointer p-1 pt-2" style=" color: #0f4470; font-size: 16px;" @click="getFolders()">
                   <font-awesome-icon :icon="['fas', 'refresh']" class="mx-1"/>
                   <span class="m-0 d-none d-md-inline-block">Actualizar</span>
                 </h5>
@@ -622,7 +622,7 @@ class UploadableFile {
                                      @change="onInputChange" class="d-none"/>
                             </DropZone>
                             <div class="d-flex">
-                              <button class="py-2 px-4 mx-2 upload-button" @click="openSelector">Cargar Documento</button>
+                              <button class="py-2 px-4 mx-2 upload-button mx-auto" @click="openSelector">Cargar Documento</button>
                             </div>
                           </template>
 
@@ -667,12 +667,12 @@ class UploadableFile {
     white-space: nowrap;
   }
 
-  li.nav-item.tab-hm button {
-    font-size: 16px;
+  li.nav-item.tab-hmv2 button {
+    font-size: 14px;
   }
 
   .nav-tabs .nav-link.active {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
