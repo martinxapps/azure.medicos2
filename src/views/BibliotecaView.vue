@@ -352,7 +352,7 @@ class UploadableFile {
                 <h5 class="cursor-pointer p-1 pt-2" style=" color: #0f4470; font-size: 16px;" @click="getFolders()">
                   <font-awesome-icon :icon="['fas', 'refresh']" class="mx-1"/>
                   <span class="m-0 d-none d-md-inline-block">Actualizar</span>
-                  {{isLoading}}
+                 
                 </h5>
               </div>
             </div>
