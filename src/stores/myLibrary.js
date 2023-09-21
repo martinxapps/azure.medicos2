@@ -12,19 +12,17 @@ useMyLibraryStore = defineStore({
         async getFolders(year, userName) {
             this.isLoading = true;
             this.total = 0;
-            for (let i = 0; i < this.folders.length; i++) {
-                let data = {
-                    path: `${year}/${userName}/${this.folders[i].name}`
-                };
-                console.log('data' + i, data);
-                this.folders[i].isLoading = true;
-                let response = await getFolders(data);
-                console.log('response' + i, response);
-                if (response.status) {
-                    this.folders[i].data = response.data;
-                    this.total += this.folders[i].data.length;
-                }
-                this.folders[i].isLoading = false;
+            let data = {
+                path: `${year}/${userName}`
+            };
+            console.log('data', data);
+            let response = await getFolders(data);
+            console.log('response', response);
+            if (response.status) {
+                this.folders.forEach((folder) => {
+                    folder.data = response.data.filter((item) => item.Path === folder.name);
+                });
+                this.total = response.data.length;
             }
             this.isLoading = false;
         },
@@ -36,32 +34,32 @@ useMyLibraryStore = defineStore({
                         name: 'BLS',
                         label: 'BLS',
                         data: [],
-                        isLoading: true,
+                        isLoading: false,
                     },
                     {
                         name: 'Cursos-Certificados',
                         label: 'Cursos/Certificados',
                         data: [],
-                        isLoading: true,
+                        isLoading: false,
                     },
 
                     {
                         name: 'Credenciales',
                         label: 'Credenciales',
                         data: [],
-                        isLoading: true,
+                        isLoading: false,
                     },
                     {
                         name: 'Poliza-Responsabilidad-Civil',
                         label: 'Póliza de Responsabilidad Civil',
                         data: [],
-                        isLoading: true,
+                        isLoading: false,
                     },
                     {
                         name: 'Publicaciones',
                         label: 'Publicaciones',
                         data: [],
-                        isLoading: true,
+                        isLoading: false,
                     },
                 ];
                 this.total = 0;
@@ -79,32 +77,32 @@ useMyLibraryStore = defineStore({
                 name: 'BLS',
                 label: 'BLS',
                 data: [],
-                isLoading: true,
+                isLoading: false,
             },
             {
                 name: 'Cursos-Certificados',
                 label: 'Cursos/Certificados',
                 data: [],
-                isLoading: true,
+                isLoading: false,
             },
 
             {
                 name: 'Credenciales',
                 label: 'Credenciales',
                 data: [],
-                isLoading: true,
+                isLoading: false,
             },
             {
                 name: 'Poliza-Responsabilidad-Civil',
                 label: 'Póliza de Responsabilidad Civil',
                 data: [],
-                isLoading: true,
+                isLoading: false,
             },
             {
                 name: 'Publicaciones',
                 label: 'Publicaciones',
                 data: [],
-                isLoading: true,
+                isLoading: false,
             },
         ],
         total: 0,
