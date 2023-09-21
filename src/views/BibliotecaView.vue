@@ -6,7 +6,7 @@ import {useRouter} from "vue-router";
 import {event, screenview} from 'vue-gtag';
 import {useMyLibraryStore} from "../stores/myLibrary";
 import DropZone from "../components/DropZone.vue";
-import {checkFolder, createFolder, uploadFile} from "../services/library";
+import {checkFolder, createFolder, deleteFile, uploadFile} from "../services/library";
 import {useNotification} from "@kyvg/vue3-notification";
 import SmallBox from "../components/SmallBox.vue";
 
@@ -18,6 +18,7 @@ const myLibraryStore = useMyLibraryStore();
 const folders = computed(() => myLibraryStore.folders);
 const total_documents = computed(() => myLibraryStore.total);
 let isLoading = ref(false);
+let isLoadingDelete = ref(false);
 const router = useRouter();
 const selectedYear = ref(null);
 const year = ref(null);
@@ -36,9 +37,26 @@ const closeModal = () => {
   showDeleteModal.value = false;
   selectedArchive.value = null;
 }
-const deleteArchive = () => {
-  showDeleteModal.value = false;
-  selectedArchive.value = null;
+const deleteArchive = async () => {
+  isLoadingDelete.value = true;
+  const responseCheck = await deleteFile(selectedArchive.value.DeleteFile);
+  if(responseCheck.status){
+    showDeleteModal.value = false;
+    selectedArchive.value = null;
+    notify({
+      title: "Listo",
+      text: "Archivo Eliminado",
+      type: "success"
+    });
+    getFolders();
+  }else{
+    notify({
+      title: "Hubo un error al eliminar",
+      type: "error"
+    });
+  }
+  isLoadingDelete.value = false;
+
 }
 
 const goBack = async () => {
@@ -68,7 +86,7 @@ const downloadPdf = async (archive) => {
   try {
     // Create a new link
     notify({
-      title: "Listo",
+      title: "Observación",
       text: "Se procederá con la descarga en unos segundos",
       type: "warn"
     });
@@ -96,7 +114,7 @@ const downloadPdf = async (archive) => {
     a.click();
     notify({
       title: "Listo",
-      text: "Resultado descargado",
+      text: "Archivo descargado",
       type: "success"
     });
     window.URL.revokeObjectURL(fileUrl);
@@ -121,6 +139,7 @@ const onInputChange = (e) => {
 const openSelector = () => {
   fileInput.value.click();
 }
+
 
 const upload = async () => {
   try {
@@ -352,7 +371,7 @@ class UploadableFile {
                 <h5 class="cursor-pointer p-1 pt-2" style=" color: #0f4470; font-size: 16px;" @click="getFolders()">
                   <font-awesome-icon :icon="['fas', 'refresh']" class="mx-1"/>
                   <span class="m-0 d-none d-md-inline-block">Actualizar</span>
-                 
+
                 </h5>
               </div>
             </div>
@@ -644,16 +663,24 @@ class UploadableFile {
     </div>
     <SmallBox :showing="showDeleteModal" @close="closeModal">
       <div class="p-4">
-        <h6><b>¿Estás seguro de eliminar el archivo {{ selectedArchive.Name }}?</b></h6>
-        <p>Esta acción no podrá ser revertida</p>
-        <div class="d-flex justify-content-end">
-          <button class="py-2 px-4 mx-2 my-2 cancel-button" @click="closeModal">
-            <b>Cancelar</b>
-          </button>
-          <button class="py-2 px-4 mx-2 my-2 delete-button" @click="deleteArchive">
-            <b>Eliminar</b>
-          </button>
-        </div>
+        <template v-if="isLoadingDelete">
+          <div class="d-flex justify-content-center">
+            <img class="img-fluid" src="@/assets/loading.gif" alt="Loading Hm">
+          </div>
+        </template>
+        <template v-else>
+          <h6><b>¿Estás seguro de eliminar el archivo {{ selectedArchive.Name }}?</b></h6>
+          <p>Esta acción no podrá ser revertida</p>
+          <div class="d-flex justify-content-end">
+            <button class="py-2 px-4 mx-2 my-2 cancel-button" @click="closeModal">
+              <b>Cancelar</b>
+            </button>
+            <button class="py-2 px-4 mx-2 my-2 delete-button" @click="deleteArchive">
+              <b>Eliminar</b>
+            </button>
+          </div>
+        </template>
+
       </div>
     </SmallBox>
   </div>

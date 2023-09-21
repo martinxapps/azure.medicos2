@@ -23,6 +23,7 @@ useMyLibraryStore = defineStore({
                     folder.data = response.data.filter((item) => item.Path === folder.name);
                 });
                 this.total = response.data.length;
+                console.log('total', this.total);
             }
             this.isLoading = false;
         },

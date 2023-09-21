@@ -11,6 +11,10 @@ export function checkFolder(data) {
     const patients = mande( `${baseURL}/folder`);
     return patients.post(data);
 }
+export function deleteFile(url) {
+    const patients = mande( `${url}`);
+    return patients.post({});
+}
 export function createFolder(data) {
     const patients = mande( `${baseURL}/addfolder`);
     return patients.post(data);
