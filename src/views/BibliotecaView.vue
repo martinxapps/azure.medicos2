@@ -325,7 +325,7 @@ class UploadableFile {
             <div class="d-block py-1">
               <div class="d-flex justify-content-end">
                 <div class="img-div">
-                  <img class="img-header-icon ml-3 mx-1" src="@/assets/biblioteca.png" alt=" icon">
+                  <img class="img-header-icon ml-3 mx-1 pt-2 pt-md-0" src="@/assets/biblioteca.png" alt=" icon">
                 </div>
                 <br>
                 <h4 class="d-flex text-headerv2 mt-2"
@@ -393,7 +393,7 @@ class UploadableFile {
                           <div class="accordion accordion-flush" id="accordionFlush">
                             <div class="row">
                               <div class="col-12 col-md-4 p-2">
-                                <label class="my-2 title-text">Seleccionar año</label>
+                                <label class="my-2 title-text">Selecciona el año</label>
                                 <select class="form-control form-select p-3 my-2"
                                         v-model="selectedYear" @change="getFolders">
                                   <option :value="null">Seleccionar año</option>
@@ -555,7 +555,7 @@ class UploadableFile {
                           <div class="col-12 col-md-4 p-2">
                             <label class="my-2 title-text">Año</label>
                             <select class="form-control form-select p-3 my-2" v-model="year">
-                              <option :value="null">Seleccionar año</option>
+                              <option :value="null">Selecciona el año</option>
                               <option v-for="(year, yearKey) in years"
                                       :key="yearKey" :value="year">
                                 {{ year }}
@@ -566,13 +566,13 @@ class UploadableFile {
                           <div class="col-12 col-md-4 p-2">
                             <label class="my-2 title-text">Carpeta</label>
                             <select class="form-control p-3 my-2 form-select" v-model="folder">
-                              <option :value="null">Seleccionar carpeta</option>
+                              <option :value="null">Seleccionar documento</option>
                               <option v-for="(folder, folderKey) in folders"
                                       :key="folderKey" :value="folder.name">
                                 {{ folder.label }}
                               </option>
                             </select>
-                            <p v-if="folder === null && dirty" class="mx-1 error-text">La carpeta es requerida</p>
+                            <p v-if="folder === null && dirty" class="mx-1 error-text">El documento es requerido</p>
                           </div>
                           <div class="col-12 col-md-4 p-2"
                                v-if="folder === 'BLS' || folder === 'Poliza-Responsabilidad-Civil'">

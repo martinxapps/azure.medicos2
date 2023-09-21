@@ -45,7 +45,7 @@ onMounted(async () => {
             <div class="d-block py-1">
               <div class="d-flex justify-content-end">
                 <div class="img-div">
-                  <img class="img-header-icon ml-3" src="@/assets/honorarios.png" alt=" icon">
+                  <img class="img-header-icon ml-3 pt-2 pt-md-1" src="@/assets/honorarios.png" alt=" icon">
                 </div>
                 <br>
                 <h4 class="d-flex text-headerv2 mt-3" style="text-align:center; color: #05305d; font-weight: 600;">
@@ -68,7 +68,7 @@ onMounted(async () => {
                 <img class="img-icon-color color-margin" src="@/assets/facturas-pagadas.png" alt=" icon" >
                 <br>
               </div>
-              <p class="d-block text-icon-color mt-3 ">Facturas Pagadas
+              <p class="d-block text-icon-color mt-3 ">Facturas <br>Pagadas
               </p>
             </div>
           </div>
@@ -79,7 +79,7 @@ onMounted(async () => {
                 <img class="img-icon-color color-margin" src="@/assets/facturas-pendientes.png" alt=" icon" >
                 <br>
               </div>
-              <p class="d-block text-icon-color mt-3">Facturas Pendientes
+              <p class="d-block text-icon-color mt-3">Facturas <br>Pendientes
               </p>
             </div>
           </div>
@@ -90,7 +90,7 @@ onMounted(async () => {
                 <img class="img-icon-color color-margin" src="@/assets/facturas.png" alt=" icon" >
                 <br>
               </div>
-              <p class="d-block text-icon-color mt-3">Transacciones
+              <p class="d-block text-icon-color mt-3">Transacciones<br>
               </p>
             </div>
           </div>
@@ -101,7 +101,7 @@ onMounted(async () => {
                 <img class="img-icon-color color-margin" src="@/assets/estados.png" alt=" icon">
                 <br>
               </div>
-              <p class="d-block text-icon-color mt-3">Estados de Cuenta
+              <p class="d-block text-icon-color mt-3">Estados <br> de Cuenta
               </p>
             </div>
           </div>
@@ -112,7 +112,7 @@ onMounted(async () => {
                 <img class="img-icon-color color-margin" src="@/assets/audited.png" alt=" icon" >
                 <br>
               </div>
-              <p class="d-block text-icon-color mt-3">Honorarios Auditados
+              <p class="d-block text-icon-color mt-3">Honorarios <br> Auditados
               </p>
             </div>
           </div>

@@ -440,6 +440,10 @@ p.span-text {
 
 @media screen and (max-width: 600px) {
 
+    .fa-2x {
+        font-size: 1.5em;
+    }
+
     .accordion-body {
         padding: 10px 12px 10px 2px;
     }
@@ -514,7 +518,7 @@ p.span-text {
         margin-top: -80px;
     }
     li.nav-item.tab-hm {
-        min-width: 145px;
+        min-width: 140px;
         word-wrap: normal;
     }
 

@@ -94,7 +94,7 @@ onMounted(async () => {
             <div class="d-block py-1">
               <div class="d-flex justify-content-end">
                 <div class="img-div">
-                  <img class="img-header-icon ml-3 mx-1" src="@/assets/mis-pacientes.png" alt=" icon">
+                  <img class="img-header-icon ml-3 mx-1 pt-2 pt-md-0" src="@/assets/mis-pacientes.png" alt=" icon">
                 </div>
                 <br>
                 <h4 class="d-flex text-headerv2 mt-2"
@@ -231,7 +231,7 @@ onMounted(async () => {
                                 </p>
                               </div>
                               <div class="col-2 d-flex row justify-content-end">
-                                <div class="p-0 p-md-4 my-4">
+                                <div class="p-0 p-md-4 my-0 my-md-4">
                                   <font-awesome-icon :icon="['fas', 'eye']" :size="'2x'"
                                                      class="icon-device"/>
                                 </div>
@@ -304,7 +304,7 @@ onMounted(async () => {
                                 </p>
                               </div>
                               <div class="col-2 d-flex row justify-content-end">
-                                <div class="p-0 p-md-5 my-4">
+                                <div class="p-0 p-md-4 my-0 my-md-4">
                                   <font-awesome-icon :icon="['fas', 'eye']" :size="'2x'"
                                                      class="icon-device"/>
                                 </div>
