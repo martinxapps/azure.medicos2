@@ -25,7 +25,7 @@ useAuthStore = defineStore({
             }
             //this.items = [];
         },
-        async login(user, type, token) {
+        login(user, type, token) {
             //get data from backend
             try {
 
@@ -41,7 +41,7 @@ useAuthStore = defineStore({
             }
             //this.items = [];
         },
-        async setUser(user) {
+        setUser(user) {
             //get data from backend
             try {
 
@@ -52,7 +52,7 @@ useAuthStore = defineStore({
             }
             //this.items = [];
         },
-        async setToken(token) {
+        setToken(token) {
             //get data from backend
             try {
 
