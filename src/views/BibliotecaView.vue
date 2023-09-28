@@ -29,12 +29,18 @@ const dirty = ref(false);
 const fileInput = ref(null);
 const years = ref([]);
 const file = ref(null);
+const description = ref(null);
 const showDeleteModal = ref(false);
 const selectedArchive = ref(null);
 const {notify} = useNotification();
 const today = new Date().toISOString().split('T')[0];
 const minDate = computed(() => today);
+const forbiddenCharacters = /[@#!:&?]/g;
 
+const filterCharacters = () => {
+  // Filtra el texto para eliminar los caracteres no permitidos
+  description.value = description.value.replace(forbiddenCharacters, '');
+}
 const closeModal = () => {
   showDeleteModal.value = false;
   selectedArchive.value = null;
@@ -42,7 +48,7 @@ const closeModal = () => {
 const deleteArchive = async () => {
   isLoadingDelete.value = true;
   const responseCheck = await deleteFile(selectedArchive.value.DeleteFile);
-  if(responseCheck.status){
+  if (responseCheck.status) {
     showDeleteModal.value = false;
     selectedArchive.value = null;
     notify({
@@ -51,7 +57,7 @@ const deleteArchive = async () => {
       type: "success"
     });
     getFolders();
-  }else{
+  } else {
     notify({
       title: "Hubo un error al eliminar",
       type: "error"
@@ -150,7 +156,7 @@ const upload = async () => {
     if (folder.value === 'BLS' || folder.value === 'Poliza-Responsabilidad-Civil') {
       if (date.value === null) return;
     }
-    if (file.value.name === null || file.value.description === null || file.value.name === '' || file.value.description === '' || file.value.description?.length > 100) return;
+    if (file.value.name === null || description.value === null || file.value.name === '' || description.value === '' || description.value?.length > 100) return;
     dirty.value = false;
     isLoading.value = true;
     //check if folder exist
@@ -174,7 +180,7 @@ const upload = async () => {
           fileContent: base64String,
           user: userName,
           fileType: file.value.type,
-          description: file.value.description,
+          description: description.value,
           expireDate: date.value
         };
         console.log('data upload', dataUpload);
@@ -185,6 +191,7 @@ const upload = async () => {
           folder.value = null;
           date.value = null;
           file.value = null;
+          description.value = null;
           notify({
             title: "Archivo subido correctamente",
             text: 'El archivo ha sido subido y puedes verlo en Mis Documentos',
@@ -228,6 +235,7 @@ const upload = async () => {
             fileContent: base64String,
             user: userName,
             fileType: file.value.type,
+            description: description.value,
             expireDate: date.value
           };
           console.log('data upload', dataUpload);
@@ -280,7 +288,10 @@ const getFolders = async () => {
   let userName = user.value.username.split('@')[0];
   await myLibraryStore.getFolders(selectedYear.value, userName);
   isLoading.value = false;
+  console.log('folders', folders);
 }
+const exist = computed(() => folders.value.some(obj => obj.data.some(item => item.Name === file.value.name)));
+
 
 onMounted(async () => {
   screenview('Biblioteca de credenciales');
@@ -437,46 +448,57 @@ class UploadableFile {
                                     <template v-else>
                                       <template v-if="file.data.length>0">
                                         <div class="row">
-                                            <table id="dtHorizontalExample" class="table table-striped table-bordered table-sm" cellspacing="0"
-                                                   width="100%">
-                                              <thead>
-                                              <tr>
-                                                <th><div class="title-text">Nombre</div></th>
-                                                <th><div class=" title-text"
-                                                         :class="{
+                                          <table id="dtHorizontalExample"
+                                                 class="table table-striped table-bordered table-sm" cellspacing="0"
+                                                 width="100%">
+                                            <thead>
+                                            <tr>
+                                              <th>
+                                                <div class="title-text">Nombre</div>
+                                              </th>
+                                              <th>
+                                                <div class=" title-text"
+                                                     :class="{
                                             'col-4': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
                                             'col-6': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
                                           }">Descripción
-                                                </div></th>
-                                                <th><div class=" title-text"
-                                                         v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
+                                                </div>
+                                              </th>
+                                              <th>
+                                                <div class=" title-text"
+                                                     v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
                                                   Fecha de caducidad
-                                                </div></th>
-                                                <th><div class="title-text">Acciones</div></th>
-                                              </tr>
-                                              </thead>
-                                              <tbody v-for="(archive, archiveKey) in file.data"
-                                                     :key="archiveKey">
-                                              <tr>
-                                                <td> <h6 class="text-left">{{ archive.Name }}</h6></td>
-                                                <td><h6 class="text-left" :class="{
+                                                </div>
+                                              </th>
+                                              <th>
+                                                <div class="title-text">Acciones</div>
+                                              </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody v-for="(archive, archiveKey) in file.data"
+                                                   :key="archiveKey">
+                                            <tr>
+                                              <td><h6 class="text-left">{{ archive.Name }}</h6></td>
+                                              <td><h6 class="text-left" :class="{
                                             'col-4': file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil',
                                             'col-6': file.name !== 'BLS' && file.name !== 'Poliza-Responsabilidad-Civil',
                                           }">{{ archive.Description }} </h6></td>
-                                                <td><h6 class=" text-left"
-                                                        v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
-                                                  {{ archive.TimeExpired }}</h6></td>
-                                                <td> <div class="d-flex justify-content-start">
+                                              <td><h6 class=" text-left"
+                                                      v-if="file.name === 'BLS' || file.name === 'Poliza-Responsabilidad-Civil'">
+                                                {{ archive.TimeExpired }}</h6></td>
+                                              <td>
+                                                <div class="d-flex justify-content-start">
                                                   <font-awesome-icon class="p-2 px-3 cursor-pointer"
                                                                      :icon="['fas', 'download']"
                                                                      @click="downloadPdf(archive)"/>
                                                   <font-awesome-icon class="p-2 px-3 cursor-pointer"
                                                                      :icon="['fas', 'trash']" style="color: red;"
                                                                      @click="selectedArchive = archive; showDeleteModal = true;"/>
-                                                </div></td>
-                                              </tr>
-                                              </tbody>
-                                            </table>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            </tbody>
+                                          </table>
                                         </div>
                                       </template>
                                       <template v-else>
@@ -532,13 +554,13 @@ class UploadableFile {
                           <div class="col-12 col-md-4 p-2">
                             <label class="my-2 title-text">Carpeta</label>
                             <select class="form-control p-3 my-2 form-select" v-model="folder">
-                              <option :value="null">Seleccionar documento</option>
+                              <option :value="null">Seleccionar carpeta</option>
                               <option v-for="(folder, folderKey) in folders"
                                       :key="folderKey" :value="folder.name">
                                 {{ folder.label }}
                               </option>
                             </select>
-                            <p v-if="folder === null && dirty" class="mx-1 error-text">El documento es requerido</p>
+                            <p v-if="folder === null && dirty" class="mx-1 error-text">La carpeta es requerida</p>
                           </div>
                           <div class="col-12 col-md-4 p-2"
                                v-if="folder === 'BLS' || folder === 'Poliza-Responsabilidad-Civil'">
@@ -548,7 +570,7 @@ class UploadableFile {
                               requerida</p>
                           </div>
                         </div>
-                        <div class=" my-3 py-3  text-center">
+                        <div class=" my-2 py-2  text-center">
                           <template v-if="file">
                             <div class="d-flex">
                               <p class="cursor-pointer ml-3" style=" color: #0f4470; font-size: 16px;"
@@ -571,6 +593,8 @@ class UploadableFile {
                               <div class="d-flex justify-content-start">
                                 <p v-if="(file.name === null || file.name === '') && dirty"
                                    class="mx-5 my-2 error-text">El nombre es requerido</p>
+                                <p v-if="exist && dirty"
+                                   class="mx-5 my-2 error-text">El nombre ya existe</p>
                               </div>
 
 
@@ -580,14 +604,15 @@ class UploadableFile {
 
                               <div class="d-flex">
                                 <font-awesome-icon class="p-4" :icon="['fas', 'book-bookmark']" size="2x"/>
-                                <textarea class="form-control p-3" rows="6" v-model="file.description" maxlength="100"
+                                <textarea class="form-control p-3" rows="6" v-model="description" maxlength="100"
+                                          @input="filterCharacters"
                                           placeholder="Descripción del archivo de máximo 100 caracteres"></textarea>
 
                               </div>
                               <div class="d-flex justify-content-start">
-                                <p v-if="(file.description === null || file.description === '') && dirty"
+                                <p v-if="(description === null || description === '') && dirty"
                                    class="mx-5 my-2 error-text">La descripción es requerida</p>
-                                <p v-if="file.description?.length > 100 && dirty"
+                                <p v-if="description?.length > 100 && dirty"
                                    class="mx-5 my-2 error-text">La descripción debe ser de máximo 100 caracteres</p>
                               </div>
 
@@ -610,7 +635,9 @@ class UploadableFile {
                                      @change="onInputChange" class="d-none"/>
                             </DropZone>
                             <div class="d-flex">
-                              <button class="py-2 px-4 mx-2 upload-button mx-auto" @click="openSelector">Seleccionar Documento</button>
+                              <button class="py-2 px-4 mx-2 upload-button mx-auto" @click="openSelector">Seleccionar
+                                Documento
+                              </button>
                             </div>
                           </template>
 

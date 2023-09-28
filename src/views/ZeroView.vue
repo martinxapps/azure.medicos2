@@ -11,7 +11,7 @@ const isLoading = ref(false);
 const props = defineProps(["nhc"]);
 const nhc = ref(props.nhc);
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
-const shareLink = computed(() => `https://medicos2.hospitalmetropolitano.org/compartir/zerofootprint/${nhc.value}`);
+const shareLink = computed(() => `${window.location.origin}/compartir/zerofootprint/${nhc.value}`);
 onMounted(() => {
   screenview('ZerofootPrint Imagenes');
 });
