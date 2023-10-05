@@ -9,7 +9,7 @@ import DropZone from "../components/DropZone.vue";
 import {checkFolder, createFolder, deleteFile, uploadFile} from "../services/library";
 import {useNotification} from "@kyvg/vue3-notification";
 import SmallBox from "../components/SmallBox.vue";
-
+import {getFolders} from "../services/library";
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
 const token = computed(() => authStore.token);
@@ -24,6 +24,8 @@ const selectedYear = ref(null);
 const year = ref(null);
 const folder = ref(null);
 const src = ref(null);
+const invalidDate = ref(false);
+const isValidating = ref(false);
 const date = ref(null);
 const dirty = ref(false);
 const fileInput = ref(null);
@@ -56,7 +58,7 @@ const deleteArchive = async () => {
       text: "Archivo Eliminado",
       type: "success"
     });
-    getFolders();
+    refresh();
   } else {
     notify({
       title: "Hubo un error al eliminar",
@@ -147,21 +149,101 @@ const onInputChange = (e) => {
 const openSelector = () => {
   fileInput.value.click();
 }
+const validateName = async () => {
+  let userName = user.value.username.split('@')[0];
+  let data = {
+    path: `${year.value}/${userName}`
+  };
+  console.log('data',data);
+  let response = await refresh(data);
+  console.log('response', response);
+  if (response.status) {
+    let files = response.data;
+    let res = files.find(objeto => objeto.Name === file.value.name && objeto.Path === folder.value);
+    console.log('res', res);
+    return res;
 
+  }
+  return true;
+}
+const validarFecha = () => {
+  // Crear un objeto Date a partir de la cadena de fecha
+  const fecha = new Date(date.value);
+  // Verificar si la fecha es válida y no es NaN
+  if (isNaN(fecha)) {
+    return false; // La fecha no es válida
+  }
+  // Obtener la fecha actual
+  const fechaActual = new Date();
+  // Comparar si la fecha es posterior a la fecha actual
+  return fecha > fechaActual;
+}
 
 const upload = async () => {
   try {
+    notify({
+      title: "Validando Archivo",
+      text: 'El archivo estó siendo validado',
+      type: "warn"
+    });
     dirty.value = true;
-    if (year.value === null || folder.value === null) return;
+    isValidating.value = true;
+    invalidDate.value = false;
+    if (year.value === null || folder.value === null) return  isValidating.value = false;
+    console.log('year', year.value);
+    console.log('folder', folder.value);
     if (folder.value === 'BLS' || folder.value === 'Poliza-Responsabilidad-Civil') {
-      if (date.value === null) return;
+      if (!validarFecha()) {
+        console.log("La fecha no es válida o no es posterior a la fecha actual.");
+        invalidDate.value = true;
+        isValidating.value = false;
+        return;
+      }
+      if (date.value === null) return isValidating.value = false;
+
+    }else{
+      date.value = null;
     }
-    if (file.value.name === null || description.value === null || file.value.name === '' || description.value === '' || description.value?.length > 100) return;
+    console.log('date', date.value);
+    if (
+        file.value.name === null ||
+        description.value === null ||
+        file.value.name === '' ||
+        description.value === '' ||
+        description.value?.length > 100) return isValidating.value = false;
+    console.log('file.value.name',file.value.name);
+    console.log('description.value',description.value);
+    let userName = user.value.username.split('@')[0];
+    let data = {
+      path: `${year.value}/${userName}`
+    };
+    console.log('data',data);
+    let response = await getFolders(data);
+    console.log('response', response);
+    let res = null;
+    if (response.status) {
+      let files = response.data;
+      res = files.find(objeto => objeto.Name === file.value.name && objeto.Path === folder.value);
+  console.log('res', res);
+
+    }
+    if(res){
+      exist.value = true;
+      console.log('exist.value',exist.value);
+      isValidating.value = false;
+      return;
+    }
+    notify({
+      title: "Archivo Validado",
+      text: 'El archivo es válido, empieza la subida',
+      type: "warn"
+    });
+    invalidDate.value = false;
+    exist.value = false;
     dirty.value = false;
     isLoading.value = true;
+    isValidating.value = false;
     //check if folder exist
-    console.log('user', user.value);
-    let userName = user.value.username.split('@')[0];
     let dataCheck = {
       path: `${year.value}/${userName}/${folder.value}`
     };
@@ -199,7 +281,7 @@ const upload = async () => {
           });
           myLibraryStore.activeTab = 0;
           isLoading.value = false;
-          getFolders();
+          refresh();
 
         } else {
           notify({
@@ -253,7 +335,7 @@ const upload = async () => {
             });
             myLibraryStore.activeTab = 0;
             isLoading.value = false;
-            getFolders();
+            refresh();
           } else {
             notify({
               title: "Hubo un error",
@@ -283,14 +365,14 @@ const upload = async () => {
   }
 };
 
-const getFolders = async () => {
+const refresh = async () => {
   isLoading.value = true;
   let userName = user.value.username.split('@')[0];
   await myLibraryStore.getFolders(selectedYear.value, userName);
   isLoading.value = false;
   console.log('folders', folders);
 }
-const exist = computed(() => folders.value.some(obj => obj.data.some(item => item.Name === file.value.name)));
+const exist = ref(false);
 
 
 onMounted(async () => {
@@ -303,7 +385,7 @@ onMounted(async () => {
   for (let i = 2020; i <= actual; i++) {
     years.value.push(i);
   }
-  getFolders();
+  refresh();
 });
 
 class UploadableFile {
@@ -386,7 +468,7 @@ class UploadableFile {
               </div>
 
               <div class="col-1 col-md-3 d-flex justify-content-end">
-                <h5 class="cursor-pointer p-1 pt-2" style=" color: #0f4470; font-size: 16px;" @click="getFolders()">
+                <h5 class="cursor-pointer p-1 pt-2" style=" color: #0f4470; font-size: 16px;" @click="refresh()">
                   <font-awesome-icon :icon="['fas', 'refresh']" class="mx-1"/>
                   <span class="m-0 d-none d-md-inline-block">Actualizar</span>
 
@@ -413,7 +495,7 @@ class UploadableFile {
                               <div class="col-12 col-md-4 p-2">
                                 <label class="my-2 title-text">Selecciona el año</label>
                                 <select class="form-control form-select p-3 my-2"
-                                        v-model="selectedYear" @change="getFolders">
+                                        v-model="selectedYear" @change="refresh">
                                   <option :value="null">Seleccionar año</option>
                                   <option v-for="(year, yearKey) in years"
                                           :key="yearKey" :value="year">
@@ -542,7 +624,8 @@ class UploadableFile {
                         <div class="row">
                           <div class="col-12 col-md-4 p-2">
                             <label class="my-2 title-text">Año</label>
-                            <select class="form-control form-select p-3 my-2" v-model="year">
+                            <select class="form-control form-select p-3 my-2" v-model="year"
+                                    :disabled="isValidating">
                               <option :value="null">Selecciona el año</option>
                               <option v-for="(year, yearKey) in years"
                                       :key="yearKey" :value="year">
@@ -553,7 +636,7 @@ class UploadableFile {
                           </div>
                           <div class="col-12 col-md-4 p-2">
                             <label class="my-2 title-text">Carpeta</label>
-                            <select class="form-control p-3 my-2 form-select" v-model="folder">
+                            <select class="form-control p-3 my-2 form-select" v-model="folder" :disabled="isValidating">
                               <option :value="null">Seleccionar carpeta</option>
                               <option v-for="(folder, folderKey) in folders"
                                       :key="folderKey" :value="folder.name">
@@ -565,9 +648,11 @@ class UploadableFile {
                           <div class="col-12 col-md-4 p-2"
                                v-if="folder === 'BLS' || folder === 'Poliza-Responsabilidad-Civil'">
                             <label class="my-2 title-text">Fecha de Caducidad</label>
-                            <input class="form-control p-3 my-2 " type="date" v-model="date" :min="minDate">
+                            <input class="form-control p-3 my-2 " type="date" v-model="date" :min="minDate" :disabled="isValidating">
                             <p v-if="date === null && dirty" class="mx-1 error-text">La fecha de caducidad es
                               requerida</p>
+                            <p v-if="invalidDate && dirty" class="mx-1 error-text">
+                              La fecha debe ser mayor que el día de hoy</p>
                           </div>
                         </div>
                         <div class=" my-2 py-2  text-center">
@@ -587,7 +672,7 @@ class UploadableFile {
                               <div class="d-flex">
                                 <font-awesome-icon class="p-4" :icon="['fas', 'file']" size="2x"/>
                                 <input class="form-control p-1" type="text" v-model="file.name"
-                                       placeholder="Nombre del Archivo">
+                                       placeholder="Nombre del Archivo" :disabled="isValidating">
 
                               </div>
                               <div class="d-flex justify-content-start">
@@ -605,7 +690,7 @@ class UploadableFile {
                               <div class="d-flex">
                                 <font-awesome-icon class="p-4" :icon="['fas', 'book-bookmark']" size="2x"/>
                                 <textarea class="form-control p-3" rows="6" v-model="description" maxlength="100"
-                                          @input="filterCharacters"
+                                          @input="filterCharacters" :disabled="isValidating"
                                           placeholder="Descripción del archivo de máximo 100 caracteres"></textarea>
 
                               </div>
@@ -617,7 +702,9 @@ class UploadableFile {
                               </div>
 
                               <div class="d-flex justify-content-center">
-                                <button class="py-2 px-4 mx-2 my-2 upload-button" @click="upload">Subir</button>
+                                <button class="py-2 px-4 mx-2 my-2 upload-button" :disabled="isValidating" @click="upload">
+                                  <span v-if="!isValidating" class="spinner"></span>
+                                  Subir</button>
                               </div>
 
                             </div>
@@ -728,6 +815,11 @@ class UploadableFile {
   border-radius: 10px;
   color: white;
   background-color: #0d2c65;
+}
+.upload-button:disabled {
+  border-radius: 10px;
+  color: white;
+  background-color: grey;
 }
 
 .delete-button {
