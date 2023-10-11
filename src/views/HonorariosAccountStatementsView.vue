@@ -106,6 +106,8 @@ const goToDetail = async () => {
                 </div>
               </div>
             </div>
+            <p class="my-1" style="color: red;">
+              Esta consulta puede tomar varios minutos dependiendo del rango de fechas seleccionado.</p>
           </div>
         </div>
 

@@ -76,7 +76,7 @@ const router = createRouter({
             meta: {
                 authRequired: true,
                 userType: "medic",
-                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
+                roles: ["PERFIL_MEDICO_BDOCU"]
             }
         },
         // //mis pacientes
