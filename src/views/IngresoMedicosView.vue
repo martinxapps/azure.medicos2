@@ -167,8 +167,8 @@ onMounted(async () => {
                       Su contraseña es la misma proporcionada por el hospital.<br>
                       Ej: Si su usario es pperez ustede deberá ingresar pperez@hmetro.med.ec
                     </p>
-                    <p class="span-text mb-4 mt-2" style="color: red;">Si tiene algún inconveniente comuníquese al <a
-                        target="_blank" href="tel:022399800">022 399 800</a> ext 2020 </p>
+                    <p class="span-text mb-4 mt-2" style="color: red;">Si tiene algún inconveniente comuníquese al
+                      <a target="_blank" href="tel:023998000">02 399 8000</a> ext 2020 </p>
                   </div>
                   <div class="col-3 col-lg-2">
                   </div>
