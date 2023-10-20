@@ -162,11 +162,13 @@ onMounted(async () => {
                            alt="microsift icon" width="30px" height="28px">
                       {{ language === "es" ? "Ingreso seguro" : "Log In" }}
                     </button>
-                    <p class="span-text my-4">
+                    <p class="span-text mt-4">
                       Ingrese con el usuario proporcionado por el hospital seguido de @hmetro.med.ec <br>
                       Su contraseña es la misma proporcionada por el hospital.<br>
                       Ej: Si su usario es pperez ustede deberá ingresar pperez@hmetro.med.ec
                     </p>
+                    <p class="mb-4 mt-2" style="color: red;">Si tienes inconvenientes comuniquese al <a target="_blank"
+                       href="tel:022399800">022 399 800</a> ext 2020 </p>
                   </div>
                   <div class="col-3 col-lg-2">
                   </div>
