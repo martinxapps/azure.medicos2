@@ -261,7 +261,7 @@ const upload = async () => {
           fileName: file.value.name,
           fileContent: base64String,
           user: userName,
-          fileType: file.value.type,
+          fileType: folder.value,
           description: description.value,
           expireDate: date.value
         };
@@ -316,7 +316,7 @@ const upload = async () => {
             fileName: file.value.name,
             fileContent: base64String,
             user: userName,
-            fileType: file.value.type,
+            fileType: folder.value,
             description: description.value,
             expireDate: date.value
           };
