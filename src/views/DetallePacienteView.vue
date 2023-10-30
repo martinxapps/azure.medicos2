@@ -15,7 +15,7 @@ import llenadoCapilarBlanco from "@/assets/llenado-capilar-blanco.png";
 import glicemiaBlanco from "@/assets/glicemia-blanco.png";
 import glicemia from "@/assets/glicemia.png";
 import corazonBlanco from "@/assets/corazon-blanco.png";
-import { ref, onMounted } from "vue";
+import {ref, onMounted, computed} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import dayjs from "dayjs";
 import {
@@ -30,7 +30,7 @@ import {
 
 import { useNotification } from "@kyvg/vue3-notification";
 import Form005Viewer from "../components/Form005Viewer.vue";
-import { useMyPatientsStore } from "../stores/myPatients";
+import { usePatientDetailStore } from "../stores/patientDetail";
 import {event, screenview} from 'vue-gtag';
 
 const { notify } = useNotification();
@@ -38,15 +38,14 @@ const { notify } = useNotification();
 //const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
 // const type = computed(() => authStore.type);
-const myPatientsStore = useMyPatientsStore();
-const activeTab = ref(0);
-const statusPaciente = ref(null);
-const svPaciente = ref([]);
+const patientDetailStore = usePatientDetailStore();
+const statusPaciente = computed(() => patientDetailStore.statusPaciente);
+const svPaciente = computed(() => patientDetailStore.svPaciente);
 const seeImages = ref(false);
-const evPaciente = ref([]);
-const formsPaciente = ref([]);
-const lab_results = ref([]);
-const image_results = ref([]);
+const evPaciente = computed(() => patientDetailStore.evPaciente);
+const formsPaciente = computed(() => patientDetailStore.formsPaciente);
+const lab_results = computed(() => patientDetailStore.lab_results);
+const image_results = computed(() => patientDetailStore.image_results);
 const props = defineProps(["nhc"]);
 const nhc = ref(props.nhc);
 const isLoading = ref(false);
@@ -58,19 +57,17 @@ const title = ref("Detalle del Paciente - MetroVirtual - Hospital Metropolitano"
 const route = useRoute();
 const router = useRouter();
 
-const isWithin24Hours = (date) => {
-  const dateForm = dayjs(date);
-  const now = dayjs(); // Obtiene la fecha y hora actual
-  const yesterday = now.subtract(24, "hour"); // Resta 24 horas a la fecha y hora actual
-  return dateForm.isAfter(yesterday) && dateForm.isBefore(now); // Compara la fecha deseada con la fecha y hora actual y la fecha y hora de hace 24 horas
-};
+
 const getPatientDetails = (nhc) => {
   try {
-    isLoading.value = true;
+    if(statusPaciente.value === null){
+      isLoading.value = true;
+    }
+
     // get patient status
     statusPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
-        statusPaciente.value = response.data;
+        patientDetailStore.statusPaciente = response.data;
         console.log("statusPaciente.value", statusPaciente.value);
         title.value = `Paciente ${statusPaciente.value.NOMBRE_PACIENTE} - MetroVirtual - Hospital Metropolitano`;
         screenview(`Detalle del Paciente ${statusPaciente.value.NOMBRE_PACIENTE}`);
@@ -104,7 +101,10 @@ const getPatientDetails = (nhc) => {
 };
 const getPatientSV = (nhc) => {
   try {
-    isLoadingSV.value = true;
+    if(svPaciente.value === []){
+      isLoadingSV.value = true;
+    }
+
     // get patient sv
     svPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
@@ -168,7 +168,7 @@ const getPatientSV = (nhc) => {
         // if (talla) {
         //   final.push(talla);
         // }
-        svPaciente.value = items;
+        patientDetailStore.svPaciente = items;
         console.log("svPaciente.value", svPaciente.value);
       } else {
         notify({
@@ -198,6 +198,84 @@ const getPatientSV = (nhc) => {
     isLoadingSV.value = false;
   }
 };
+const getPatientEV = async (nhc) => {
+  try {
+    if(evPaciente.value === []){
+      isLoadingForms.value = true;
+    }
+
+    // get patient ev
+    const evPacienteResponse = await evPacienteEmergencia(nhc);
+    if (evPacienteResponse.status) {
+      patientDetailStore.evPaciente = evPacienteResponse.data;
+      // console.log(" evPaciente.value", evPaciente.value);
+      // console.log(" evPaciente.value", evPaciente.value[0]);
+      // get patient forms
+      patientDetailStore.formsPaciente = await formularioPaciente(evPaciente.value[0].NHCL, evPaciente.value[0].ADM);
+      console.log("formsPaciente.value", formsPaciente.value);
+
+    } else {
+      notify({
+        title: "¡Atención!",
+        text: "No existen registros de evoluciones-prescripciones para este paciente",
+        type: "info"
+      });
+    }
+    isLoadingForms.value = false;
+  } catch (e) {
+    console.log("error", e);
+    notify({
+      title: "Hubo un problema al cargar los registros de evoluciones-prescripciones",
+      text: e,
+      type: "error"
+    });
+    isLoadingForms.value = false;
+  }
+};
+const getLabResults = (nhc) => {
+  // get patient lab results
+  if(patientDetailStore.lab_results === []){
+    isLoadingLab.value = true;
+  }
+
+  resultadosLaboratorioPaciente(nhc).then((response) => {
+    if (response.status) {
+      patientDetailStore.lab_results = response.data;
+    } else {
+      notify({
+        title: "¡Atención!",
+        text: "No existen resultados de laboratorio disponibles para este paciente",
+        type: "info"
+      });
+    }
+    isLoadingLab.value = false;
+  });
+};
+const getImageResults = (nhc) => {
+  // get patient lab results
+  if(image_results.value === []){
+    isLoadingImage.value = true;
+  }
+
+  resultadosImagenPaciente(nhc).then((response) => {
+    isLoadingImage.value = false;
+    if (response.status) {
+      // image_results.value = response.data.map((image_result) => {
+      //   let newIr = image_result;
+      //   newIr.fecha_ = `${image_result.FECHA.substring(6, 10)}-${image_result.FECHA.substring(3, 5)}-${image_result.FECHA.substring(0, 2)}`;
+      //   return newIr;
+      // })
+      patientDetailStore.image_results = response.data;
+    } else {
+      notify({
+        title: "¡Atención!",
+        text: "No existen resultados de imagen disponibles para este paciente",
+        type: "info"
+      });
+    }
+  });
+};
+
 const getWhiteImage = (item) => {
 
   switch (item.SIGNO) {
@@ -241,7 +319,6 @@ const getImage = (item) => {
       return corazon;
   }
 };
-
 const getUnit = (item) => {
   switch (item.SIGNO) {
     case "TALLA":
@@ -265,79 +342,23 @@ const getUnit = (item) => {
       return "";
   }
 };
-
-const getPatientEV = async (nhc) => {
-  try {
-    isLoadingForms.value = true;
-    // get patient ev
-    const evPacienteResponse = await evPacienteEmergencia(nhc);
-    if (evPacienteResponse.status) {
-      evPaciente.value = evPacienteResponse.data;
-      console.log(" evPaciente.value", evPaciente.value);
-      console.log(" evPaciente.value", evPaciente.value[0]);
-      // get patient forms
-      formsPaciente.value = await formularioPaciente(evPaciente.value[0].NHCL, evPaciente.value[0].ADM);
-      console.log("formsPaciente.value", formsPaciente.value);
-
-    } else {
-      notify({
-        title: "¡Atención!",
-        text: "No existen registros de evoluciones-prescripciones para este paciente",
-        type: "info"
-      });
-    }
-    isLoadingForms.value = false;
-  } catch (e) {
-    console.log("error", e);
-    notify({
-      title: "Hubo un problema al cargar los registros de evoluciones-prescripciones",
-      text: e,
-      type: "error"
-    });
-    isLoadingForms.value = false;
+const isWithin24Hours = (date) => {
+  const dateForm = dayjs(date);
+  const now = dayjs(); // Obtiene la fecha y hora actual
+  const yesterday = now.subtract(24, "hour"); // Resta 24 horas a la fecha y hora actual
+  return dateForm.isAfter(yesterday) && dateForm.isBefore(now); // Compara la fecha deseada con la fecha y hora actual y la fecha y hora de hace 24 horas
+};
+const getWord = (key) => {
+  switch (key) {
+    case "true":
+    case true:
+      return "Nuevo";
+    default:
+      return "Solicitado";
   }
 };
-const getLabResults = (nhc) => {
-  // get patient lab results
-  isLoadingLab.value = true;
-  resultadosLaboratorioPaciente(nhc).then((response) => {
-    if (response.status) {
-      lab_results.value = response.data;
-    } else {
-      notify({
-        title: "¡Atención!",
-        text: "No existen resultados de laboratorio disponibles para este paciente",
-        type: "info"
-      });
-    }
-    isLoadingLab.value = false;
-  });
-};
-
-
-const getImageResults = (nhc) => {
-  // get patient lab results
-  isLoadingImage.value = true;
-  resultadosImagenPaciente(nhc).then((response) => {
-    isLoadingImage.value = false;
-    if (response.status) {
-      // image_results.value = response.data.map((image_result) => {
-      //   let newIr = image_result;
-      //   newIr.fecha_ = `${image_result.FECHA.substring(6, 10)}-${image_result.FECHA.substring(3, 5)}-${image_result.FECHA.substring(0, 2)}`;
-      //   return newIr;
-      // })
-      image_results.value = response.data;
-    } else {
-      notify({
-        title: "¡Atención!",
-        text: "No existen resultados de imagen disponibles para este paciente",
-        type: "info"
-      });
-    }
-  });
-};
 const goBack = () => {
-  myPatientsStore.activeTabPaciente = 0;
+  patientDetailStore.activeTabPaciente = 0;
   if (window.history.state.back === null) {
     router.replace({ name: "mis-pacientes" });
   } else {
@@ -525,15 +546,7 @@ const goToZeroCtrlItem = async (item) => {
   //await router.push({name: 'medic-patient-curva-view', params: {type, na, nhc: nhc.value}});
 };
 
-const getWord = (key) => {
-  switch (key) {
-    case "true":
-    case true:
-      return "Nuevo";
-    default:
-      return "Solicitado";
-  }
-};
+
 const goToImageResult = async (result) => {
   let split = result.deep_link.split("/");
   // let url = router.resolve({
@@ -688,8 +701,8 @@ onMounted(async () => {
             <ul class="nav nav-tabs tabs-details" id="PatientTab" role="tablist">
               <li class="nav-item tab-hm" role="presentation">
                 <button class="nav-link nav-hm pl-0" id="vital-signs-tab" data-toggle="tab"
-                        :class="{'active': myPatientsStore.activeTabPaciente === 0}"
-                        @click="myPatientsStore.activeTabPaciente = 0"
+                        :class="{'active': patientDetailStore.activeTabPaciente === 0}"
+                        @click="patientDetailStore.activeTabPaciente = 0"
                         data-target="#vital-signs" type="button" role="tab"
                         aria-controls="vital-signs" aria-selected="true">
                   Signos Vitales
@@ -697,8 +710,8 @@ onMounted(async () => {
               </li>
               <li class="nav-item tab-hm" role="presentation">
                 <button class="nav-link nav-hm pl-0" id="evolutions-tab" data-toggle="tab"
-                        :class="{'active': myPatientsStore.activeTabPaciente === 1}"
-                        @click="myPatientsStore.activeTabPaciente = 1"
+                        :class="{'active': patientDetailStore.activeTabPaciente === 1}"
+                        @click="patientDetailStore.activeTabPaciente = 1"
                         data-target="#evolutions" type="button"
                         role="tab" aria-controls="evolutions" aria-selected="false">
                   Evoluciones y Prescripciones
@@ -706,8 +719,8 @@ onMounted(async () => {
               </li>
               <li class="nav-item tab-hm" role="presentation">
                 <button class="nav-link nav-hm pl-0" id="lab-tab" data-toggle="tab"
-                        :class="{'active': myPatientsStore.activeTabPaciente === 2}"
-                        @click="myPatientsStore.activeTabPaciente = 2"
+                        :class="{'active': patientDetailStore.activeTabPaciente === 2}"
+                        @click="patientDetailStore.activeTabPaciente = 2"
                         data-target="#lab" type="button" role="tab" aria-controls="lab"
                         aria-selected="true">
                   Laboratorio
@@ -715,8 +728,8 @@ onMounted(async () => {
               </li>
               <li class="nav-item tab-hm" role="presentation">
                 <button class="nav-link nav-hm pl-0" id="image-tab" data-toggle="tab"
-                        :class="{'active': myPatientsStore.activeTabPaciente === 3}"
-                        @click="myPatientsStore.activeTabPaciente = 3"
+                        :class="{'active': patientDetailStore.activeTabPaciente === 3}"
+                        @click="patientDetailStore.activeTabPaciente = 3"
                         data-target="#image" type="button" role="tab" aria-controls="image"
                         aria-selected="false">
                   Imagen
@@ -726,7 +739,7 @@ onMounted(async () => {
             </ul>
             <div class="tab-content" id="PatientTabContent">
               <div class="tab-pane fade" id="vital-signs" role="tabpanel"
-                   :class="{'active': myPatientsStore.activeTabPaciente === 0, 'show': myPatientsStore.activeTabPaciente === 0}"
+                   :class="{'active': patientDetailStore.activeTabPaciente === 0, 'show': patientDetailStore.activeTabPaciente === 0}"
                    aria-labelledby="vital-signs-tab">
                 <div class="container">
                   <div class="row justify-content-center">
@@ -828,7 +841,7 @@ onMounted(async () => {
                 </div>
               </div>
               <div class="tab-pane fade" id="evolutions" role="tabpanel"
-                   :class="{'active': myPatientsStore.activeTabPaciente === 1, 'show': myPatientsStore.activeTabPaciente === 1}"
+                   :class="{'active': patientDetailStore.activeTabPaciente === 1, 'show': patientDetailStore.activeTabPaciente === 1}"
                    aria-labelledby="evolutions-tab">
                 <div class="container">
                   <div class="row justify-content-center">
@@ -904,7 +917,7 @@ onMounted(async () => {
                 </div>
               </div>
               <div class="tab-pane fade" id="lab" role="tabpanel"
-                   :class="{'active': myPatientsStore.activeTabPaciente === 2, 'show': myPatientsStore.activeTabPaciente === 2}"
+                   :class="{'active': patientDetailStore.activeTabPaciente === 2, 'show': patientDetailStore.activeTabPaciente === 2}"
                    aria-labelledby="lab-tab">
                 <div class="container">
                   <div class="row justify-content-center">
@@ -989,7 +1002,7 @@ onMounted(async () => {
                 </div>
               </div>
               <div class="tab-pane fade" id="image" role="tabpanel"
-                   :class="{'active': myPatientsStore.activeTabPaciente === 3, 'show': myPatientsStore.activeTabPaciente === 3}"
+                   :class="{'active': patientDetailStore.activeTabPaciente === 3, 'show': patientDetailStore.activeTabPaciente === 3}"
                    aria-labelledby="image-tab">
                 <div class="container">
                   <div class="row justify-content-center">
