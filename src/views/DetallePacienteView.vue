@@ -41,7 +41,7 @@ const { notify } = useNotification();
 const patientDetailStore = usePatientDetailStore();
 const statusPaciente = computed(() => patientDetailStore.statusPaciente);
 const svPaciente = computed(() => patientDetailStore.svPaciente);
-const seeImages = ref(false);
+const seeImages = computed(() => patientDetailStore.seeImages);
 const evPaciente = computed(() => patientDetailStore.evPaciente);
 const formsPaciente = computed(() => patientDetailStore.formsPaciente);
 const lab_results = computed(() => patientDetailStore.lab_results);
@@ -60,6 +60,7 @@ const router = useRouter();
 
 const getPatientDetails = (nhc) => {
   try {
+
     if(statusPaciente.value === null){
       isLoading.value = true;
     }
@@ -101,9 +102,12 @@ const getPatientDetails = (nhc) => {
 };
 const getPatientSV = (nhc) => {
   try {
-    if(svPaciente.value === []){
+    console.log('svPaciente.value', svPaciente.value);
+    console.log('svPaciente.value', svPaciente.value.length < 1);
+    if(svPaciente.value.length < 1){
       isLoadingSV.value = true;
     }
+    console.log('isLoadingSV.value', isLoadingSV.value);
 
     // get patient sv
     svPacienteEmergencia(nhc).then((response) => {
@@ -171,6 +175,7 @@ const getPatientSV = (nhc) => {
         patientDetailStore.svPaciente = items;
         console.log("svPaciente.value", svPaciente.value);
       } else {
+        patientDetailStore.svPaciente = [];
         notify({
           title: "¡Atención!",
           text: "No existen registros de signos vitales para este paciente",
@@ -200,7 +205,7 @@ const getPatientSV = (nhc) => {
 };
 const getPatientEV = async (nhc) => {
   try {
-    if(evPaciente.value === []){
+    if(evPaciente.value.length < 1){
       isLoadingForms.value = true;
     }
 
@@ -234,7 +239,7 @@ const getPatientEV = async (nhc) => {
 };
 const getLabResults = (nhc) => {
   // get patient lab results
-  if(patientDetailStore.lab_results === []){
+  if(patientDetailStore.lab_results.length < 1){
     isLoadingLab.value = true;
   }
 
@@ -242,6 +247,7 @@ const getLabResults = (nhc) => {
     if (response.status) {
       patientDetailStore.lab_results = response.data;
     } else {
+      patientDetailStore.lab_results = [];
       notify({
         title: "¡Atención!",
         text: "No existen resultados de laboratorio disponibles para este paciente",
@@ -253,7 +259,7 @@ const getLabResults = (nhc) => {
 };
 const getImageResults = (nhc) => {
   // get patient lab results
-  if(image_results.value === []){
+  if(image_results.value.length < 1){
     isLoadingImage.value = true;
   }
 
@@ -267,6 +273,7 @@ const getImageResults = (nhc) => {
       // })
       patientDetailStore.image_results = response.data;
     } else {
+      patientDetailStore.image_results = [];
       notify({
         title: "¡Atención!",
         text: "No existen resultados de imagen disponibles para este paciente",
@@ -358,7 +365,7 @@ const getWord = (key) => {
   }
 };
 const goBack = () => {
-  patientDetailStore.activeTabPaciente = 0;
+  patientDetailStore.clearPatient();
   if (window.history.state.back === null) {
     router.replace({ name: "mis-pacientes" });
   } else {
@@ -653,42 +660,41 @@ onMounted(async () => {
                 {{ statusPaciente?.NOMBRE_PACIENTE }}
               </h4>
             </div>
-            <template v-if="statusPaciente">
-              <div class="row my-2 dates-pacientes">
-                <div class="col-12 col-md-5">
-                  <p class="descrip-paciente">
-                    <b>NHC: </b>{{ statusPaciente?.HC ? statusPaciente?.HC : "No registrado" }}
-                  </p>
-                  <p class="descrip-paciente">
-                    <b>Diagnóstico: </b>{{ statusPaciente?.DG_PRINCIPAL ? statusPaciente?.DG_PRINCIPAL : "No registrado"
-                    }}</p>
-                  <p class="descrip-paciente">
-                    <b>Plan/Convenio: </b>{{ statusPaciente?.TIPO_DCTO ? statusPaciente?.TIPO_DCTO : "No registrado" }}
-                  </p>
-                </div>
-                <div class="col-12 col-md-4">
-                  <p class="descrip-paciente">
-                    <b>Médico: </b>{{ statusPaciente?.NOMBRE_MEDICO ? statusPaciente?.NOMBRE_MEDICO : "No registrado" }}
-                  </p>
-                  <p class="descrip-paciente">
-                    <b>Especialidad: </b>{{ statusPaciente?.ESPECIALIDAD ? statusPaciente?.ESPECIALIDAD : "No registrado"
-                    }}</p>
-                  <p class="descrip-paciente">
-                    <b>Admisión: </b>{{ evPaciente ? evPaciente[0] ? evPaciente[0]?.ADM : "No registrado" : "No registrado" }}</p>
-                </div>
-                <div class="col-12 col-md-3">
-                  <p class="descrip-paciente">
-                    <b>Edad: </b>{{ statusPaciente?.EDAD ? statusPaciente?.EDAD + " Años" : "No registrado" }}</p>
-                  <p class="descrip-paciente">
-                    <b>CI: </b>{{ statusPaciente?.CEDULA ? statusPaciente?.CEDULA : "No registrado" }}</p>
-                  <p class="descrip-paciente">
-                    <b>Ubicación: </b>{{ statusPaciente?.NRO_HABITACION ? statusPaciente?.NRO_HABITACION : "No registrado"
-                    }}</p>
-                </div>
+            <div class="row my-2 dates-pacientes">
+              <div class="col-12 col-md-5">
+                <p class="descrip-paciente">
+                  <b>NHC: </b>{{ statusPaciente?.HC ? statusPaciente?.HC : "No registrado" }}
+                </p>
+                <p class="descrip-paciente">
+                  <b>Diagnóstico: </b>{{ statusPaciente?.DG_PRINCIPAL ? statusPaciente?.DG_PRINCIPAL : "No registrado"
+                  }}</p>
+                <p class="descrip-paciente">
+                  <b>Plan/Convenio: </b>{{ statusPaciente?.TIPO_DCTO ? statusPaciente?.TIPO_DCTO : "No registrado" }}
+                </p>
               </div>
-            </template>
+              <div class="col-12 col-md-4">
+                <p class="descrip-paciente">
+                  <b>Médico: </b>{{ statusPaciente?.NOMBRE_MEDICO ? statusPaciente?.NOMBRE_MEDICO : "No registrado" }}
+                </p>
+                <p class="descrip-paciente">
+                  <b>Especialidad: </b>{{ statusPaciente?.ESPECIALIDAD ? statusPaciente?.ESPECIALIDAD : "No registrado"
+                  }}</p>
+                <p class="descrip-paciente">
+                  <b>Admisión: </b>{{ evPaciente ? evPaciente[0] ? evPaciente[0]?.ADM : "No registrado" : "No registrado" }}</p>
+              </div>
+              <div class="col-12 col-md-3">
+                <p class="descrip-paciente">
+                  <b>Edad: </b>{{ statusPaciente?.EDAD ? statusPaciente?.EDAD + " Años" : "No registrado" }}</p>
+                <p class="descrip-paciente">
+                  <b>CI: </b>{{ statusPaciente?.CEDULA ? statusPaciente?.CEDULA : "No registrado" }}</p>
+                <p class="descrip-paciente">
+                  <b>Ubicación: </b>{{ statusPaciente?.NRO_HABITACION ? statusPaciente?.NRO_HABITACION : "No registrado"
+                  }}</p>
+              </div>
+            </div>
           </div>
         </div>
+
 
         <div class="row my-2 pb-5 pt-2">
           <div class="col-sm-12 mt-2">
@@ -1015,7 +1021,7 @@ onMounted(async () => {
                       </template>
                       <template v-else>
                         <template v-if="seeImages">
-                          <div class="flex" @click="seeImages = false;">
+                          <div class="flex" @click="patientDetailStore.seeImages = false;">
                             <div class="row mt-3">
                               <h5 class="cursor-pointer ml-3"
                                   style=" color: #0f4470; font-size: 16px;">
@@ -1089,7 +1095,7 @@ onMounted(async () => {
                             <p class="title-results m-4"><b>Ver Exámenes (Zero FootPrint GE)</b>
                             </p>
                           </div>
-                          <div @click="seeImages = true;"
+                          <div @click="patientDetailStore.seeImages = true;"
                                class=" my-1 p-4 row cursor-pointer text-left border-result hover-list-element">
                             <p class="title-results m-4"><b>Ver Informes</b>
                             </p>

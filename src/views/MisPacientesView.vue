@@ -5,11 +5,13 @@ import {useMyPatientsStore} from "../stores/myPatients";
 import {computed, ref, onMounted} from "vue";
 import {useRouter} from "vue-router";
 import {event, screenview} from 'vue-gtag';
+import {usePatientDetailStore} from "../stores/patientDetail";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
 // const type = computed(() => authStore.type);
 const myPatientsStore = useMyPatientsStore();
+const patientDetailStore = usePatientDetailStore();
 const dealer_patients = computed(() => myPatientsStore.dealer_patients);
 const total_dealer_patients = computed(() => myPatientsStore.total_dealer_patients);
 const consulted_patients = computed(() => myPatientsStore.consulted_patients);
@@ -41,6 +43,7 @@ const goBack = async () => {
 
 const goToPatientDetail = async (patient) => {
   try {
+    patientDetailStore.clearPatient();
     console.log('see_patient', {
       patient_name: patient.NOMBRE_PACIENTE,
       patient_nhc: patient.HC,
