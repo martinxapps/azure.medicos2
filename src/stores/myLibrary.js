@@ -20,7 +20,7 @@ useMyLibraryStore = defineStore({
             console.log('response', response);
             if (response.status) {
                 this.folders.forEach((folder) => {
-                    folder.data = response.data.filter((item) => item.Path === folder.name);
+                    folder.data = response.data.filter((item) => item.Path.toLowerCase() === folder.name.toLowerCase());
                 });
                 this.total = response.data.length;
                 console.log('total', this.total);
@@ -43,7 +43,6 @@ useMyLibraryStore = defineStore({
                         data: [],
                         isLoading: false,
                     },
-
                     {
                         name: 'Credenciales',
                         label: 'Credenciales',

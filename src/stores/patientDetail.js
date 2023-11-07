@@ -13,6 +13,7 @@ usePatientDetailStore = defineStore({
             this.lab_results = [];
             this.image_result = [];
             this.activeTabPaciente = 0;
+            this.seeImages = false;
         },
     },
     state: () => ({
@@ -23,5 +24,6 @@ usePatientDetailStore = defineStore({
         lab_results: [],
         image_results: [],
         activeTabPaciente: 0,
+        seeImages: false,
     }),
 });
