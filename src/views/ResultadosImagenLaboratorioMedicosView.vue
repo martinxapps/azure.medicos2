@@ -60,8 +60,9 @@ const getImageResults = (nhc) => {
       //   newIr.fecha_ = `${image_result.FECHA.substring(6, 10)}-${image_result.FECHA.substring(3, 5)}-${image_result.FECHA.substring(0, 2)}`;
       //   return newIr;
       // });
-      image_results.value = response.data;
+      patientResultsStore.image_results = response.data;
     } else {
+      patientResultsStore.image_results = [];
       notify({
         title: "¡Atención!",
         text: "No existen resultados de imagen disponibles para este paciente",

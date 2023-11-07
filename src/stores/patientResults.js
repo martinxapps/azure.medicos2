@@ -8,7 +8,7 @@ usePatientResultsStore = defineStore({
         clearPatientResults() {
             this.patient = null;
             this.lab_results = [];
-            this.image_result = [];
+            this.image_results = [];
             this.activeTab = 0;
             this.seeImages = false;
         },
