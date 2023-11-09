@@ -37,6 +37,7 @@ const goBack = () => {
 };
 
 const goToPatientResults = async (patient) => {
+  patientResultsStore.clearPatientResults();
   console.log("patient", patient);
   event('view_patient_results', {
     patient: `${patient.APELLIDOS} ${patient.NOMBRES}`
