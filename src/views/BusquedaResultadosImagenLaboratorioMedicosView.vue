@@ -5,6 +5,7 @@ import { usePatientsListStore } from "../stores/patientsList";
 import { computed, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {event, screenview} from "vue-gtag";
+import {usePatientResultsStore} from "../stores/patientResults";
 
 //const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -12,6 +13,7 @@ import {event, screenview} from "vue-gtag";
 const patientsListStore = usePatientsListStore();
 const patient_list = computed(() => patientsListStore.patient_list);
 const search_type = computed(() => patientsListStore.search_type);
+const patientResultsStore = usePatientResultsStore();
 const searchTerm = ref("");
 const searchType = ref("pte");
 let isLoading = ref(false);
@@ -42,6 +44,7 @@ const goToPatientResults = async (patient) => {
   await router.push({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: patient.PK_NHCL } });
 };
 onMounted(() => {
+  patientResultsStore.clearPatientResults();
   screenview('Búsqueda de Resultados de Imagen y Laboratorio');
   event('view_search_results');
   searchType.value = search_type.value;
