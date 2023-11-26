@@ -245,7 +245,7 @@ const upload = async () => {
     isValidating.value = false;
     //check if folder exist
     let dataCheck = {
-      path: `${year.value}/${userName}/${folder.value}`
+      path: `${year.value}/${userName}/${folder.value.toUpperCase()}`
     };
     const responseCheck = await checkFolder(dataCheck);
     console.log('responseCheck', responseCheck);
@@ -257,11 +257,11 @@ const upload = async () => {
       reader.onload = async (e) => {
         const base64String = e.target.result.split(',')[1]; // Extract the Base64 string
         let dataUpload = {
-          path: `${year.value}/${userName}/${folder.value}`,
+          path: `${year.value}/${userName}/${folder.value.toUpperCase()}`,
           fileName: file.value.name,
           fileContent: base64String,
           user: userName,
-          fileType: folder.value,
+          fileType: folder.value.toUpperCase(),
           description: description.value,
           expireDate: date.value
         };
@@ -300,7 +300,7 @@ const upload = async () => {
       // no existe
       // crea
       let dataCreate = {
-        path: `${year.value}/${userName}/${folder.value}`
+        path: `${year.value}/${userName}/${folder.value.toUpperCase()}`
       };
       const responseCreate = await createFolder(dataCreate);
       console.log('responseCreate', responseCreate);
@@ -312,11 +312,11 @@ const upload = async () => {
           const base64String = e.target.result.split(',')[1]; // Extract the Base64 string
           console.log(base64String);
           let dataUpload = {
-            path: `${year.value}/${userName}/${folder.value}`,
+            path: `${year.value}/${userName}/${folder.value.toUpperCase()}`,
             fileName: file.value.name,
             fileContent: base64String,
             user: userName,
-            fileType: folder.value,
+            fileType: folder.value.toUpperCase(),
             description: description.value,
             expireDate: date.value
           };

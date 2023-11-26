@@ -4,12 +4,25 @@ const baseURL = 'https://api.hospitalmetropolitano.org/v2/medicos';
 const mainSearch = mande(baseURL);
 
 
-export function getMyPatients(start, length) {
+export function getMyPatients(start, length, isResident) {
   const patients = mande(  baseURL);
-  return patients.get(`mis-pacientes?start=${start}&length=${length}`);
+    let url;
+  if(isResident){
+      url = `mis-pacientes-residentes?start=${start}&length=${length}`
+  }else{
+      url = `mis-pacientes?start=${start}&length=${length}`;
+  }
+
+  return patients.get(url);
 }
-export function searchMyPatients(start, length, search) {
+export function searchMyPatients(start, length, search, isResident) {
     const patients = mande(  baseURL);
-    return patients.get(`mis-pacientes?start=${start}&length=${length}&searchField=${search}`);
+    let url;
+    if(isResident){
+        url = `mis-pacientes-residentes?start=${start}&length=${length}&searchField=${search}`
+    }else{
+        url = `mis-pacientes?start=${start}&length=${length}&searchField=${search}`;
+    }
+    return patients.get(url);
 }
 
