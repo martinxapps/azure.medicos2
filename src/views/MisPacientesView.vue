@@ -26,6 +26,8 @@ const search = async () => {
   if(isLoadingDealers.value || isLoadingConsulted.value) return;
   isLoadingDealers.value = true;
   isLoadingConsulted.value = true;
+  console.log('user', user.value);
+  console.log('authStore', authStore.hasRole('PERFIL_MEDICO_RESIDENTES'));
   await myPatientsStore.searchPatients(0, 1000, searchTerm.value, authStore.hasRole('PERFIL_MEDICO_RESIDENTES'));
   isLoadingDealers.value = false;
   isLoadingConsulted.value = false;
@@ -69,6 +71,8 @@ onMounted(async () => {
   if (consulted_patients.value.length < 1) {
     isLoadingConsulted.value = true;
   }
+  console.log('user', user.value);
+  console.log('authStore', authStore.hasRole('PERFIL_MEDICO_RESIDENTES'));
   await myPatientsStore.getPatients(0, 1000, authStore.hasRole('PERFIL_MEDICO_RESIDENTES'));
   isLoadingDealers.value = false;
   isLoadingConsulted.value = false;
