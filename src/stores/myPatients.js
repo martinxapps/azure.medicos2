@@ -11,6 +11,7 @@ useMyPatientsStore = defineStore({
         async getPatients(start, length, isResident) {
             //get data from backend
             try {
+                console.log('is resident', isResident);
                 const response = await getMyPatients(start, length, isResident);
                 console.log('response getMy patients', response);
                 if (response.status) {
@@ -30,9 +31,10 @@ useMyPatientsStore = defineStore({
             }
             //this.items = [];
         },
-        async searchPatients(start, length, term) {
+        async searchPatients(start, length, term, isResident) {
             //get data from backend
             try {
+                console.log('is resident', isResident);
                 const response = await searchMyPatients(start,length, term, isResident);
                 console.log('response getMy patients', response);
                 if (response.status) {
