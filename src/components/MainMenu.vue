@@ -77,17 +77,17 @@ onMounted(() => {
             language === "es" ? "Resultados de Imagen y Laboratorio" : "Image and Lab Results"
           }}</span>
       </div>
-      <a v-if="authStore.hasRole('PERFIL_MEDICO_BDOCU')"
-         :href="`https://appdocumentosdirmed.azurewebsites.net/DM/Login/Auth2Factor/${user?.name}/${hash}`"
-         target="_blank" style="text-decoration: none !important;"
-         class="cursor-pointer p-2 d-flex justify-content-end item-header text-white">
+      <div v-if="authStore.hasRole('PERFIL_MEDICO_BDOCU')"
+          style="text-decoration: none !important;"
+         class="cursor-pointer p-2 d-flex justify-content-end item-header ">
         <img class="icon icon--small my-2 mx-2"
+             @click="goTo('biblioteca-de-credenciales')"
              src="@/assets/icon-menu-biblioteca.png"
              width="22" height="25" alt="Phone">
-        <span class="inside-item p-2 mx-2 text-white">{{
+        <span class="inside-item p-2 mx-2">{{
             language === "es" ? "Biblioteca de Credenciales" : "Credential Library"
           }}</span>
-      </a>
+      </div>
       <div @click="goTo('honorarios')" v-if="authStore.hasRole('PERFIL_MEDICO_HONORARIOS')"
            class="cursor-pointer p-2 d-flex justify-content-end item-header">
         <img class="icon icon--small my-2 mx-2"
@@ -128,7 +128,7 @@ onMounted(() => {
             language === "es" ? "Resultados de Imagen y Laboratorio" : "Image and Lab Results"
           }}</span>
       </div>
-      <div @click="goTo('dashboard')"
+      <div @click="goTo('biblioteca-de-credenciales')"
            class="cursor-pointer p-2 d-flex justify-content-end item-header">
         <img class="icon icon--small my-2 mx-2"
              src="@/assets/icon-menu-biblioteca.png"

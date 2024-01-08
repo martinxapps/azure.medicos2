@@ -825,7 +825,7 @@ onMounted(async () => {
                                          class="cursor-pointer text-center">
                                       <p class="title-paciente"
                                          style="text-decoration: underline; color: black;">
-                                        Ver control de Emoglucotest
+                                        Ver control de Hemoglucotest
                                       </p>
                                     </div>
                                   </template>
