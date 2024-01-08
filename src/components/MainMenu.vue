@@ -1,8 +1,7 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth";
-import { computed, onMounted, ref } from "vue";
-import auth from "../services/auth";
+import {useRouter} from "vue-router";
+import {useAuthStore} from "../stores/auth";
+import {computed, onMounted, ref} from "vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -14,7 +13,7 @@ const logout = async () => {
   try {
     opened.value = !opened.value;
     await authStore.logout();
-    await router.replace({ name: "ingreso" });
+    await router.replace({name: "ingreso"});
   } catch (e) {
     console.log("error", e);
   }
@@ -29,7 +28,7 @@ const goTo = async (name) => {
 };
 const hashCode = (string) => {
   let hash = 0,
-    i, chr;
+      i, chr;
   if (string.length === 0) return hash;
   for (i = 0; i < string.length; i++) {
     chr = string.charCodeAt(i);
@@ -52,7 +51,7 @@ onMounted(() => {
            src="@/assets/icon-medicos-blanco.png" width="24" height="22"
            alt="perfil">
       <span
-        class="">{{
+          class="">{{
           language === "es" ? "Mi Perfil" : "My Profile"
         }}</span>
     </div>
@@ -78,10 +77,10 @@ onMounted(() => {
           }}</span>
       </div>
       <div v-if="authStore.hasRole('PERFIL_MEDICO_BDOCU')"
-          style="text-decoration: none !important;"
-         class="cursor-pointer p-2 d-flex justify-content-end item-header ">
+           @click="goTo('biblioteca-de-credenciales')"
+           class="cursor-pointer p-2 d-flex justify-content-end item-header ">
         <img class="icon icon--small my-2 mx-2"
-             @click="goTo('biblioteca-de-credenciales')"
+
              src="@/assets/icon-menu-biblioteca.png"
              width="22" height="25" alt="Phone">
         <span class="inside-item p-2 mx-2">{{
@@ -94,7 +93,7 @@ onMounted(() => {
              src="@/assets/icon-menu-honorarios.png"
              width="25" height="28" alt="Phone">
         <span
-          class="inside-item p-2 mx-2">{{
+            class="inside-item p-2 mx-2">{{
             language === "es" ? "Mis Honorarios" : "My Fees"
           }}</span>
       </div>
@@ -143,7 +142,7 @@ onMounted(() => {
              src="@/assets/icon-menu-honorarios.png"
              width="23" height="26" alt="Phone">
         <span
-          class="inside-item p-2 mx-2">{{
+            class="inside-item p-2 mx-2">{{
             language === "es" ? "Mis Honorarios" : "My Fees"
           }}</span>
       </div>
