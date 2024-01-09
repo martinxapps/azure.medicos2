@@ -102,6 +102,43 @@ const router = createRouter({
                 roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
             }
         },
+        // patient graph view / medic
+        {
+            path: language === "es" ? "/mis-pacientes/:nhc/grafico-curva/:type/:na" : "/my-patients/:nhc/curve-graph/:type/:na",
+            name: "medic-patient-curva-view",
+            component: CurvaView,
+            props: true,
+            meta: {
+                authRequired: true,
+                userType: "medic",
+                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
+            }
+        },
+        // patient lab result / medic
+        {
+            path: language === "es" ? "/mis-pacientes/:nhc/laboratorio/:url" : "/my-patients/:nhc/lab/:url",
+            name: "medic-patient-lab-result-view",
+            component: LabResultView,
+            props: true,
+            meta: {
+                authRequired: true,
+                userType: "medic",
+                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
+            }
+        },
+        // patient image result / medic
+        {
+            path: language === "es" ? "/mis-pacientes/:nhc/imagen/:url" : "/mis-pacientes/:nhc/image/:url",
+            name: "medic-patient-image-result-view",
+            component: ImageResultView,
+            props: true,
+            meta: {
+                authRequired: true,
+                userType: "medic",
+                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
+            }
+        },
+
         // patient zerofootprint view / medic
         {
             path: "/zerofootprint/:nhc",
@@ -150,42 +187,7 @@ const router = createRouter({
                 roles: []
             }
         },
-        // patient graph view / medic
-        {
-            path: language === "es" ? "/mis-pacientes/:nhc/grafico-curva/:type/:na" : "/my-patients/:nhc/curve-graph/:type/:na",
-            name: "medic-patient-curva-view",
-            component: CurvaView,
-            props: true,
-            meta: {
-                authRequired: true,
-                userType: "medic",
-                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
-            }
-        },
-        // patient lab result / medic
-        {
-            path: language === "es" ? "/mis-pacientes/:nhc/laboratorio/:url" : "/my-patients/:nhc/lab/:url",
-            name: "medic-patient-lab-result-view",
-            component: LabResultView,
-            props: true,
-            meta: {
-                authRequired: true,
-                userType: "medic",
-                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
-            }
-        },
-        // patient image result / medic
-        {
-            path: language === "es" ? "/mis-pacientes/:nhc/imagen/:url" : "/mis-pacientes/:nhc/image/:url",
-            name: "medic-patient-image-result-view",
-            component: ImageResultView,
-            props: true,
-            meta: {
-                authRequired: true,
-                userType: "medic",
-                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
-            }
-        },
+
         // share lab result / medic
         {
             path: language === "es" ? "/compartir/:nhc/laboratorio/:url" : "/share/:nhc/lab/:url",
@@ -212,7 +214,7 @@ const router = createRouter({
         },
         //patient results search / medic
         {
-            path: language === "es" ? "/resultados-imagen-y-laboratorio-medicos" : "/image-and-lab-results-medic",
+            path: language === "es" ? "/resultados-imagen-y-laboratorio" : "/image-and-lab-results",
             name: "resultados-imagen-y-laboratorio-medicos",
             component: BusquedaResultadosImagenLaboratorioMedicosView,
             meta: {
@@ -223,7 +225,7 @@ const router = createRouter({
         },
         // //patients medic results
         {
-            path: language === "es" ? "/resultados-imagen-y-laboratorio-medicos/:nhc" : "/image-and-lab-results-medic/:nhc",
+            path: language === "es" ? "/resultados-imagen-y-laboratorio/:nhc" : "/image-and-lab-results/:nhc",
             name: "resultados-paciente-imagen-y-laboratorio-medicos",
             component: ResultadosImagenLaboratorioMedicosView,
             props: true,
@@ -235,7 +237,7 @@ const router = createRouter({
         },
         // lab result search / medic
         {
-            path: language === "es" ? "/resultados-imagen-y-laboratorio-medicos/:nhc/laboratorio/:url" : "/image-and-lab-results-medic/:nhc/lab/:url",
+            path: language === "es" ? "/resultados-imagen-y-laboratorio/:nhc/laboratorio/:url" : "/image-and-lab-results/:nhc/lab/:url",
             name: "medic-lab-result-view",
             component: LabResultView,
             props: true,
@@ -247,7 +249,7 @@ const router = createRouter({
         },
         // image result search / medic
         {
-            path: language === "es" ? "/resultados-imagen-y-laboratorio-medicos/:nhc/imagen/:url" : "/image-and-lab-results-medic/:nhc/image/:url",
+            path: language === "es" ? "/resultados-imagen-y-laboratorio/:nhc/imagen/:url" : "/image-and-lab-results/:nhc/image/:url",
             name: "medic-image-result-view",
             component: ImageResultView,
             props: true,
@@ -362,7 +364,7 @@ const router = createRouter({
         },
         // // my profie medic
         {
-            path: language === "es" ? "/mi-perfil-medico" : "/my-profile-medic",
+            path: language === "es" ? "/mi-perfil" : "/my-profile",
             name: "mi-perfil-medico",
             component: MiPerfilMedicoView,
             meta: {

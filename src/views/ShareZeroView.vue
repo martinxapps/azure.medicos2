@@ -3,13 +3,15 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import IframeViewer from "../components/IframeViewer.vue";
 import {screenview} from "vue-gtag";
+import {decryptId} from "../services/security";
 
 const route = useRoute();
 const router = useRouter();
 
 const isLoading = ref(false);
 const props = defineProps(["nhc"]);
-const nhc = ref(props.nhc);
+const encryptedNHC = ref(props.nhc);
+const nhc = ref(decryptId(encryptedNHC.value));
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
 
 onMounted(() => {

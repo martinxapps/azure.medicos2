@@ -6,6 +6,7 @@ import { computed, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {event, screenview} from "vue-gtag";
 import {usePatientResultsStore} from "../stores/patientResults";
+import {encryptId} from "../services/security";
 
 //const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -38,12 +39,30 @@ const goBack = () => {
 
 const goToPatientResults = async (patient) => {
   patientResultsStore.clearPatientResults();
-  console.log("patient", patient);
+
   event('view_patient_results', {
     patient: `${patient.APELLIDOS} ${patient.NOMBRES}`
   });
-  await router.push({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: patient.PK_NHCL } });
+  let encryptedNHC = encryptId(patient.PK_NHCL);
+  await router.push({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: encryptedNHC } });
 };
+
+const goToPatientResultsCtrl = async (patient) => {
+  patientResultsStore.clearPatientResults();
+
+  event('view_patient_results', {
+    patient: `${patient.APELLIDOS} ${patient.NOMBRES}`
+  });
+  let encryptedNHC = encryptId(patient.PK_NHCL);
+  let url = router.resolve({
+    name: "resultados-paciente-imagen-y-laboratorio-medicos",
+    params: { nhc: encryptedNHC }
+  });
+  window.open(url.href, "_blank");
+  // await router.push({name: 'medic-lab-result-view', params: {url: split[3], nhc: nhc.value}});
+};
+
+
 onMounted(() => {
   patientResultsStore.clearPatientResults();
   screenview('Búsqueda de Resultados de Imagen y Laboratorio');
@@ -149,7 +168,7 @@ onMounted(() => {
                 <template v-for="(patient, patientKey) in patient_list"
                           :key="patientKey">
                   <div class=" m-1 p-2 row text-left border-result hover-list-element cursor-pointer"
-                       @click="goToPatientResults(patient)"
+                       @click.exact="goToPatientResults(patient)" @click.ctrl="goToPatientResultsCtrl(patient)"
                        :title="`Ver resultados del paciente ${ patient?.APELLIDOS} ${ patient?.NOMBRES}`">
                     <div class="col-9 my-3">
                       <p class="title-results ">

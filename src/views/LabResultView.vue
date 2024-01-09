@@ -7,6 +7,7 @@ import { statusPacienteEmergencia, urlDocumento } from "../services/patient";
 import PdfViewer from "../components/PdfViewer.vue";
 import { useNotification } from "@kyvg/vue3-notification";
 import {screenview} from "vue-gtag";
+import {decryptId} from "../services/security";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -20,12 +21,15 @@ const isAvailable = ref(false);
 const props = defineProps(["nhc", "url"]);
 const src = ref(null);
 const statusPaciente = ref(null);
-const nhc = ref(props.nhc);
+const encryptedNHC = ref(props.nhc);
+console.log('encryptedNHC', encryptedNHC.value);
+const nhc = ref(decryptId(encryptedNHC.value));
+console.log('nhc', nhc.value);
 const url = ref(props.url);
 const title = ref("Resultado de Laboratorio - Metrovirtual - Hospital Metropolitano");
 
 onMounted(() => {
-  screenview('Resultado de Imagen');
+  screenview('Resultado de Laboratorio');
   getUrl(url.value);
   getPatientDetails(nhc.value);
 
@@ -50,9 +54,9 @@ const goBack = () => {
     console.log("route query", route.query);
     if (window.history.state.back === null) {
       if (route.query.prev === "detalle-paciente") {
-        router.replace({ name: "detalle-paciente", params: { nhc: nhc.value } });
+        router.replace({ name: "detalle-paciente", params: { nhc: encryptedNHC.value } });
       } else if (route.query.prev === "resultados") {
-        router.replace({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: nhc.value } });
+        router.replace({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: encryptedNHC.value } });
       } else {
         router.replace({ name: "dashboard" });
       }

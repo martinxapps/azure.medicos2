@@ -9,6 +9,7 @@ import {useNotification} from "@kyvg/vue3-notification";
 import dayjs from "dayjs";
 import {event, screenview} from "vue-gtag";
 import {usePatientResultsStore} from "../stores/patientResults";
+import {decryptId, encryptId} from "../services/security";
 
 
 const {notify} = useNotification();
@@ -24,7 +25,8 @@ let isLoadingImage = ref(false);
 const router = useRouter();
 const route = useRoute();
 const props = defineProps(["nhc"]);
-const nhc = ref(props.nhc);
+const encryptedNHC = ref(props.nhc);
+const nhc = ref(decryptId(encryptedNHC.value));
 const title = ref("Resultados de Imagen y Laboratorio - MetroVirtual - Hospital Metropolitano");
 
 const getLabResults = (nhc) => {
@@ -124,13 +126,15 @@ const goToLabResult = async (result) => {
   //   query: { prev: "resultados" }
   // });
   // window.open(url.href, "_blank");
+
   event('see_lab_result', {
     nhc: nhc.value,
     uuid: split[3]
   });
+
   await router.push({
     name: "medic-lab-result-view",
-    params: {url: split[3], nhc: nhc.value},
+    params: {url: split[3], nhc: encryptedNHC.value},
     query: {prev: "resultados"}
   });
 };
@@ -140,9 +144,10 @@ const goToLabResultCtrl = async (result) => {
     nhc: nhc.value,
     uuid: split[3]
   });
+
   let url = router.resolve({
     name: "medic-lab-result-view",
-    params: {url: split[3], nhc: nhc.value},
+    params: {url: split[3], nhc: encryptedNHC.value},
     query: {prev: "resultados"}
   });
   window.open(url.href, "_blank");
@@ -167,7 +172,7 @@ const goToZeroCtrl = async () => {
   });
   let url = router.resolve({
     name: "medic-patient-zerofootprint-view",
-    params: {nhc: nhc.value},
+    params: {nhc: encryptedNHC.value},
     query: {prev: "resultados"}
   });
   window.open(url.href, "_blank");
@@ -178,9 +183,10 @@ const goToZeroCtrlItem = async (item) => {
     nhc: nhc.value,
     id: item.ID_ESTUDIO
   });
+  const encryptedId = encryptId(item.ID_ESTUDIO);
   let url = router.resolve({
     name: "medic-patient-zerofootprint-item-view",
-    params: {id: item.ID_ESTUDIO},
+    params: {id: encryptedId },
     query: {prev: "resultados"}
   });
   window.open(url.href, "_blank");
@@ -198,9 +204,10 @@ const goToImageResult = async (result) => {
   //   query: { prev: "resultados" }
   // });
   // window.open(url.href, "_blank");
+
   await router.push({
     name: "medic-image-result-view",
-    params: {url: split[3], nhc: nhc.value},
+    params: {url: split[3], nhc: encryptedNHC.value },
     query: {prev: "resultados"}
   });
 };
@@ -210,9 +217,10 @@ const goToImageResultCtrl = async (result) => {
     nhc: nhc.value,
     uuid: split[3]
   });
+
   let url = router.resolve({
     name: "medic-image-result-view",
-    params: {url: split[3], nhc: nhc.value},
+    params: {url: split[3], nhc: encryptedNHC.value},
     query: {prev: "resultados"}
   });
   window.open(url.href, "_blank");
@@ -296,13 +304,10 @@ const downloadLabFile = (labResult) => {
 };
 
 onMounted(async () => {
-
-  const nhc = props.nhc;
-  console.log("nhc", nhc);
-  if (nhc) {
-    getPatientDetails(nhc);
-    getLabResults(nhc);
-    getImageResults(nhc);
+  if (nhc.value) {
+    getPatientDetails(nhc.value);
+    getLabResults(nhc.value);
+    getImageResults(nhc.value);
   }
 });
 

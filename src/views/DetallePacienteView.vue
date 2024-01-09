@@ -31,6 +31,7 @@ import {
 import { useNotification } from "@kyvg/vue3-notification";
 import Form005Viewer from "../components/Form005Viewer.vue";
 import { usePatientDetailStore } from "../stores/patientDetail";
+import {decryptId, encryptId} from "../services/security";
 import {event, screenview} from 'vue-gtag';
 
 const { notify } = useNotification();
@@ -47,7 +48,9 @@ const formsPaciente = computed(() => patientDetailStore.formsPaciente);
 const lab_results = computed(() => patientDetailStore.lab_results);
 const image_results = computed(() => patientDetailStore.image_results);
 const props = defineProps(["nhc"]);
-const nhc = ref(props.nhc);
+const encryptedNHC = ref(props.nhc);
+const nhc = ref(decryptId(encryptedNHC.value));
+
 const isLoading = ref(false);
 const isLoadingSV = ref(false);
 const isLoadingForms = ref(false);
@@ -443,6 +446,7 @@ const downloadImageFile = (imageResult) => {
     });
   }
 };
+
 const goToLabResult = async (result) => {
   let split = result.deep_link.split("/");
   // let url = router.resolve({
@@ -457,7 +461,7 @@ const goToLabResult = async (result) => {
   });
   await router.push({
     name: "medic-patient-lab-result-view",
-    params: { url: split[3], nhc: nhc.value },
+    params: { url: split[3], nhc: encryptedNHC.value },
     query: { prev: "detalle-paciente" }
   });
 };
@@ -469,7 +473,7 @@ const goToLabResultCtrl = async (result) => {
   });
   let url = router.resolve({
     name: "medic-patient-lab-result-view",
-    params: { url: split[3], nhc: nhc.value },
+    params: { url: split[3], nhc: encryptedNHC.value },
     query: { prev: "detalle-paciente" }
   });
   window.open(url.href, "_blank");
@@ -492,10 +496,10 @@ const goToGraphic = async (type, item) => {
   event('see_graph', {
     value: item.SIGNO,
   });
+  const encryptedAttention = encryptId(item.ATENCION);
   await router.push({
     name: "medic-patient-curva-view",
-    params: { type, na: item.ATENCION, nhc: nhc.value },
-    query: { prev: "detalle-paciente" }
+    params: { type, na: encryptedAttention, nhc: encryptedNHC.value }
   });
 };
 const goToGraphicCtrl = async (type, item) => {
@@ -505,10 +509,10 @@ const goToGraphicCtrl = async (type, item) => {
   event('see_graph', {
     value: item.SIGNO,
   });
+  const encryptedAttention = encryptId(item.ATENCION);
   let url = router.resolve({
     name: "medic-patient-curva-view",
-    params: { type, na: item.ATENCION, nhc: nhc.value },
-    query: { prev: "detalle-paciente" }
+    params: { type, na: encryptedAttention, nhc: encryptedNHC.value }
   });
   window.open(url.href, "_blank");
   //await router.push({name: 'medic-patient-curva-view', params: {type, na, nhc: nhc.value}});
@@ -533,7 +537,7 @@ const goToZeroCtrl = async () => {
 
   let url = router.resolve({
     name: "medic-patient-zerofootprint-view",
-    params: { nhc: nhc.value },
+    params: { nhc: encryptedNHC.value },
     query: { prev: "detalle-paciente" }
   });
   window.open(url.href, "_blank");
@@ -544,9 +548,10 @@ const goToZeroCtrlItem = async (item) => {
     nhc: nhc.value,
     id: item.ID_ESTUDIO
   });
+  const encryptedId = encryptId(item.ID_ESTUDIO);
   let url = router.resolve({
     name: "medic-patient-zerofootprint-item-view",
-    params: { id: item.ID_ESTUDIO },
+    params: { id: encryptedId },
     query: { prev: "detalle-paciente" }
   });
   window.open(url.href, "_blank");
@@ -568,7 +573,7 @@ const goToImageResult = async (result) => {
   });
   await router.push({
     name: "medic-patient-image-result-view",
-    params: { url: split[3], nhc: nhc.value },
+    params: { url: split[3], nhc: encryptedNHC.value },
     query: { prev: "detalle-paciente" }
   });
 };
@@ -580,7 +585,7 @@ const goToImageResultCtrl = async (result) => {
   });
   let url = router.resolve({
     name: "medic-patient-image-result-view",
-    params: { url: split[3], nhc: nhc.value },
+    params: { url: split[3], nhc: encryptedNHC.value },
     query: { prev: "detalle-paciente" }
   });
   window.open(url.href, "_blank");
@@ -588,18 +593,16 @@ const goToImageResultCtrl = async (result) => {
 };
 
 onMounted(async () => {
-  const nhc = props.nhc;
-  if (nhc) {
-    getPatientDetails(nhc);
-    getPatientSV(nhc);
-    getLabResults(nhc);
-    getImageResults(nhc);
-    await getPatientEV(nhc);
+  console.log('nhc', nhc.value);
+  if (nhc.value) {
+    getPatientDetails(nhc.value);
+    getPatientSV(nhc.value);
+    getLabResults(nhc.value);
+    getImageResults(nhc.value);
+    await getPatientEV(nhc.value);
   } else {
     await router.replace({ name: "mis-pacientes" });
   }
-
-
 });
 
 

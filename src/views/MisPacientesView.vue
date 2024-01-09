@@ -6,6 +6,7 @@ import {computed, ref, onMounted} from "vue";
 import {useRouter} from "vue-router";
 import {event, screenview} from 'vue-gtag';
 import {usePatientDetailStore} from "../stores/patientDetail";
+import {encryptId} from "../services/security";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
@@ -23,7 +24,7 @@ const router = useRouter();
 
 
 const search = async () => {
-  if(isLoadingDealers.value || isLoadingConsulted.value) return;
+  if (isLoadingDealers.value || isLoadingConsulted.value) return;
   isLoadingDealers.value = true;
   isLoadingConsulted.value = true;
   console.log('user', user.value);
@@ -46,17 +47,18 @@ const goBack = async () => {
 const goToPatientDetail = async (patient) => {
   try {
     patientDetailStore.clearPatient();
-    console.log('see_patient', {
-      patient_name: patient.NOMBRE_PACIENTE,
-      patient_nhc: patient.HC,
-      user_name: user.value.name
-    });
+    // console.log('see_patient', {
+    //   patient_name: patient.NOMBRE_PACIENTE,
+    //   patient_nhc: patient.HC,
+    //   user_name: user.value.name
+    // });
     event('see_patient', {
       patient_name: patient.NOMBRE_PACIENTE,
       patient_nhc: patient.HC,
       user_name: user.value.name
     });
-    router.push({name: "detalle-paciente", params: {nhc: patient.HC}}).catch((e) => console.log("e", e));
+    let encryptedNHC = encryptId(patient.HC);
+    router.push({name: "detalle-paciente", params: {nhc: encryptedNHC}}).catch((e) => console.log("e", e));
   } catch (e) {
     console.log("e", e);
   }

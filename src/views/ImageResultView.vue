@@ -1,11 +1,12 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { statusPacienteEmergencia, urlDocumento } from "../services/patient";
+import {ref, onMounted} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {statusPacienteEmergencia, urlDocumento} from "../services/patient";
 import PdfViewer from "../components/PdfViewer.vue";
-import { useNotification } from "@kyvg/vue3-notification";
+import {useNotification} from "@kyvg/vue3-notification";
 import {screenview} from "vue-gtag";
+import {decryptId} from "../services/security";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -13,14 +14,15 @@ import {screenview} from "vue-gtag";
 
 const route = useRoute();
 const router = useRouter();
-const { notify } = useNotification();
+const {notify} = useNotification();
 const title = ref("Resultado de Imagen - MetroVirtual - Hospital Metropolitano");
 const isLoading = ref(false);
 const isAvailable = ref(false);
 const props = defineProps(["url", "nhc"]);
 const src = ref(null);
 const statusPaciente = ref(null);
-const nhc = ref(props.nhc);
+const encryptedNHC = ref(props.nhc);
+const nhc = ref(decryptId(encryptedNHC.value));
 const url = ref(props.url);
 onMounted(() => {
   screenview('Resultado de Imagen');
@@ -33,11 +35,11 @@ const goBack = () => {
   console.log("route query", route.query);
   if (window.history.state.back === null) {
     if (route.query.prev === "detalle-paciente") {
-      router.replace({ name: "detalle-paciente", params: { nhc: nhc.value } });
+      router.replace({name: "detalle-paciente", params: {nhc: encryptedNHC.value}});
     } else if (route.query.prev === "resultados") {
-      router.replace({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: nhc.value } });
+      router.replace({name: "resultados-paciente-imagen-y-laboratorio-medicos", params: {nhc: encryptedNHC.value}});
     } else {
-      router.replace({ name: "dashboard" });
+      router.replace({name: "dashboard"});
     }
   } else {
     router.back();
@@ -103,7 +105,7 @@ const getUrl = async (url) => {
           <div class=" col-6 " @click="goBack()">
             <div class="row mt-3">
               <h5 class="cursor-pointer ml-3" style=" color: #0f4470; font-size: 16px;">
-                <font-awesome-icon :icon="['fas', 'chevron-left']" />
+                <font-awesome-icon :icon="['fas', 'chevron-left']"/>
                 Regresar
               </h5>
             </div>
@@ -149,7 +151,7 @@ const getUrl = async (url) => {
             <template v-else>
               <template v-if="isAvailable">
                 <pdf-viewer :url="src" :nhc="nhc" :name="'resultado_imagen'" :type="'imagen'"
-                            :id="url" />
+                            :id="url"/>
               </template>
               <template v-else>
                 <p class="center text-search">Resultado de imagen no disponible</p>
@@ -157,7 +159,7 @@ const getUrl = async (url) => {
             </template>
           </div>
         </div>
-        <FooterMedico />
+        <FooterMedico/>
       </div>
     </div>
   </div>

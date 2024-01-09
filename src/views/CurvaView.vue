@@ -7,6 +7,7 @@ import { statusPacienteEmergencia, urlCurva } from "../services/patient";
 import pdf from "@jbtje/vite-vue3pdf";
 import { useNotification } from "@kyvg/vue3-notification";
 import {screenview} from "vue-gtag";
+import {decryptId} from "../services/security";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
@@ -27,14 +28,19 @@ const numPages = ref(1);
 const isLoading = ref(false);
 const isAvailable = ref(false);
 const props = defineProps(["type", "na", "nhc"]);
+const type = ref(props.type);
+const encryptedNHC = ref(props.nhc);
+const nhc = ref(decryptId(encryptedNHC.value));
+const encryptedNa = ref(props.na);
+const na = ref(decryptId(encryptedNa.value));
 const src = ref(null);
 const statusPaciente = ref(null);
-const name = ref("Gráfico");
+const name = ref("");
 const title = ref("Resultado de Laboratorio - Metrovirtual / Hospital Metropolitano");
 
 
 onMounted(() => {
-  switch (props.type) {
+  switch (type.value) {
     case "TEMP":
       name.value = "Curva de temperatura";
       break;
@@ -45,13 +51,13 @@ onMounted(() => {
       name.value = "Curva de frecuencia cardiaca";
       break;
     case "GLUC":
-      name.value = "Control de hemoglucotest";
+      name.value = "Control de Hemoglucotest";
       break;
   }
   title.value = `${name.value} - Metrovirtual - Hospital Metropolitano`;
   screenview(`Gráfico ${name.value}`);
-  getUrl(props.type, props.na);
-  getPatientDetails(props.nhc);
+  getUrl(type.value, na.value);
+  getPatientDetails(nhc.value);
 });
 const getPatientDetails = (nhc) => {
   try {
@@ -73,13 +79,7 @@ const getPatientDetails = (nhc) => {
 const goBack = () => {
   console.log("route query", route.query);
   if (window.history.state.back === null) {
-    if (route.query.prev === "detalle-paciente") {
-      router.replace({ name: "detalle-paciente", params: { nhc: props.nhc } });
-    } else if (route.query.prev === "resultados") {
-      router.replace({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: props.nhc } });
-    } else {
-      router.replace({ name: "dashboard" });
-    }
+    router.replace({ name: "detalle-paciente", params: { nhc: encryptedNHC.value } });
   } else {
     router.back();
   }
