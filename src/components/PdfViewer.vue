@@ -130,9 +130,6 @@ onMounted(async () => {
       <p class="text-paginator">{{ currentPage }} / {{ numPages }} Páginas</p>
       <button class="prevew p-1 px-4" v-if="currentPage < numPages" @click="nextPage()">Siguiente</button>
     </div>
-    <p>{{nhc}}</p>
-    <p>{{encryptedNHC}}</p>
-    <p>{{shareLink}}</p>
     <div class="container">
       <div class="row justify-content-end my-1 row-img">
         <div class="col-2 col-md-1 col-img">
