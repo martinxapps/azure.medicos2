@@ -6,13 +6,17 @@ import BusquedaResultadosImagenLaboratorioMedicosView
     from "../views/BusquedaResultadosImagenLaboratorioMedicosView.vue";
 import LabResultView from "../views/LabResultView.vue";
 import ShareLabResultView from "../views/ShareLabResultView.vue";
+import V2ShareLabResultView from "../views/V2ShareLabResultView.vue";
 import ImageResultView from "../views/ImageResultView.vue";
 import ShareImageResultView from "../views/ShareImageResultView.vue";
+import V2ShareImageResultView from "../views/V2ShareImageResultView.vue";
 import CurvaView from "../views/CurvaView.vue";
 import ZeroView from "../views/ZeroView.vue";
 import ShareZeroView from "../views/ShareZeroView.vue";
+import V2ShareZeroView from "../views/V2ShareZeroView.vue";
 import ZeroItemView from "../views/ZeroItemView.vue";
 import ShareZeroItemView from "../views/ShareZeroItemView.vue";
+import V2ShareZeroItemView from "../views/V2ShareZeroItemView.vue";
 import BuzonDeSugerenciasView from "../views/BuzonDeSugerenciasView.vue";
 import MiPerfilMedicoView from "../views/MiPerfilMedicoView.vue";
 import DetallePacienteView from "../views/DetallePacienteView.vue";
@@ -163,6 +167,18 @@ const router = createRouter({
                 roles: []
             }
         },
+        // share patient zerofootprint view / medic
+        {
+            path: "/compartir-v2/zerofootprint/:nhc",
+            name: "share-v2-patient-zerofootprint-view",
+            component: V2ShareZeroView,
+            props: true,
+            meta: {
+                authRequired: false,
+                userType: "generic",
+                roles: []
+            }
+        },
         // patient zerofootprint view / medic
         {
             path: "/zerofootprint-item/:id",
@@ -180,6 +196,18 @@ const router = createRouter({
             path: "/compartir/zerofootprint-item/:id",
             name: "share-medic-patient-zerofootprint-item-view",
             component: ShareZeroItemView,
+            props: true,
+            meta: {
+                authRequired: false,
+                userType: "generic",
+                roles: []
+            }
+        },
+        // share patient zerofootprint view / medic
+        {
+            path: "/compartir-v2/zerofootprint-item/:id",
+            name: "share-v2-patient-zerofootprint-item-view",
+            component: V2ShareZeroItemView,
             props: true,
             meta: {
                 authRequired: false,
@@ -205,6 +233,30 @@ const router = createRouter({
             path: language === "es" ? "/compartir/:nhc/imagen/:url" : "/share/:nhc/image/:url",
             name: "share-image-result-view",
             component: ShareImageResultView,
+            props: true,
+            meta: {
+                authRequired: false,
+                userType: "generic",
+                roles: []
+            }
+        },
+        // share lab result / medic
+        {
+            path: language === "es" ? "/compartir-v2/:nhc/laboratorio/:url" : "/share/:nhc/lab/:url",
+            name: "v2-share-lab-result-view",
+            component: V2ShareLabResultView,
+            props: true,
+            meta: {
+                authRequired: false,
+                userType: "generic",
+                roles: []
+            }
+        },
+        // share image result / medic
+        {
+            path: language === "es" ? "/compartir-v2/:nhc/imagen/:url" : "/share/:nhc/image/:url",
+            name: "v2-share-image-result-view",
+            component: V2ShareImageResultView,
             props: true,
             meta: {
                 authRequired: false,
