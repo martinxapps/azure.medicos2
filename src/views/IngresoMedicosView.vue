@@ -61,7 +61,16 @@ const newLogin = async () => {
     if (!roles) {
       notify({
         title: "Usuario incompleto",
-        text: "El usuario no ha sido configurado correctamente, contactese con el administrador del sistema",
+        text: "El usuario no ha sido configurado correctamente, contáctese con el administrador del sistema",
+        type: "error"
+      });
+      await authStore.logout();
+      return;
+    }
+    if (roles.length < 1) {
+      notify({
+        title: "Usuario incompleto",
+        text: "El usuario no ha sido configurado correctamente, contáctese con el administrador del sistema",
         type: "error"
       });
       await authStore.logout();
