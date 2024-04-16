@@ -485,9 +485,10 @@ router.beforeEach(async (to, from, next) => {
             }
             //valido roles para acceso
             let requiredRoles = to.meta.roles;
-            // console.log('required roles', requiredRoles);
+            console.log('required roles', requiredRoles);
             let authRoles = user.value.idTokenClaims?.roles;
-            // console.log('authRoles', authRoles);
+            console.log('authRoles', authRoles);
+            console.log('authRoles', authRoles.length);
             if (requiredRoles.length < 1) {
                 next();
             } else {

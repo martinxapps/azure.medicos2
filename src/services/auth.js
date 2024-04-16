@@ -97,7 +97,7 @@ export default {
       //   )
       // } */
     }
-    console.log('### Azure AD sign-in: enabled\n', config)
+    // console.log('### Azure AD sign-in: enabled\n', config)
 
     // Create our shared/static MSAL app object
     msalApp = new msal.PublicClientApplication(config)
@@ -189,11 +189,11 @@ export default {
     try {
       // 1. Try to acquire token silently
       tokenResp = await msalApp.acquireTokenSilent(accessTokenRequest)
-      console.log('### MSAL acquireTokenSilent was successful', tokenResp)
+      //console.log('### MSAL acquireTokenSilent was successful', tokenResp)
     } catch (err) {
       // 2. Silent process might have failed so try via popup
       tokenResp = await msalApp.acquireTokenRedirect(accessTokenRequest, tokenResp)
-      console.log('### MSAL acquireTokenPopup was successful')
+      //console.log('### MSAL acquireTokenPopup was successful')
     }
 
     // Just in case check, probably never triggers
