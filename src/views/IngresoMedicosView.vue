@@ -67,15 +67,15 @@ const newLogin = async () => {
       await authStore.logout();
       return;
     }
-    if (roles.length < 1) {
-      notify({
-        title: "Usuario incompleto",
-        text: "El usuario no ha sido configurado correctamente, contáctese con el administrador del sistema",
-        type: "error"
-      });
-      await authStore.logout();
-      return;
-    }
+    // if (roles.length < 1) {
+    //   notify({
+    //     title: "Usuario incompleto",
+    //     text: "El usuario no ha sido configurado correctamente, contáctese con el administrador del sistema",
+    //     type: "error"
+    //   });
+    //   await authStore.logout();
+    //   return;
+    // }
     let token = await auth.acquireToken();
     await authStore.login(userResult, "medic", token);
     event('login', {

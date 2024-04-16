@@ -366,6 +366,7 @@ const upload = async () => {
 };
 
 const refresh = async () => {
+
   isLoading.value = true;
   let userName = user.value.username.split('@')[0];
   await myLibraryStore.getFolders(selectedYear.value, userName);
@@ -385,6 +386,14 @@ onMounted(async () => {
   for (let i = 2020; i <= actual; i++) {
     years.value.push(i);
   }
+  // console.log('codMedico', user.value.codMedico)
+  // if(!user.value.codMedico || user.value.codMedico === ''){
+  //   notify({
+  //     title: "Error detectado",
+  //     text: "Al parecer su perfil necesita una configuración adicional, por favor comuníquese con nuestra mesa de ayuda CONCAS 399 8000",
+  //     type: "error"
+  //   });
+  // }
   refresh();
 });
 
