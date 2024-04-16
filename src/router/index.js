@@ -487,8 +487,20 @@ router.beforeEach(async (to, from, next) => {
             let requiredRoles = to.meta.roles;
             console.log('required roles', requiredRoles);
             let authRoles = user.value.idTokenClaims?.roles;
-            console.log('authRoles', authRoles);
-            console.log('authRoles', authRoles.length);
+            if (authRoles.length < 1) {
+                notify({
+                    title: "Error",
+                    text: "Al parecer su perfil necesita una configuración adicional, por favor comuníquese con nuestra mesa de ayuda CONCAS 399 8000",
+                    type: "error"
+                });
+                await authStore.logout();
+                next({
+                    name: "ingreso"
+                });
+
+            }
+            // console.log('authRoles', authRoles);
+            // console.log('authRoles', authRoles.length);
             if (requiredRoles.length < 1) {
                 next();
             } else {
@@ -497,7 +509,7 @@ router.beforeEach(async (to, from, next) => {
                 } else {
                     notify({
                         title: "No tienes acceso a esta sección",
-                        text: "Consulta con el administrador del sistema para que asigne los permisos necesarios",
+                        text: "Consulta con el administrador del sistema para que te asigne los permisos necesarios",
                         type: "error"
                     });
                     next({

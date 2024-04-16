@@ -61,7 +61,16 @@ const newLogin = async () => {
     if (!roles) {
       notify({
         title: "Usuario incompleto",
-        text: "El usuario no ha sido configurado correctamente, contactese con el administrador del sistema",
+        text: "El usuario no ha sido configurado correctamente, contáctese con el administrador del sistema",
+        type: "error"
+      });
+      await authStore.logout();
+      return;
+    }
+    if (roles.length < 1) {
+      notify({
+        title: "Error",
+        text: "Al parecer su perfil necesita una configuración adicional, por favor comuníquese con nuestra mesa de ayuda CONCAS 399 8000",
         type: "error"
       });
       await authStore.logout();
