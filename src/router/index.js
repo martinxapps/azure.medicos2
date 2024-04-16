@@ -487,21 +487,9 @@ router.beforeEach(async (to, from, next) => {
             let requiredRoles = to.meta.roles;
             // console.log('required roles', requiredRoles);
             let authRoles = user.value.idTokenClaims?.roles;
-            console.log('authRoles', authRoles);
-            // if(authRoles.length < 1){
-            //     notify({
-            //         title: "No tienes roles definidos en esta cuenta",
-            //         text: "Consulta con el administrador del sistema para que asigne los permisos necesarios",
-            //         type: "error"
-            //     });
-            //     await authStore.logout();
-            //     next({
-            //         name: "ingreso"
-            //     });
-            // }
+            // console.log('authRoles', authRoles);
             if (requiredRoles.length < 1) {
                 next();
-
             } else {
                 if (authRoles?.some(elem => requiredRoles.includes(elem))) {
                     next();
