@@ -411,7 +411,7 @@ onMounted(async () => {
                               <p class="title-results"><b>{{ labResult?.ORIGEN }}</b>
                                 <span class="p-2 mx-2 pill" v-if="isWithin24Hours(labResult?.fecha_)"
                                       :class="{
-                                  'gray':labResult?.IsOrderValidated === 'false' || !labResult?.IsOrderValidated,
+                                  'gray':labResult?.IsOrderValidated === 'false' || !labResult?.IsOrderValidated || labResult?.IsOrderValidated === false,
                                    'orange':labResult?.IsOrderValidated === true || labResult?.IsOrderValidated === 'true'
                                 }">
                                   {{ getWord(labResult?.IsOrderValidated) }}
