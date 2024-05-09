@@ -412,7 +412,7 @@ onMounted(async () => {
                                 <span class="p-2 mx-2 pill" v-if="isWithin24Hours(labResult?.fecha_)"
                                       :class="{
                                   'gray':labResult?.IsOrderValidated === 'false' || !labResult?.IsOrderValidated,
-                                   'orange':labResult?.IsOrderValidated || labResult?.IsOrderValidated === 'true'
+                                   'orange':labResult?.IsOrderValidated === true || labResult?.IsOrderValidated === 'true'
                                 }">
                                   {{ getWord(labResult?.IsOrderValidated) }}
                                 </span>
@@ -506,7 +506,8 @@ onMounted(async () => {
                                 :key="imageResultKey">
                               <div class="col-9">
                                 <p class="title-results"><b>{{ imageResult?.ESTUDIO }}</b>
-                                  <span class="p-2 mx-2 pill" v-if="isWithin24Hours(imageResult?.fecha_)">Nuevo</span>
+                                  <span class="p-2 mx-2 pill orange" v-if="isWithin24Hours(imageResult?.fecha_)">
+                                    Nuevo</span>
                                 </p>
                                 <p class="text-results">{{ imageResult?.FECHA }}</p>
                                 <p class="text-results">
