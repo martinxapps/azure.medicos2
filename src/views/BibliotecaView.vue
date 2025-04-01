@@ -466,6 +466,13 @@ class UploadableFile {
       <div class="container m-auto d-block " style="background: #f8f9fc;">
         <div class="row my-2 pb-5 pt-2">
           <div class="col-sm-12 mt-3">
+            <div class="row d-flex justify-content-end">
+              <a class="text-center cursor-pointer p-2 btn-loginv2"
+                 href="https://hmetro.sharepoint.com/:f:/s/DM/DocumentosDM/EliOX0UxKvRFrIlhPtHQCe8BaI2mtMj98ung6wzRN0O5dQ?e=laZ8Tg"
+                 target="_blank" rel="noopener noreferrer">
+                Tutoriales
+              </a>
+            </div>
             <div class="row">
               <div class="col-11 col-md-9">
                 <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
