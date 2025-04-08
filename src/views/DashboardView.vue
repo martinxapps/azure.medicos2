@@ -15,6 +15,9 @@ const goTo = async (name) => {
   await router.push({ name: name });
 
 };
+const goToLink = async (url) => {
+  window.open(url, '_blank');
+};
 const registerCredentials = async () => {
   screenview('Biblioteca de Credenciales');
   event('see_credentials');
@@ -145,6 +148,19 @@ onMounted(async () => {
               <br>
             </div>
             <p class="d-block mt-3 text-icon-color py-1">Mis Honorarios
+            </p>
+          </div>
+        </div>
+        <div class=" col-6 col-md-3 d-block pb-5 " v-if="authStore.hasRole('PERFIL_MEDICO_BDOCU')">
+          <div class="icon-img cursor-pointer"
+               @click="goToLink('https://hmetro.sharepoint.com/:f:/s/DM/DocumentosDM/EliOX0UxKvRFrIlhPtHQCe8BaI2mtMj98ung6wzRN0O5dQ?e=laZ8Tg')">
+            <div class="row d-block img-border">
+              <img class="img-icon-color" src="@/assets/biblioteca-blancov2.png"
+                   alt=" icon">
+              <img class="img-icon-color color-margin" src="@/assets/bibliotecav2.png" alt=" icon">
+              <br>
+            </div>
+            <p class="d-block mt-3 text-icon-color">Tutoriales
             </p>
           </div>
         </div>
