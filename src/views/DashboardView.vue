@@ -155,9 +155,9 @@ onMounted(async () => {
           <div class="icon-img cursor-pointer"
                @click="goToLink('https://hmetro.sharepoint.com/:f:/s/DM/DocumentosDM/EliOX0UxKvRFrIlhPtHQCe8BaI2mtMj98ung6wzRN0O5dQ?e=laZ8Tg')">
             <div class="row d-block img-border">
-              <img class="img-icon-color" src="@/assets/biblioteca-blancov2.png"
-                   alt=" icon">
-              <img class="img-icon-color color-margin" src="@/assets/bibliotecav2.png" alt=" icon">
+              <img class="img-icon-color" src="@/assets/tutorial-blanco.png"
+                   alt=" tutoriales">
+              <img class="img-icon-color color-margin" src="@/assets/tutorial.png" alt=" tutoriales">
               <br>
             </div>
             <p class="d-block mt-3 text-icon-color">Tutoriales
