@@ -84,15 +84,15 @@ onMounted(async () => {
           <p class="black-colorv2" style="font-size: 18px;">!Hoy será un gran día!</p>
         </div>
       </div>
-      <div class="text-center ">
-        <a class="btn btn-primary d-inline-block p-3"
-           style="background-color: #0d9cde !important; font-weight: 600;"
-           href="https://hmetro.sharepoint.com/:f:/s/DM/DocumentosDM/EliOX0UxKvRFrIlhPtHQCe8BaI2mtMj98ung6wzRN0O5dQ?e=laZ8Tg"
-           target="_blank"
-           rel="noopener noreferrer">
-          Tutoriales HIS MV
-        </a>
-      </div>
+<!--      <div class="text-center ">-->
+<!--        <a class="btn btn-primary d-inline-block p-3"-->
+<!--           style="background-color: #0d9cde !important; font-weight: 600;"-->
+<!--           href="https://hmetro.sharepoint.com/:f:/s/DM/DocumentosDM/EliOX0UxKvRFrIlhPtHQCe8BaI2mtMj98ung6wzRN0O5dQ?e=laZ8Tg"-->
+<!--           target="_blank"-->
+<!--           rel="noopener noreferrer">-->
+<!--          Tutoriales HIS MV-->
+<!--        </a>-->
+<!--      </div>-->
     </div>
 
     <div class="container m-auto d-block">
