@@ -210,7 +210,8 @@ const upload = async () => {
         description.value === null ||
         file.value.name === '' ||
         description.value === '' ||
-        description.value?.length > 100) return isValidating.value = false;
+        description.value?.length > 100 ||
+      description.value?.length < 50) return isValidating.value = false;
     console.log('file.value.name',file.value.name);
     console.log('description.value',description.value);
     let userName = user.value.username.split('@')[0];
@@ -383,7 +384,7 @@ onMounted(async () => {
   selectedYear.value = actual;
   year.value = actual;
 // Crea un array de años desde 2020 hasta el año actual
-  for (let i = 2020; i <= actual; i++) {
+  for (let i = 2026; i <= actual; i++) {
     years.value.push(i);
   }
   // console.log('codMedico', user.value.codMedico)
@@ -711,15 +712,15 @@ class UploadableFile {
                               <div class="d-flex">
                                 <font-awesome-icon class="p-4" :icon="['fas', 'book-bookmark']" size="2x"/>
                                 <textarea class="form-control p-3" rows="6" v-model="description" maxlength="100"
-                                          @input="filterCharacters" :disabled="isValidating"
-                                          placeholder="Descripción del archivo de máximo 100 caracteres"></textarea>
+                                          @input="filterCharacters" :disabled="isValidating" minlength="50"
+                                          placeholder="Descripción del archivo de mínimo 50 y máximo 100 caracteres"></textarea>
 
                               </div>
                               <div class="d-flex justify-content-start">
                                 <p v-if="(description === null || description === '') && dirty"
                                    class="mx-5 my-2 error-text">La descripción es requerida</p>
-                                <p v-if="description?.length > 100 && dirty"
-                                   class="mx-5 my-2 error-text">La descripción debe ser de máximo 100 caracteres</p>
+                                <p v-if="(description?.length > 100 || description?.length < 50) && dirty"
+                                   class="mx-5 my-2 error-text">La descripción debe ser de mínimo 50 y máximo 100 caracteres</p>
                               </div>
 
                               <div class="d-flex justify-content-center">
