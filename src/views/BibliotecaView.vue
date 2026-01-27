@@ -30,6 +30,7 @@ const date = ref(null);
 const dirty = ref(false);
 const fileInput = ref(null);
 const years = ref([]);
+const fullYears = ref([]);
 const file = ref(null);
 const description = ref(null);
 const showDeleteModal = ref(false);
@@ -396,6 +397,9 @@ onMounted(async () => {
   const actual = new Date().getFullYear();
   selectedYear.value = actual;
   year.value = actual;
+  for (let i = 2020; i <= actual; i++) {
+    fullYears.value.push(i);
+  }
   years.value = buildYears();
   // console.log('codMedico', user.value.codMedico)
   // if(!user.value.codMedico || user.value.codMedico === ''){
@@ -529,7 +533,7 @@ class UploadableFile {
                                 <select class="form-control form-select p-3 my-2"
                                         v-model="selectedYear" @change="refresh">
                                   <option :value="null">Seleccionar año</option>
-                                  <option v-for="(year, yearKey) in years"
+                                  <option v-for="(year, yearKey) in fullYears"
                                           :key="yearKey" :value="year">
                                     {{ year }}
                                   </option>
