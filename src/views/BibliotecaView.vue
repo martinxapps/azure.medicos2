@@ -375,7 +375,20 @@ const refresh = async () => {
   console.log('folders', folders);
 }
 const exist = ref(false);
+const buildYears = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const day = now.getDate();
 
+  const result = [year];
+
+  if (month === 0 && day <= 15) {
+    result.unshift(year - 1);
+  }
+
+  return result;
+};
 
 onMounted(async () => {
   screenview('Biblioteca de credenciales');
@@ -383,10 +396,7 @@ onMounted(async () => {
   const actual = new Date().getFullYear();
   selectedYear.value = actual;
   year.value = actual;
-// Crea un array de años desde 2020 hasta el año actual
-  for (let i = 2026; i <= actual; i++) {
-    years.value.push(i);
-  }
+  years.value = buildYears();
   // console.log('codMedico', user.value.codMedico)
   // if(!user.value.codMedico || user.value.codMedico === ''){
   //   notify({
