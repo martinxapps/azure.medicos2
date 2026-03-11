@@ -264,9 +264,9 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <div class=ow mb-4 mb-md-2 justify-content-center pb-5 mt-5 my-5">
+    <div class="row mb-4 mb-md-2 justify-content-center pb-5 mt-5 my-5">
       <!--columna de text-->
-      <div class=""rcol-12 col-md-4">
+      <div class="col-12 col-md-4">
         <div class="row mt-2 mt-md-5 justify-content-center">
           <a
             href="https://www.hospitalmetropolitano.org/es/terminos-condiciones-y-uso-de-medios"
