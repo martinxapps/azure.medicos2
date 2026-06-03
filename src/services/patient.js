@@ -60,8 +60,8 @@ export function urlDocumentoImagen(id) {
 
   return patients.get(`/pacientes/resultado/i?id=${encodeURIComponent(id)}`)
 }
-const baseURLV2 = 'https://api.hospitalmetropolitano.org/v2'
+
 export function urlCurva(data) {
-  const patients = mande(`${baseURLV2}/medicos/reportes`)
-  return patients.post(data)
+  const patients = mande(`${baseURL}/medicos/reportes`);
+  return patients.post(data);
 }
