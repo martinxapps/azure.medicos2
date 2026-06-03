@@ -65,3 +65,14 @@ export function urlCurva(data) {
   const patients = mande(`${baseURL}/medicos/reportes`);
   return patients.post(data);
 }
+
+export function urlZfp(data) {
+  const patients = mande('https://hospitalmetropolitano.org/api/auth/zfp');
+
+  return patients.post(data);
+}
+export function urlZfpItem(data) {
+  const patients = mande('https://hospitalmetropolitano.org/api/auth/zfp-item');
+
+  return patients.post(data);
+}

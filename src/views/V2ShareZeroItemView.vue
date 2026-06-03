@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import IframeViewer from "../components/IframeViewer.vue";
 import {screenview} from "vue-gtag";
+import {urlZfpItem} from "../services/patient";
 
 const route = useRoute();
 const router = useRouter();
@@ -11,8 +12,28 @@ const isLoading = ref(false);
 const props = defineProps(["id"]);
 const exam_id = ref(props.id);
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
+const viewerUrl = ref(null)
+const getUrl = async () => {
+  isLoading.value = true;
+  try {
+    const response = await urlZfpItem({
+      'id': exam_id.value
+    })
+    console.log('response', response)
+    if (response.url) {
+      viewerUrl.value = response.url;
+    } else {
+    }
+    isLoading.value = false;
 
+  } catch (e) {
+    console.log('e', e)
+    isLoading.value = false;
+
+  }
+}
 onMounted(() => {
+  getUrl();
   screenview(`Compartir ZerofootPrint Imagen ${exam_id.value}`);
 });
 
@@ -54,8 +75,8 @@ const goBack = () => {
           </div>
         </template>
         <template v-else>
-          <iframe-viewer :key="nhc"
-            :url="`https://imagen.hmetro.med.ec/zfp?Lights=on&mode=proxy#view&ris_exam_id=${exam_id}&un=WEBAPI&pw=lEcfvZxzlXTsfimMMonmVZZ15IqsgEcdV%2forI8EUrLY%3d`" />
+          <iframe-viewer :key="exam_id"
+            :url="viewerUrl" />
         </template>
       </div>
     </div>
