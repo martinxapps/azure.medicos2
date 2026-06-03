@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { statusPacienteEmergencia, urlDocumento } from "../services/patient";
+import { statusPacienteEmergencia, urlDocumentoImagen } from "../services/patient";
 import PdfViewer from "../components/PdfViewer.vue";
 import { useNotification } from "@kyvg/vue3-notification";
 import {screenview} from "vue-gtag";
@@ -42,7 +42,7 @@ const getPatientDetails = (nhc) => {
 const getUrl = (url) => {
   if (url) {
     isLoading.value = true;
-    urlDocumento(`https://api.hospitalmetropolitano.org/v2/pacientes/resultado/i/?id=${url}`).then(async (response) => {
+    urlDocumentoImagen(url).then(async (response) => {
       console.log("response", response);
       if (response.status) {
         src.value = response.url;

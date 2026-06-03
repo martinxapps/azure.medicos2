@@ -3,7 +3,7 @@ import FooterMedico from "../components/FooterMedico.vue";
 //import { useAuthStore } from "../stores/auth";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { statusPacienteEmergencia, urlDocumento } from "../services/patient";
+import { statusPacienteEmergencia, urlDocumento, urlDocumentoLaboratorio } from "../services/patient";
 import PdfViewer from "../components/PdfViewer.vue";
 import { useNotification } from "@kyvg/vue3-notification";
 import {screenview} from "vue-gtag";
@@ -70,7 +70,7 @@ const getUrl = async (url) => {
   try {
     if (url) {
       isLoading.value = true;
-      let response = await urlDocumento(`https://api.hospitalmetropolitano.org/v2/pacientes/resultado/l/?id=${url}`);
+      let response = await urlDocumentoLaboratorio(url);
       console.log("response", response);
       if (response.status) {
         src.value = response.url;
