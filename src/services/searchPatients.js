@@ -1,6 +1,6 @@
 
 import { mande, defaults } from 'mande';
-const baseURL = 'https://api.hospitalmetropolitano.org/t/v1/buscar-paciente';
+const baseURL = 'https://hospitalmetropolitano.org/api/v1/medicos/buscar-paciente';
 
 
 export function searchPatients(data) {
