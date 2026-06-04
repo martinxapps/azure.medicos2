@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import pdf from "@jbtje/vite-vue3pdf";
+import VuePdfEmbed from "vue-pdf-embed";
 import printJS from "print-js";
 
 import { useNotification } from "@kyvg/vue3-notification";
@@ -26,10 +26,15 @@ const numPagesEvent = (e) => {
   console.log("numPagesEvent", e);
   numPages.value = e;
 };
-const pageLoadedEvent = (e) => {
-  console.log("currentPage", e);
-  currentPage.value = e;
+const loadedEvent = (pdf) => {
+  console.log("loadedEvent", pdf);
+  numPages.value = pdf.numPages;
 };
+const pageLoadedEvent = (pdf) => {
+  console.log("pageLoadedEvent", pdf);
+  console.log("currentPage", currentPage.value);
+};
+
 
 const previousPage = () => {
   currentPage.value = currentPage.value - 1;
@@ -176,13 +181,13 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <pdf
+    <VuePdfEmbed
       ref="pdfRef"
-      :src="src"
-      @num-pages="numPagesEvent"
-      @page-loaded="pageLoadedEvent"
+      :source="src"
       :page="currentPage"
-    ></pdf>
+      @loaded="loadedEvent"
+      @rendered="pageLoadedEvent"
+    />
   </div>
 </template>
 

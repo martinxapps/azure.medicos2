@@ -20,7 +20,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/vue-fontawesome": "^3.0.3",
-    "@jbtje/vite-vue3pdf": "^0.2.0",
     "@kyvg/vue3-notification": "^2.9.0",
     "@popperjs/core": "^2.11.7",
     "bootstrap": "^5.2.3",
@@ -33,7 +32,7 @@
     "print-js": "^1.6.0",
     "vue": "^3.2.47",
     "vue-gtag": "^2.0.1",
-    "vue-pdf": "^4.3.0",
+    "vue-pdf-embed": "^1.2.1",
     "vue-router": "^4.1.6",
     "xlsx": "^0.18.5"
   },
