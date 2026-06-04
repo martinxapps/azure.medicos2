@@ -2,7 +2,6 @@
 import FooterMedico from "../components/FooterMedico.vue";
 import {ref, onMounted} from "vue";
 import VuePdfEmbed from "vue-pdf-embed";
-import pdf from "@jbtje/vite-vue3pdf";
 import {useNotification} from "@kyvg/vue3-notification";
 import {event, screenview} from "vue-gtag";
 import {transaccion} from "../services/fees";
