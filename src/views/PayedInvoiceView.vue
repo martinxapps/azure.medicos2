@@ -3,7 +3,7 @@ import FooterMedico from "../components/FooterMedico.vue";
 //import {useAuthStore} from "../stores/auth";
 import {ref, onMounted} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import pdf from "@jbtje/vite-vue3pdf";
+import VuePdfEmbed from "vue-pdf-embed";
 import {useNotification} from "@kyvg/vue3-notification";
 import {event, screenview} from "vue-gtag";
 import {facturaPagada} from "../services/fees";
@@ -19,9 +19,13 @@ const numPagesEvent = (e) => {
   console.log("numPagesEvent", e);
   numPages.value = e;
 };
-const pageLoadedEvent = (e) => {
-  console.log("currentPage", e);
-  currentPage.value = e;
+const loadedEvent = (pdf) => {
+  console.log("loadedEvent", pdf);
+  numPages.value = pdf.numPages;
+};
+const pageLoadedEvent = (pdf) => {
+  console.log("pageLoadedEvent", pdf);
+  console.log("currentPage", currentPage.value);
 };
 const currentPage = ref(1);
 const numPages = ref(1);
@@ -193,13 +197,13 @@ const printPdf = async () => {
                     </div>
                   </div>
                 </div>
-                <pdf
-                    ref="pdfRef"
-                    :src="src"
-                    @num-pages="numPagesEvent"
-                    @page-loaded="pageLoadedEvent"
-                    :page="currentPage"
-                ></pdf>
+                <VuePdfEmbed
+                  ref="pdfRef"
+                  :source="src"
+                  :page="currentPage"
+                  @loaded="loadedEvent"
+                  @rendered="pageLoadedEvent"
+                />
               </template>
               <template v-else>
                 <p class="text-center text-search">Factura No. {{ name }} no disponible</p>

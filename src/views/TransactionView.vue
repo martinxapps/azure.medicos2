@@ -1,7 +1,7 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
 import {ref, onMounted} from "vue";
-import {useRoute, useRouter} from "vue-router";
+import VuePdfEmbed from "vue-pdf-embed";
 import pdf from "@jbtje/vite-vue3pdf";
 import {useNotification} from "@kyvg/vue3-notification";
 import {event, screenview} from "vue-gtag";
@@ -18,10 +18,15 @@ const numPagesEvent = (e) => {
   console.log("numPagesEvent", e);
   numPages.value = e;
 };
-const pageLoadedEvent = (e) => {
-  console.log("currentPage", e);
-  currentPage.value = e;
+const loadedEvent = (pdf) => {
+  console.log("loadedEvent", pdf);
+  numPages.value = pdf.numPages;
 };
+const pageLoadedEvent = (pdf) => {
+  console.log("pageLoadedEvent", pdf);
+  console.log("currentPage", currentPage.value);
+};
+
 const currentPage = ref(1);
 const numPages = ref(1);
 const isLoading = ref(false);
@@ -193,13 +198,13 @@ const printPdf = async () => {
                     </div>
                   </div>
                 </div>
-                <pdf
-                    ref="pdfRef"
-                    :src="src"
-                    @num-pages="numPagesEvent"
-                    @page-loaded="pageLoadedEvent"
-                    :page="currentPage"
-                ></pdf>
+                <VuePdfEmbed
+                  ref="pdfRef"
+                  :source="src"
+                  :page="currentPage"
+                  @loaded="loadedEvent"
+                  @rendered="pageLoadedEvent"
+                />
               </template>
               <template v-else>
                 <p class="text-center text-search">Transacción No. {{ id }} no disponible</p>
