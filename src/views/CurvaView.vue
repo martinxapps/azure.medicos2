@@ -4,7 +4,7 @@ import FooterMedico from "../components/FooterMedico.vue";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { statusPacienteEmergencia, urlCurva } from "../services/patient";
-import pdf from "@jbtje/vite-vue3pdf";
+import VuePdfEmbed from "vue-pdf-embed";
 import { useNotification } from "@kyvg/vue3-notification";
 import {screenview} from "vue-gtag";
 import {decryptId} from "../services/security";
@@ -19,9 +19,13 @@ const numPagesEvent = (e) => {
   console.log("numPagesEvent", e);
   numPages.value = e;
 };
-const pageLoadedEvent = (e) => {
-  console.log("currentPage", e);
-  currentPage.value = e;
+const loadedEvent = (pdf) => {
+  console.log("loadedEvent", pdf);
+  numPages.value = pdf.numPages;
+};
+const pageLoadedEvent = (pdf) => {
+  console.log("pageLoadedEvent", pdf);
+  console.log("currentPage", currentPage.value);
 };
 const currentPage = ref(1);
 const numPages = ref(1);
@@ -194,12 +198,14 @@ const getUrl = async (type, na) => {
             <template v-else>
               <template v-if="isAvailable">
 
-                <pdf
-                  :src="'data:application/pdf;base64,'+src"
-                  @num-pages="numPagesEvent"
-                  @page-loaded="pageLoadedEvent"
+
+                <VuePdfEmbed
+                  ref="pdfRef"
+                  :source="'data:application/pdf;base64,'+src"
                   :page="currentPage"
-                ></pdf>
+                  @loaded="loadedEvent"
+                  @rendered="pageLoadedEvent"
+                />
               </template>
               <template v-else>
                 <p class="center text-search">{{ name }} no disponible</p>
