@@ -6,6 +6,7 @@ import {useNotification} from "@kyvg/vue3-notification";
 import {event, screenview} from "vue-gtag";
 import {transaccion} from "../services/fees";
 import printJS from "print-js";
+import {useRoute, useRouter} from "vue-router";
 
 // const authStore = useAuthStore();
 // const user = computed(() => authStore.user);
