@@ -18,7 +18,6 @@ const startDate = ref(null);
 const endDate = ref(null);
 const searchType = ref(4);
 let isLoading = ref(false);
-//const route = useRoute();
 const router = useRouter();
 const search = async () => {
   isLoading.value = true;

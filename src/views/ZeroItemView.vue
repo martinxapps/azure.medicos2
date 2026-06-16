@@ -6,11 +6,11 @@ import {screenview} from "vue-gtag";
 import {decryptId} from "../services/security";
 import {urlZfpItem} from "../services/patient";
 
-const route = useRoute();
-const router = useRouter();
 
-const isLoading = ref(false);
 const props = defineProps(["id"]);
+const router = useRouter();
+const route = useRoute();
+const isLoading = ref(false);
 const encrypted_exam_id = ref(props.id);
 const exam_id = ref(decryptId(encrypted_exam_id.value));
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
