@@ -215,7 +215,7 @@ onMounted(async () => {
                     <div class="col-6">
                       <a
                         class="d-flex justify-content-center cursor-pointer"
-                        href="https://play.google.com/store/apps/details?id=com.metrovirtual.medics"
+                        href="https://play.google.com/store/apps/details?id=hm.metrovirtual.medics"
                         target="_blank"
                       >
                         <img
