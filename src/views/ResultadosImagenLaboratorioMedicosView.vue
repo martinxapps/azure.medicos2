@@ -7,7 +7,8 @@ import {
   resultadosImagenPaciente,
   resultadosLaboratorioPaciente,
   urlDocumento,
-  urlDocumentoImagen
+  urlDocumentoImagen,
+  urlDocumentoLaboratorio
 } from '../services/patient'
 import { searchPatients } from '../services/searchPatients'
 import { useNotification } from '@kyvg/vue3-notification'
@@ -245,7 +246,7 @@ const downloadImageFile = (imageResult) => {
       type: 'info'
     })
 
-    const id = imageResult.deep_link.split('/')[3];
+    const id = imageResult.deep_link.split('/')[3]
 
     urlDocumentoImagen(id).then(async (response) => {
       if (response.status) {
@@ -283,9 +284,9 @@ const downloadLabFile = (labResult) => {
       text: 'Se procederá con la descarga en unos segundos',
       type: 'info'
     })
-    const id = labResult.deep_link.split('/')[3];
+    const id = labResult.deep_link.split('/')[3]
 
-    urlDocumento(id).then(async (response) => {
+    urlDocumentoLaboratorio(id).then(async (response) => {
       if (response.status) {
         const link = document.createElement('a')
         link.setAttribute('href', response.url)
