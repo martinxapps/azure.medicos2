@@ -239,6 +239,7 @@ const goToImageResultCtrl = async (result) => {
 }
 
 const downloadImageFile = (imageResult) => {
+  console.log('imageResult', imageResult);
   if (imageResult.deep_link) {
     notify({
       title: 'Listo',
@@ -247,12 +248,13 @@ const downloadImageFile = (imageResult) => {
     })
 
     const id = imageResult.deep_link.split('/')[3]
+    console.log('imageResult id', id);
 
     urlDocumentoImagen(id).then(async (response) => {
       if (response.status) {
         const link = document.createElement('a')
         link.setAttribute('href', response.url)
-        link.setAttribute('target', '_blank')
+        // link.setAttribute('target', '_blank')
         const d = new Date()
         link.setAttribute('download', `${imageResult.NHC}_${d.getTime()}.pdf`)
         link.style.display = 'none'
@@ -278,6 +280,7 @@ const downloadImageFile = (imageResult) => {
   }
 }
 const downloadLabFile = (labResult) => {
+  console.log('labResult', labResult);
   if (labResult.deep_link) {
     notify({
       title: 'Listo',
@@ -285,12 +288,13 @@ const downloadLabFile = (labResult) => {
       type: 'info'
     })
     const id = labResult.deep_link.split('/')[3]
+    console.log('labResult id', id);
 
     urlDocumentoLaboratorio(id).then(async (response) => {
       if (response.status) {
         const link = document.createElement('a')
         link.setAttribute('href', response.url)
-        link.setAttribute('target', '_blank')
+        // link.setAttribute('target', '_blank')
         link.setAttribute('download', `${labResult.ID_STUDIO}.pdf`)
         link.style.display = 'none'
         document.body.appendChild(link)
