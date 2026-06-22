@@ -391,7 +391,7 @@ const downloadLabFile = (labResult) => {
       if (response.status) {
         const link = document.createElement('a')
         link.setAttribute('href', response.url)
-        link.setAttribute('target', '_blank')
+        // link.setAttribute('target', '_blank')
         link.setAttribute('download', `${labResult.ID_STUDIO}.pdf`)
         link.style.display = 'none'
         document.body.appendChild(link)
