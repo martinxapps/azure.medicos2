@@ -71,8 +71,19 @@ export function urlZfp(data) {
 
   return patients.post(data);
 }
+
+export function urlZfpShare(data) {
+  const patients = mande('https://hospitalmetropolitano.org/api/auth/zfp-share');
+
+  return patients.post(data);
+}
 export function urlZfpItem(data) {
   const patients = mande('https://hospitalmetropolitano.org/api/auth/zfp-item');
+
+  return patients.post(data);
+}
+export function urlZfpItemShare(data) {
+  const patients = mande('https://hospitalmetropolitano.org/api/auth/zfp-item-share');
 
   return patients.post(data);
 }
