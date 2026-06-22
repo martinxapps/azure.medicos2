@@ -283,7 +283,7 @@ const downloadLabFile = (labResult) => {
       text: 'Se procederá con la descarga en unos segundos',
       type: 'info'
     })
-    const id = imageResult.deep_link.split('/')[3];
+    const id = labResult.deep_link.split('/')[3];
 
     urlDocumento(id).then(async (response) => {
       if (response.status) {
