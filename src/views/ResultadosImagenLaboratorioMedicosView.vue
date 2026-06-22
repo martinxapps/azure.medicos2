@@ -1,125 +1,131 @@
 <script setup>
-import FooterMedico from "../components/FooterMedico.vue";
-import {useAuthStore} from "../stores/auth";
-import {ref, computed, onMounted} from "vue";
-import {useRoute, useRouter} from "vue-router";
-import {resultadosImagenPaciente, resultadosLaboratorioPaciente, urlDocumento} from "../services/patient";
-import {searchPatients} from "../services/searchPatients";
-import {useNotification} from "@kyvg/vue3-notification";
-import dayjs from "dayjs";
-import {event, screenview} from "vue-gtag";
-import {usePatientResultsStore} from "../stores/patientResults";
-import {decryptId, encryptId} from "../services/security";
+import FooterMedico from '../components/FooterMedico.vue'
+import { useAuthStore } from '../stores/auth'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import {
+  resultadosImagenPaciente,
+  resultadosLaboratorioPaciente,
+  urlDocumento,
+  urlDocumentoImagen
+} from '../services/patient'
+import { searchPatients } from '../services/searchPatients'
+import { useNotification } from '@kyvg/vue3-notification'
+import dayjs from 'dayjs'
+import { event, screenview } from 'vue-gtag'
+import { usePatientResultsStore } from '../stores/patientResults'
+import { decryptId, encryptId } from '../services/security'
 
+const { notify } = useNotification()
+const authStore = useAuthStore()
+const user = computed(() => authStore.user)
 
-const {notify} = useNotification();
-const authStore = useAuthStore();
-const user = computed(() => authStore.user);
-
-const patient = computed(() => patientResultsStore.patient);
-const patientResultsStore = usePatientResultsStore();
-const lab_results = computed(() => patientResultsStore.lab_results);
-const image_results = computed(() => patientResultsStore.image_results);
-let isLoadingLab = ref(false);
-let isLoadingImage = ref(false);
-const router = useRouter();
-const route = useRoute();
-const props = defineProps(["nhc"]);
-const encryptedNHC = ref(props.nhc);
-const nhc = ref(decryptId(encryptedNHC.value));
-const title = ref("Resultados de Imagen y Laboratorio - MetroVirtual - Hospital Metropolitano");
+const patient = computed(() => patientResultsStore.patient)
+const patientResultsStore = usePatientResultsStore()
+const lab_results = computed(() => patientResultsStore.lab_results)
+const image_results = computed(() => patientResultsStore.image_results)
+let isLoadingLab = ref(false)
+let isLoadingImage = ref(false)
+const router = useRouter()
+const route = useRoute()
+const props = defineProps(['nhc'])
+const encryptedNHC = ref(props.nhc)
+const nhc = ref(decryptId(encryptedNHC.value))
+const title = ref('Resultados de Imagen y Laboratorio - MetroVirtual - Hospital Metropolitano')
 
 const getLabResults = (nhc) => {
   // get patient lab results
   if (lab_results.value.length < 1) {
-    isLoadingLab.value = true;
+    isLoadingLab.value = true
   }
 
   resultadosLaboratorioPaciente(nhc).then((response) => {
-    isLoadingLab.value = false;
+    isLoadingLab.value = false
     if (response.status) {
-      patientResultsStore.lab_results = response.data;
+      patientResultsStore.lab_results = response.data
     } else {
-      patientResultsStore.lab_results = [];
+      patientResultsStore.lab_results = []
       notify({
-        title: "¡Atención!",
-        text: "No existen resultados de laboratorio disponibles para este paciente",
-        type: "info"
-      });
+        title: '¡Atención!',
+        text: 'No existen resultados de laboratorio disponibles para este paciente',
+        type: 'info'
+      })
     }
-  });
-};
+  })
+}
 const getImageResults = (nhc) => {
   // get patient lab results
   if (image_results.value.length < 1) {
-    isLoadingImage.value = true;
+    isLoadingImage.value = true
   }
   resultadosImagenPaciente(nhc).then((response) => {
-    isLoadingImage.value = false;
+    isLoadingImage.value = false
     if (response.status) {
       // image_results.value = response.data.map((image_result) => {
       //   let newIr = image_result;
       //   newIr.fecha_ = `${image_result.FECHA.substring(6, 10)}-${image_result.FECHA.substring(3, 5)}-${image_result.FECHA.substring(0, 2)}`;
       //   return newIr;
       // });
-      patientResultsStore.image_results = response.data;
+      patientResultsStore.image_results = response.data
     } else {
-      patientResultsStore.image_results = [];
+      patientResultsStore.image_results = []
       notify({
-        title: "¡Atención!",
-        text: "No existen resultados de imagen disponibles para este paciente",
-        type: "info"
-      });
+        title: '¡Atención!',
+        text: 'No existen resultados de imagen disponibles para este paciente',
+        type: 'info'
+      })
     }
-  });
-};
+  })
+}
 const getPatientDetails = (nhc) => {
   let data = {
     pte: nhc,
-    tipoBusqueda: "nhc"
-  };
+    tipoBusqueda: 'nhc'
+  }
   searchPatients(data).then((response) => {
     if (response.status) {
-      patientResultsStore.patient = response.data[0];
-      title.value = `Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS} - MetroVirtual - Hospital Metropolitano`;
-      screenview(`Resultados Imagen y Laboratorio de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS}`);
+      patientResultsStore.patient = response.data[0]
+      title.value = `Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS} - MetroVirtual - Hospital Metropolitano`
+      screenview(
+        `Resultados Imagen y Laboratorio de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS}`
+      )
     } else {
       notify({
-        title: "El paciente no existe",
+        title: 'El paciente no existe',
         text: response.message,
-        type: "error"
-      });
+        type: 'error'
+      })
       // TODO: regresar de pantalla
     }
-  });
-};
+  })
+}
 
 const getWord = (key) => {
   switch (key) {
-    case "true":
+    case 'true':
     case true:
-      return "Nuevo";
+      return 'Nuevo'
     default:
-      return "Solicitado";
+      return 'Solicitado'
   }
-};
+}
 const isWithin24Hours = (date) => {
-  const dateForm = dayjs(date);
-  const now = dayjs(); // Obtiene la fecha y hora actual
-  const yesterday = now.subtract(24, "hour"); // Resta 24 horas a la fecha y hora actual
-  return dateForm.isAfter(yesterday) && dateForm.isBefore(now); // Compara la fecha deseada con la fecha y hora actual y la fecha y hora de hace 24 horas
-};
+  const dateForm = dayjs(date)
+  const now = dayjs() // Obtiene la fecha y hora actual
+  const yesterday = now.subtract(24, 'hour') // Resta 24 horas a la fecha y hora actual
+  return dateForm.isAfter(yesterday) && dateForm.isBefore(now) // Compara la fecha deseada con la fecha y hora actual y la fecha y hora de hace 24 horas
+}
 
 const goBack = () => {
-  patientResultsStore.clearPatientResults();
+  patientResultsStore.clearPatientResults()
   if (window.history.state.back === null) {
-    router.replace({name: "resultados-imagen-y-laboratorio-medicos"});
+    router.replace({ name: 'resultados-imagen-y-laboratorio-medicos' })
   } else {
-    router.back();
+    router.back()
   }
-};
+}
 const goToLabResult = async (result) => {
-  let split = result.deep_link.split("/");
+  let split = result.deep_link.split('/')
   // let url = router.resolve({
   //   name: "medic-lab-result-view",
   //   params: { url: split[3], nhc: nhc.value },
@@ -130,29 +136,29 @@ const goToLabResult = async (result) => {
   event('see_lab_result', {
     nhc: nhc.value,
     uuid: split[3]
-  });
+  })
 
   await router.push({
-    name: "medic-lab-result-view",
-    params: {url: split[3], nhc: encryptedNHC.value},
-    query: {prev: "resultados"}
-  });
-};
+    name: 'medic-lab-result-view',
+    params: { url: split[3], nhc: encryptedNHC.value },
+    query: { prev: 'resultados' }
+  })
+}
 const goToLabResultCtrl = async (result) => {
-  let split = result.deep_link.split("/");
+  let split = result.deep_link.split('/')
   event('see_lab_result', {
     nhc: nhc.value,
     uuid: split[3]
-  });
+  })
 
   let url = router.resolve({
-    name: "medic-lab-result-view",
-    params: {url: split[3], nhc: encryptedNHC.value},
-    query: {prev: "resultados"}
-  });
-  window.open(url.href, "_blank");
+    name: 'medic-lab-result-view',
+    params: { url: split[3], nhc: encryptedNHC.value },
+    query: { prev: 'resultados' }
+  })
+  window.open(url.href, '_blank')
   // await router.push({name: 'medic-lab-result-view', params: {url: split[3], nhc: nhc.value}});
-};
+}
 const goToZero = async () => {
   // let url = router.resolve({
   //   name: "medic-patient-zerofootprint-view",
@@ -161,43 +167,43 @@ const goToZero = async () => {
   // });
   // window.open(url.href, "_blank");
   await router.push({
-    name: "medic-patient-zerofootprint-view",
-    params: {nhc: nhc.value},
-    query: {prev: "resultados"}
-  });
-};
+    name: 'medic-patient-zerofootprint-view',
+    params: { nhc: nhc.value },
+    query: { prev: 'resultados' }
+  })
+}
 const goToZeroCtrl = async () => {
   event('see_zerofootprint', {
     nhc: nhc.value
-  });
+  })
   let url = router.resolve({
-    name: "medic-patient-zerofootprint-view",
-    params: {nhc: encryptedNHC.value},
-    query: {prev: "resultados"}
-  });
-  window.open(url.href, "_blank");
+    name: 'medic-patient-zerofootprint-view',
+    params: { nhc: encryptedNHC.value },
+    query: { prev: 'resultados' }
+  })
+  window.open(url.href, '_blank')
   //await router.push({name: 'medic-patient-curva-view', params: {type, na, nhc: nhc.value}});
-};
+}
 const goToZeroCtrlItem = async (item) => {
   event('see_zerofootprint', {
     nhc: nhc.value,
     id: item.ID_ESTUDIO
-  });
-  const encryptedId = encryptId(item.ID_ESTUDIO);
+  })
+  const encryptedId = encryptId(item.ID_ESTUDIO)
   let url = router.resolve({
-    name: "medic-patient-zerofootprint-item-view",
-    params: {id: encryptedId },
-    query: {prev: "resultados"}
-  });
-  window.open(url.href, "_blank");
+    name: 'medic-patient-zerofootprint-item-view',
+    params: { id: encryptedId },
+    query: { prev: 'resultados' }
+  })
+  window.open(url.href, '_blank')
   //await router.push({name: 'medic-patient-curva-view', params: {type, na, nhc: nhc.value}});
-};
+}
 const goToImageResult = async (result) => {
-  let split = result.deep_link.split("/");
+  let split = result.deep_link.split('/')
   event('see_image_result', {
     nhc: nhc.value,
     uuid: split[3]
-  });
+  })
   // let url = router.resolve({
   //   name: "medic-image-result-view",
   //   params: { url: split[3], nhc: nhc.value },
@@ -206,126 +212,130 @@ const goToImageResult = async (result) => {
   // window.open(url.href, "_blank");
 
   await router.push({
-    name: "medic-image-result-view",
-    params: {url: split[3], nhc: encryptedNHC.value },
-    query: {prev: "resultados"}
-  });
-};
+    name: 'medic-image-result-view',
+    params: { url: split[3], nhc: encryptedNHC.value },
+    query: { prev: 'resultados' }
+  })
+}
 const goToImageResultCtrl = async (result) => {
-  let split = result.deep_link.split("/");
+  let split = result.deep_link.split('/')
   event('see_image_result', {
     nhc: nhc.value,
     uuid: split[3]
-  });
+  })
 
   let url = router.resolve({
-    name: "medic-image-result-view",
-    params: {url: split[3], nhc: encryptedNHC.value},
-    query: {prev: "resultados"}
-  });
-  window.open(url.href, "_blank");
+    name: 'medic-image-result-view',
+    params: { url: split[3], nhc: encryptedNHC.value },
+    query: { prev: 'resultados' }
+  })
+  window.open(url.href, '_blank')
   // await router.push({
   //   name: "medic-image-result-view",
   //   params: { url: split[3], nhc: nhc.value },
   //   query: { prev: "resultados" }
   // });
-};
+}
 
 const downloadImageFile = (imageResult) => {
-  if (imageResult.urlPdf) {
+  if (imageResult.deep_link) {
     notify({
-      title: "Listo",
-      text: "Se procederá con la descarga en unos segundos",
-      type: "info"
-    });
-    urlDocumento(imageResult.urlPdf).then(async (response) => {
+      title: 'Listo',
+      text: 'Se procederá con la descarga en unos segundos',
+      type: 'info'
+    })
+
+    const id = imageResult.deep_link.split('/')[3];
+
+    urlDocumentoImagen(id).then(async (response) => {
       if (response.status) {
-        const link = document.createElement("a");
-        link.setAttribute("href", response.url);
-        link.setAttribute("target", "_blank");
-        const d = new Date();
-        link.setAttribute("download", `${imageResult.NHC}_${d.getTime()}.pdf`);
-        link.style.display = "none";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const link = document.createElement('a')
+        link.setAttribute('href', response.url)
+        link.setAttribute('target', '_blank')
+        const d = new Date()
+        link.setAttribute('download', `${imageResult.NHC}_${d.getTime()}.pdf`)
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
         notify({
-          title: "Listo",
-          text: "Resultado de imagen descargado",
-          type: "success"
-        });
+          title: 'Listo',
+          text: 'Resultado de imagen descargado',
+          type: 'success'
+        })
         event('file_download', {
           value: 'imagen'
-        });
+        })
       } else {
         notify({
-          title: "El archivo no esta disponible",
+          title: 'El archivo no esta disponible',
           text: response.message,
-          type: "error"
-        });
+          type: 'error'
+        })
       }
-    });
+    })
   }
-};
+}
 const downloadLabFile = (labResult) => {
-  if (labResult.urlPdf) {
+  if (labResult.deep_link) {
     notify({
-      title: "Listo",
-      text: "Se procederá con la descarga en unos segundos",
-      type: "info"
-    });
-    urlDocumento(labResult.urlPdf).then(async (response) => {
+      title: 'Listo',
+      text: 'Se procederá con la descarga en unos segundos',
+      type: 'info'
+    })
+    const id = imageResult.deep_link.split('/')[3];
+
+    urlDocumento(id).then(async (response) => {
       if (response.status) {
-        const link = document.createElement("a");
-        link.setAttribute("href", response.url);
-        link.setAttribute("target", "_blank");
-        link.setAttribute("download", `${labResult.ID_STUDIO}.pdf`);
-        link.style.display = "none";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const link = document.createElement('a')
+        link.setAttribute('href', response.url)
+        link.setAttribute('target', '_blank')
+        link.setAttribute('download', `${labResult.ID_STUDIO}.pdf`)
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
         notify({
-          title: "Listo",
-          text: "Resultado de imagen descargado",
-          type: "success"
-        });
+          title: 'Listo',
+          text: 'Resultado de imagen descargado',
+          type: 'success'
+        })
         event('file_download', {
           value: 'laboratorio'
-        });
+        })
       } else {
         notify({
-          title: "El archivo no esta disponible",
+          title: 'El archivo no esta disponible',
           text: response.message,
-          type: "error"
-        });
+          type: 'error'
+        })
       }
-    });
+    })
   }
-};
+}
 
 onMounted(async () => {
   if (nhc.value) {
-    getPatientDetails(nhc.value);
-    getLabResults(nhc.value);
-    getImageResults(nhc.value);
+    getPatientDetails(nhc.value)
+    getLabResults(nhc.value)
+    getImageResults(nhc.value)
   }
-});
-
+})
 </script>
 <template>
   <div>
     <teleport to="#page-title">
-      <title>{{title}}</title>
+      <title>{{ title }}</title>
     </teleport>
-    <div class="justify-content-center py-1" style="background-color: rgb(229 237 241);">
+    <div class="justify-content-center py-1" style="background-color: rgb(229 237 241)">
       <!--header section-->
       <div class="container m-auto d-block">
-        <div class="row mb-2  mt-2 justify-content-center">
+        <div class="row mb-2 mt-2 justify-content-center">
           <!--columna de text-->
-          <div class=" col-6 " @click="goBack()">
+          <div class="col-6" @click="goBack()">
             <div class="row mt-3">
-              <h5 class="cursor-pointer ml-3" style=" color: #0f4470; font-size: 16px;">
-                <font-awesome-icon :icon="['fas', 'chevron-left']"/>
+              <h5 class="cursor-pointer ml-3" style="color: #0f4470; font-size: 16px">
+                <font-awesome-icon :icon="['fas', 'chevron-left']" />
                 Regresar
               </h5>
             </div>
@@ -334,12 +344,14 @@ onMounted(async () => {
             <div class="d-block py-1">
               <div class="d-flex justify-content-end">
                 <div class="img-div">
-                  <img class="img-header-icon ml-3" src="@/assets/resultados.png" alt=" icon">
+                  <img class="img-header-icon ml-3" src="@/assets/resultados.png" alt=" icon" />
                 </div>
-                <br>
-                <h4 class="d-flex text-headerv2 mt-1"
-                    style="text-align:left; color: #05305d; font-weight: 600;">
-                  Resultados de Imagen y Laboratorio<br>
+                <br />
+                <h4
+                  class="d-flex text-headerv2 mt-1"
+                  style="text-align: left; color: #05305d; font-weight: 600"
+                >
+                  Resultados de Imagen y Laboratorio<br />
                   {{ patient?.NOMBRES }} {{ patient?.APELLIDOS }}
                 </h4>
               </div>
@@ -348,8 +360,8 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <div class="justify-content-center py-2" style="background-color: #f8f9fc;">
-      <div class="container m-auto d-block" style="background: #f8f9fc;">
+    <div class="justify-content-center py-2" style="background-color: #f8f9fc">
+      <div class="container m-auto d-block" style="background: #f8f9fc">
         <!--        <div class="row mt-3 mb-3">-->
         <!--          <div class="d-block py-1">-->
         <!--            <div class="d-flex justify-content-end">-->
@@ -367,103 +379,147 @@ onMounted(async () => {
         <!--          </div>-->
         <!--        </div>-->
         <div class="row my-2 pb-5 pt-2">
-          <div class="col-sm-12 ">
+          <div class="col-sm-12">
             <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
               <li class="nav-item tab-hm" role="presentation">
-                <button class="nav-link nav-hm" id="lab-tab" data-toggle="tab"
-                        :class="{'active': patientResultsStore.activeTab === 0}"
-                        @click="patientResultsStore.activeTab = 0"
-                        data-target="#lab" type="button" role="tab" aria-controls="lab"
-                        aria-selected="true">Laboratorio <span class="bg-number">{{ lab_results.length }}</span>
+                <button
+                  class="nav-link nav-hm"
+                  id="lab-tab"
+                  data-toggle="tab"
+                  :class="{ active: patientResultsStore.activeTab === 0 }"
+                  @click="patientResultsStore.activeTab = 0"
+                  data-target="#lab"
+                  type="button"
+                  role="tab"
+                  aria-controls="lab"
+                  aria-selected="true"
+                >
+                  Laboratorio <span class="bg-number">{{ lab_results.length }}</span>
                 </button>
               </li>
               <li class="nav-item tab-hm" role="presentation">
-                <button class="nav-link nav-hm" id="image-tab" data-toggle="tab"
-                        :class="{'active': patientResultsStore.activeTab === 1}"
-                        @click="patientResultsStore.activeTab = 1"
-                        data-target="#image" type="button" role="tab" aria-controls="image"
-                        aria-selected="false">Imagen <span class="bg-number">{{ image_results.length }}</span>
+                <button
+                  class="nav-link nav-hm"
+                  id="image-tab"
+                  data-toggle="tab"
+                  :class="{ active: patientResultsStore.activeTab === 1 }"
+                  @click="patientResultsStore.activeTab = 1"
+                  data-target="#image"
+                  type="button"
+                  role="tab"
+                  aria-controls="image"
+                  aria-selected="false"
+                >
+                  Imagen <span class="bg-number">{{ image_results.length }}</span>
                 </button>
               </li>
-
             </ul>
             <div class="tab-content" id="ResultsTabContent">
-              <div class="tab-pane fade" id="lab" role="tabpanel"
-                   :class="{'active': patientResultsStore.activeTab === 0, 'show': patientResultsStore.activeTab === 0}"
-                   aria-labelledby="lab-tab">
+              <div
+                class="tab-pane fade"
+                id="lab"
+                role="tabpanel"
+                :class="{
+                  active: patientResultsStore.activeTab === 0,
+                  show: patientResultsStore.activeTab === 0
+                }"
+                aria-labelledby="lab-tab"
+              >
                 <div class="container">
                   <div class="row justify-content-center">
                     <div class="col-12 p-4">
                       <template v-if="isLoadingLab">
                         <div class="d-flex justify-content-center">
-                          <img class="img-fluid" src="@/assets/loading.gif"
-                               alt="Loading Hm">
-
+                          <img class="img-fluid" src="@/assets/loading.gif" alt="Loading Hm" />
                         </div>
                       </template>
                       <template v-else>
                         <template v-if="lab_results.length > 0">
                           <div
-                              class=" my-1 py-2 row text-left border-result hover-list-element"
-                              v-for="(labResult, labResultKey) in lab_results"
-                              :key="labResultKey">
+                            class="my-1 py-2 row text-left border-result hover-list-element"
+                            v-for="(labResult, labResultKey) in lab_results"
+                            :key="labResultKey"
+                          >
                             <div class="col-9">
-                              <p class="title-results"><b>{{ labResult?.ORIGEN }}</b>
-                                <span class="p-2 mx-2 pill" v-if="isWithin24Hours(labResult?.fecha_)"
-                                      :class="{
-                                  'gray':labResult?.IsOrderValidated === 'false' || !labResult?.IsOrderValidated || labResult?.IsOrderValidated === false,
-                                   'orange':labResult?.IsOrderValidated === true || labResult?.IsOrderValidated === 'true'
-                                }">
+                              <p class="title-results">
+                                <b>{{ labResult?.ORIGEN }}</b>
+                                <span
+                                  class="p-2 mx-2 pill"
+                                  v-if="isWithin24Hours(labResult?.fecha_)"
+                                  :class="{
+                                    gray:
+                                      labResult?.IsOrderValidated === 'false' ||
+                                      !labResult?.IsOrderValidated ||
+                                      labResult?.IsOrderValidated === false,
+                                    orange:
+                                      labResult?.IsOrderValidated === true ||
+                                      labResult?.IsOrderValidated === 'true'
+                                  }"
+                                >
                                   {{ getWord(labResult?.IsOrderValidated) }}
                                 </span>
                               </p>
                               <p class="text-results">{{ labResult?.FECHA }}</p>
-                              <p class="text-results">
-                                <b>Médico:</b> {{ labResult?.MEDICO }}
-                              </p>
-                              <div class="flex cursor-pointer" @click="labResult.isOpen = !labResult.isOpen">
-                                <font-awesome-icon class="px-1"
-                                                   :icon="['fas', 'list' ]"/>
+                              <p class="text-results"><b>Médico:</b> {{ labResult?.MEDICO }}</p>
+                              <div
+                                class="flex cursor-pointer"
+                                @click="labResult.isOpen = !labResult.isOpen"
+                              >
+                                <font-awesome-icon class="px-1" :icon="['fas', 'list']" />
                                 Exámenes Solicitados
-                                <font-awesome-icon class="px-2"
-                                                   :icon="['fas', labResult.isOpen ?  'chevron-up':'chevron-down' ]"/>
+                                <font-awesome-icon
+                                  class="px-2"
+                                  :icon="['fas', labResult.isOpen ? 'chevron-up' : 'chevron-down']"
+                                />
                               </div>
                               <template v-if="labResult.isOpen">
-                                <hr class="my-1">
+                                <hr class="my-1" />
                                 <div class="row px-3 py-1">
-                                  <ul class="col-12 col-md-6 m-0"
-                                      v-for="(exam, key) in labResult.examenes" v-bind:key="key">
+                                  <ul
+                                    class="col-12 col-md-6 m-0"
+                                    v-for="(exam, key) in labResult.examenes"
+                                    v-bind:key="key"
+                                  >
                                     <li class="m-0 small-font">{{ exam }}</li>
                                   </ul>
                                 </div>
                               </template>
-                              <p style="color: #ff8201;">Laboratorio</p>
+                              <p style="color: #ff8201">Laboratorio</p>
                             </div>
                             <div class="col-3 d-flex flex-column flex-md-row justify-content-end">
-                              <div class="cursor-pointer" title="Ver resultado"
-                                   style="display: inline-block;"
-                                   @click.exact="goToLabResult(labResult)"
-                                   @click.ctrl="goToLabResultCtrl(labResult)">
+                              <div
+                                class="cursor-pointer"
+                                title="Ver resultado"
+                                style="display: inline-block"
+                                @click.exact="goToLabResult(labResult)"
+                                @click.ctrl="goToLabResultCtrl(labResult)"
+                              >
                                 <div class="p-2 p-md-4">
-                                  <font-awesome-icon :icon="['fas', 'eye']" size="2x"
-                                                     class="icon-device"/>
+                                  <font-awesome-icon
+                                    :icon="['fas', 'eye']"
+                                    size="2x"
+                                    class="icon-device"
+                                  />
                                 </div>
-
                               </div>
-                              <div @click="downloadLabFile(labResult)"
-                                   class="cursor-pointer"
-                                   title="Descargar resultado">
+                              <div
+                                @click="downloadLabFile(labResult)"
+                                class="cursor-pointer"
+                                title="Descargar resultado"
+                              >
                                 <div class="p-2 p-md-4">
-                                  <font-awesome-icon :icon="['fas', 'download']" size="2x"
-                                                     class="icon-device"/>
+                                  <font-awesome-icon
+                                    :icon="['fas', 'download']"
+                                    size="2x"
+                                    class="icon-device"
+                                  />
                                 </div>
-
                               </div>
                             </div>
                           </div>
                         </template>
                         <template v-else>
-                          <div class=" my-3 py-3  text-center">
+                          <div class="my-3 py-3 text-center">
                             <h4 class="center text-search">
                               No existen resultados de laboratorio disponibles para este paciente.
                             </h4>
@@ -474,79 +530,108 @@ onMounted(async () => {
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="image" role="tabpanel"
-                   :class="{'active': patientResultsStore.activeTab === 1, 'show': patientResultsStore.activeTab === 1}"
-                   aria-labelledby="image-tab">
+              <div
+                class="tab-pane fade"
+                id="image"
+                role="tabpanel"
+                :class="{
+                  active: patientResultsStore.activeTab === 1,
+                  show: patientResultsStore.activeTab === 1
+                }"
+                aria-labelledby="image-tab"
+              >
                 <div class="container">
-
                   <div class="row justify-content-center">
                     <div class="col-12 p-4">
                       <template v-if="isLoadingImage">
                         <div class="d-flex justify-content-center">
-                          <img class="img-fluid" src="@/assets/loading.gif"
-                               alt="Loading Hm">
-
+                          <img class="img-fluid" src="@/assets/loading.gif" alt="Loading Hm" />
                         </div>
                       </template>
                       <template v-else>
                         <template v-if="patientResultsStore.seeImages">
-                          <div class="flex" @click="patientResultsStore.seeImages = false;">
+                          <div class="flex" @click="patientResultsStore.seeImages = false">
                             <div class="row mt-3">
-                              <h5 class="cursor-pointer ml-3"
-                                  style=" color: #0f4470; font-size: 16px;">
-                                <font-awesome-icon :icon="['fas', 'chevron-left']"/>
+                              <h5
+                                class="cursor-pointer ml-3"
+                                style="color: #0f4470; font-size: 16px"
+                              >
+                                <font-awesome-icon :icon="['fas', 'chevron-left']" />
                                 Regresar
                               </h5>
                             </div>
                           </div>
                           <template v-if="image_results.length > 0">
                             <div
-                                class=" my-1 py-2 row text-left border-result hover-list-element"
-                                v-for="(imageResult, imageResultKey) in image_results"
-                                :key="imageResultKey">
+                              class="my-1 py-2 row text-left border-result hover-list-element"
+                              v-for="(imageResult, imageResultKey) in image_results"
+                              :key="imageResultKey"
+                            >
                               <div class="col-9">
-                                <p class="title-results"><b>{{ imageResult?.ESTUDIO }}</b>
-                                  <span class="p-2 mx-2 pill orange" v-if="isWithin24Hours(imageResult?.fecha_)">
-                                    Nuevo</span>
+                                <p class="title-results">
+                                  <b>{{ imageResult?.ESTUDIO }}</b>
+                                  <span
+                                    class="p-2 mx-2 pill orange"
+                                    v-if="isWithin24Hours(imageResult?.fecha_)"
+                                  >
+                                    Nuevo</span
+                                  >
                                 </p>
                                 <p class="text-results">{{ imageResult?.FECHA }}</p>
-                                <p class="text-results">
-                                  <b>Médico:</b> {{ imageResult?.MEDICO }}
-                                </p>
-                                <p class="text-results" style="color: #ff8201;">Imagen</p>
+                                <p class="text-results"><b>Médico:</b> {{ imageResult?.MEDICO }}</p>
+                                <p class="text-results" style="color: #ff8201">Imagen</p>
                               </div>
                               <div class="col-3 d-flex flex-column flex-md-row justify-content-end">
-                                <div class="cursor-pointer" title="Ver imagen" style="display: inline-block;"
-                                     @click.exact="goToZeroCtrlItem(imageResult)"
-                                     @click.ctrl="goToZeroCtrlItem(imageResult)">
+                                <div
+                                  class="cursor-pointer"
+                                  title="Ver imagen"
+                                  style="display: inline-block"
+                                  @click.exact="goToZeroCtrlItem(imageResult)"
+                                  @click.ctrl="goToZeroCtrlItem(imageResult)"
+                                >
                                   <div class="p-2 p-md-4">
-                                    <font-awesome-icon :icon="['fas', 'desktop']" size="2x"
-                                                       class="icon-device"/>
+                                    <font-awesome-icon
+                                      :icon="['fas', 'desktop']"
+                                      size="2x"
+                                      class="icon-device"
+                                    />
                                   </div>
                                 </div>
-                                <div class="cursor-pointer" title="Ver informe"
-                                     style="display: inline-block;"
-                                     @click.exact="goToImageResult(imageResult)"
-                                     @click.ctrl="goToImageResultCtrl(imageResult)">
+                                <div
+                                  class="cursor-pointer"
+                                  title="Ver informe"
+                                  style="display: inline-block"
+                                  @click.exact="goToImageResult(imageResult)"
+                                  @click.ctrl="goToImageResultCtrl(imageResult)"
+                                >
                                   <div class="p-2 p-md-4">
-                                    <font-awesome-icon :icon="['fas', 'eye']" size="2x"
-                                                       class="icon-device"/>
+                                    <font-awesome-icon
+                                      :icon="['fas', 'eye']"
+                                      size="2x"
+                                      class="icon-device"
+                                    />
                                   </div>
                                 </div>
-                                <div class="cursor-pointer" title="Descargar informe"
-                                     v-if="imageResult.urlPdf"
-                                     style="display: inline-block;"
-                                     @click="downloadImageFile(imageResult)">
+                                <div
+                                  class="cursor-pointer"
+                                  title="Descargar informe"
+                                  v-if="imageResult.urlPdf"
+                                  style="display: inline-block"
+                                  @click="downloadImageFile(imageResult)"
+                                >
                                   <div class="p-2 p-md-4">
-                                    <font-awesome-icon :icon="['fas', 'download']" size="2x"
-                                                       class="icon-device"/>
+                                    <font-awesome-icon
+                                      :icon="['fas', 'download']"
+                                      size="2x"
+                                      class="icon-device"
+                                    />
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </template>
                           <template v-else>
-                            <div class=" my-3 py-3  text-center">
+                            <div class="my-3 py-3 text-center">
                               <h4 class="center text-search">
                                 No existen resultados de imagen disponibles para este paciente.
                               </h4>
@@ -554,21 +639,21 @@ onMounted(async () => {
                           </template>
                         </template>
                         <template v-else>
-                          <div @click.exact="goToZeroCtrl()" @click.ctrl="goToZeroCtrl()"
-                               class=" my-1 p-4 row text-left border-result hover-list-element cursor-pointer">
-                            <p class="title-results m-4"><b>Ver Exámenes (Zero FootPrint GE)</b>
-                            </p>
+                          <div
+                            @click.exact="goToZeroCtrl()"
+                            @click.ctrl="goToZeroCtrl()"
+                            class="my-1 p-4 row text-left border-result hover-list-element cursor-pointer"
+                          >
+                            <p class="title-results m-4"><b>Ver Exámenes (Zero FootPrint GE)</b></p>
                           </div>
-                          <div @click="patientResultsStore.seeImages = true;"
-                               class=" my-1 p-4 row cursor-pointer text-left border-result hover-list-element">
-                            <p class="title-results m-4"><b>Ver Informes</b>
-                            </p>
+                          <div
+                            @click="patientResultsStore.seeImages = true"
+                            class="my-1 p-4 row cursor-pointer text-left border-result hover-list-element"
+                          >
+                            <p class="title-results m-4"><b>Ver Informes</b></p>
                           </div>
                         </template>
-
                       </template>
-
-
                     </div>
                   </div>
                 </div>
@@ -576,7 +661,7 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <FooterMedico/>
+        <FooterMedico />
       </div>
     </div>
   </div>
@@ -591,7 +676,7 @@ onMounted(async () => {
   border-radius: 15px;
   background-color: #ff8201;
   color: white;
-  font-weight: 500
+  font-weight: 500;
 }
 
 .select-result {
@@ -636,9 +721,8 @@ img.img-metrovirtual {
 }
 
 .row.d-block:hover {
-  background: #0B72D8 !important;
+  background: #0b72d8 !important;
 }
-
 
 .img-icon-color {
   width: 105px;
@@ -650,7 +734,7 @@ img.img-metrovirtual {
 }
 
 .img-border {
-  background: #E9EDF8;
+  background: #e9edf8;
   padding: 20px 5px;
   width: 145px;
   height: 145px;
@@ -712,7 +796,6 @@ input.search {
   color: #05305d;
   cursor: pointer;
 }
-
 
 a:hover {
   text-decoration: none;

@@ -70,7 +70,8 @@ const goBack = () => {
           </div>
         </div>
       </div>
-      <div class="justify-content-center px-2 flex-grow-1" style="background-color: #f8f9fc; margin-top: 5vh;">
+      <div class="justify-content-center px-2 flex-grow-1"
+           style="background-color: #f8f9fc; margin-top: 5vh;">
         <template v-if="isLoading">
           <div class="d-flex justify-content-center">
             <img class="img-fluid" src="@/assets/loading.gif" alt="Loading Hm">
