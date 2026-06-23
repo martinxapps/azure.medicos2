@@ -204,6 +204,7 @@ const upload = async () => {
     let data = {
       path: `${year.value}/${userName}`
     };
+    isLoading.value = true;
     let response = await getFolders(data);
     let res = null;
     if (response.status) {
@@ -213,6 +214,7 @@ const upload = async () => {
     if(res){
       exist.value = true;
       isValidating.value = false;
+      isLoading.value = false;
       return;
     }
     notify({
