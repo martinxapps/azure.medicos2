@@ -463,7 +463,7 @@ class UploadableFile {
                       class="nav-link nav-hm pl-0"
                       id="lab-tab"
                       data-toggle="tab"
-                      :class="{ active: myLibraryStore.activeTab === 0 }"
+                      :class="{ active: myLibraryStore.activeTab === 0, }"
 
                       data-target="#lab"
                       type="button"
@@ -480,7 +480,7 @@ class UploadableFile {
                       class="nav-link nav-hm pl-0"
                       id="image-tab"
                       data-toggle="tab"
-                      :class="{ active: myLibraryStore.activeTab === 1 }"
+                      :class="{ active: myLibraryStore.activeTab === 1 ,}"
                       data-target="#image"
                       type="button"
                       role="tab"
