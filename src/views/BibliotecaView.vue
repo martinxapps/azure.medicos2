@@ -50,7 +50,9 @@ const closeModal = () => {
 }
 const deleteArchive = async () => {
   isLoadingDelete.value = true;
-  const responseCheck = await deleteFile(selectedArchive.value.DeleteFile);
+  const query = new URL(selectedArchive.value.DeleteFile).search;
+  console.log(query);
+  const responseCheck = await deleteFile(query);
   if (responseCheck.status) {
     showDeleteModal.value = false;
     selectedArchive.value = null;
@@ -101,13 +103,9 @@ const downloadPdf = async (archive) => {
       text: "Se procederá con la descarga en unos segundos",
       type: "warn"
     });
-    const response = await fetch(archive.Uri, {
-      method: 'GET',
-      // Puedes agregar encabezados personalizados si es necesario
-      headers: {
-        'Authorization': token.value, // Si es necesario
-      },
-    });
+    const query = new URL(archive.Uri).search;
+    console.log(query);
+    const response = await downloadPdf(query);
 
     if (!response.ok) {
       throw new Error('No se pudo obtener el documento');

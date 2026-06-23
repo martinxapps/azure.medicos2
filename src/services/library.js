@@ -47,11 +47,13 @@ export function checkMedic() {
   return patients.post({});
 }
 
-export function deleteFile(url) {
-  const patients = mande(`${baseURLV1}/medicos/bdm/delete-file`);
-  return patients.post({
-    url,
-  });
+export function deleteFile(query) {
+  const patients = mande(`${baseURLV1}/medicos/bdm/delete${query}`);
+  return patients.post({});
+}
+export function downloadFile(query) {
+  const patients = mande(`${baseURLV1}/medicos/bdm/download${query}`);
+  return patients.get();
 }
 
 
