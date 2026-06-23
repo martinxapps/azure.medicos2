@@ -6,7 +6,7 @@ import {useRouter} from "vue-router";
 import {event, screenview} from 'vue-gtag';
 import {useMyLibraryStore} from "../stores/myLibrary";
 import DropZone from "../components/DropZone.vue";
-import {checkFolder, createFolder, deleteFile, uploadFile, checkMedic} from "../services/library";
+import {checkFolder, createFolder, deleteFile, uploadFile, checkMedic, downloadFile } from "../services/library";
 import {useNotification} from "@kyvg/vue3-notification";
 import SmallBox from "../components/SmallBox.vue";
 import {getFolders} from "../services/library";
@@ -105,15 +105,20 @@ const downloadPdf = async (archive) => {
     });
     const query = new URL(archive.Uri).search;
     console.log(query);
-    const response = await downloadPdf(query);
+    const response = await downloadFile(query);
+    console.log('response', response);
 
     if (!response.ok) {
       throw new Error('No se pudo obtener el documento');
     }
 
     const blob = await response.blob();
+    console.log('blob', blob);
+
     // Crear un enlace (link) temporal para descargar el archivo
     const fileUrl = window.URL.createObjectURL(blob);
+    console.log('fileUrl', fileUrl);
+
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = fileUrl;
