@@ -19,6 +19,7 @@ useMyLibraryStore = defineStore({
             let response = await getFolders(data);
             console.log('response', response);
             if (response.status) {
+                this.files = response.data;
                 this.folders.forEach((folder) => {
                     folder.data = response.data.filter((item) => item.Path.toLowerCase() === folder.name.toLowerCase());
                 });
@@ -106,6 +107,7 @@ useMyLibraryStore = defineStore({
             },
         ],
         total: 0,
+        files: [],
         activeTab: 0,
         isLoading: false,
     }),

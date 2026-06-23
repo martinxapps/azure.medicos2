@@ -205,12 +205,8 @@ const upload = async () => {
       path: `${year.value}/${userName}`
     };
     isLoading.value = true;
-    let response = await getFolders(data);
-    let res = null;
-    if (response.status) {
-      let files = response.data;
-      res = files.find(objeto => objeto.Name === file.value.name && objeto.Path === folder.value);
-    }
+    let files = myLibraryStore.files;
+    let res = files.find(objeto => objeto.Name === file.value.name && objeto.Path === folder.value);
     if(res){
       exist.value = true;
       isValidating.value = false;
