@@ -51,9 +51,17 @@ export function deleteFile(query) {
   const patients = mande(`${baseURLV1}/medicos/bdm/delete${query}`);
   return patients.post({});
 }
+// export function downloadFile(query) {
+//   const patients = mande(`${baseURLV1}/medicos/bdm/download${query}`);
+//   return patients.get();
+// }
 export function downloadFile(query) {
-  const patients = mande(`${baseURLV1}/medicos/bdm/download${query}`);
-  return patients.get();
+  return fetch(`${baseURLV1}/medicos/bdm/download${query}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('metrovirtualToken')}`
+    }
+  })
 }
 
 
