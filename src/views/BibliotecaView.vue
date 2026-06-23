@@ -18,7 +18,7 @@ const myLibraryStore = useMyLibraryStore();
 const folders = computed(() => myLibraryStore.folders);
 const total_documents = computed(() => myLibraryStore.total);
 let isLoading = ref(true);
-let isLoadingDelete = ref(true);
+let isLoadingDelete = ref(false);
 const router = useRouter();
 const selectedYear = ref(null);
 const year = ref(null);
