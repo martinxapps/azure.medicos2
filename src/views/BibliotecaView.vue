@@ -17,7 +17,7 @@ const token = computed(() => authStore.token);
 const myLibraryStore = useMyLibraryStore();
 const folders = computed(() => myLibraryStore.folders);
 const total_documents = computed(() => myLibraryStore.total);
-let isLoading = ref(false);
+let isLoading = ref(true);
 let isLoadingDelete = ref(true);
 const router = useRouter();
 const selectedYear = ref(null);
