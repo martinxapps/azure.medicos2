@@ -211,6 +211,7 @@ const upload = async () => {
       exist.value = true;
       isValidating.value = false;
       isLoading.value = false;
+
       return;
     }
     notify({

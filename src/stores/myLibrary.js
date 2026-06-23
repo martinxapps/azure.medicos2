@@ -15,16 +15,13 @@ useMyLibraryStore = defineStore({
             let data = {
                 path: `${year}/${userName}`
             };
-            console.log('data', data);
             let response = await getFolders(data);
-            console.log('response', response);
             if (response.status) {
                 this.files = response.data;
                 this.folders.forEach((folder) => {
                     folder.data = response.data.filter((item) => item.Path.toLowerCase() === folder.name.toLowerCase());
                 });
                 this.total = response.data.length;
-                console.log('total', this.total);
             }
             this.isLoading = false;
         },
@@ -64,6 +61,7 @@ useMyLibraryStore = defineStore({
                     },
                 ];
                 this.total = 0;
+                this.files = [];
                 this.activeTab = 0;
                 this.isLoading = false;
             } catch (e) {
