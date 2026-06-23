@@ -459,11 +459,12 @@ class UploadableFile {
                 <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
                   <li class="nav-item tab-hmv2" role="presentation">
                     <button
+                      @click="myLibraryStore.activeTab = 0"
                       class="nav-link nav-hm pl-0"
                       id="lab-tab"
                       data-toggle="tab"
                       :class="{ active: myLibraryStore.activeTab === 0 }"
-                      @click="myLibraryStore.activeTab = 0"
+
                       data-target="#lab"
                       type="button"
                       role="tab"
@@ -475,11 +476,11 @@ class UploadableFile {
                   </li>
                   <li class="nav-item tab-hmv2" role="presentation">
                     <button
+                      @click="myLibraryStore.activeTab = 1"
                       class="nav-link nav-hm pl-0"
                       id="image-tab"
                       data-toggle="tab"
                       :class="{ active: myLibraryStore.activeTab === 1 }"
-                      @click="myLibraryStore.activeTab = 1"
                       data-target="#image"
                       type="button"
                       role="tab"
@@ -509,11 +510,12 @@ class UploadableFile {
                 class="tab-pane fade"
                 id="lab"
                 role="tabpanel"
+                aria-labelledby="lab-tab"
                 :class="{
                   active: myLibraryStore.activeTab === 0,
                   show: myLibraryStore.activeTab === 0
                 }"
-                aria-labelledby="lab-tab"
+
               >
                 <div class="container">
                   <div class="row justify-content-center">
