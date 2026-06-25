@@ -60,6 +60,17 @@ export function urlDocumentoImagen(id) {
 
   return patients.get(`/pacientes/resultado/i?id=${encodeURIComponent(id)}`)
 }
+export function urlDocumentoLaboratorioShare(id) {
+  const patients = mande(baseURL)
+
+  return patients.get(`/res/pacientes/resultado/l?id=${encodeURIComponent(id)}`)
+}
+
+export function urlDocumentoImagenShare(id) {
+  const patients = mande(baseURL)
+
+  return patients.get(`/res/pacientes/resultado/i?id=${encodeURIComponent(id)}`)
+}
 
 export function urlCurva(data) {
   const patients = mande(`${baseURL}/medicos/reportes`);
