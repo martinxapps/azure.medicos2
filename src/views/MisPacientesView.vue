@@ -57,7 +57,7 @@ const goToPatientDetail = async (patient) => {
       patient_nhc: patient.HC,
       user_name: user.value.name
     });
-    let encryptedNHC = encryptId(patient.HC);
+    let encryptedNHC = await encryptId(patient.HC);
     router.push({name: "detalle-paciente", params: {nhc: encryptedNHC}}).catch((e) => console.log("e", e));
   } catch (e) {
     console.log("e", e);
@@ -73,8 +73,6 @@ onMounted(async () => {
   if (consulted_patients.value.length < 1) {
     isLoadingConsulted.value = true;
   }
-  console.log('user', user.value);
-  console.log('authStore', authStore.hasRole('PERFIL_MEDICO_RESIDENTES'));
   await myPatientsStore.getPatients(0, 1000, authStore.hasRole('PERFIL_MEDICO_RESIDENTES'));
   isLoadingDealers.value = false;
   isLoadingConsulted.value = false;
