@@ -1,6 +1,6 @@
 <script setup>
 import FooterMedico from "../components/FooterMedico.vue";
-//import {useAuthStore} from "../stores/auth";
+//import {useAuthStore} from "../stores/auth";decryptId
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { statusPacienteEmergencia, urlCurva } from "../services/patient";
@@ -63,8 +63,10 @@ onMounted(() => {
   getUrl(type.value, na.value);
   getPatientDetails(nhc.value);
 });
-const getPatientDetails = (nhc) => {
+const getPatientDetails = async (nhc) => {
   try {
+    na.value = await decryptId(encryptedNa.value);
+
     // get patient status
     statusPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
@@ -97,6 +99,8 @@ const nextPage = () => {
 
 const getUrl = async (type, na) => {
   try {
+    na.value = await decryptId(encryptedNa.value);
+
     if (na) {
       let payload = {
         idReport: type,

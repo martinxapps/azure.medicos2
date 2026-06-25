@@ -34,9 +34,11 @@ onMounted(() => {
   getPatientDetails(nhc.value);
 
 });
-const getPatientDetails = (nhc) => {
+const getPatientDetails = async (nhc) => {
   try {
     // get patient status
+    nhc.value = await decryptId(encryptedNHC.value);
+
     statusPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
         statusPaciente.value = response.data;

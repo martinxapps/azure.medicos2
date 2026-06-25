@@ -22,7 +22,7 @@ const props = defineProps(["url", "nhc"]);
 const src = ref(null);
 const statusPaciente = ref(null);
 const encryptedNHC = ref(props.nhc);
-const nhc = ref(decryptId(encryptedNHC.value));
+const nhc = ref(null);
 const url = ref(props.url);
 onMounted(() => {
   screenview('Resultado de Imagen');
@@ -45,9 +45,11 @@ const goBack = () => {
     router.back();
   }
 };
-const getPatientDetails = (nhc) => {
+const getPatientDetails = async (nhc) => {
   try {
     // get patient status
+    nhc.value = await decryptId(encryptedNHC.value);
+
     statusPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
         statusPaciente.value = response.data;

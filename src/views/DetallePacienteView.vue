@@ -599,7 +599,6 @@ const goToImageResultCtrl = async (result) => {
 }
 
 onMounted(async () => {
-  console.log('nhc', nhc.value)
   nhc.value = await decryptId(encryptedNHC.value);
   if (nhc.value) {
     getPatientDetails(nhc.value)
