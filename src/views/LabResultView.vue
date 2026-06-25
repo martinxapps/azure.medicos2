@@ -23,7 +23,6 @@ const src = ref(null);
 const statusPaciente = ref(null);
 const encryptedNHC = ref(props.nhc);
 const nhc = ref(null);
-console.log('nhc', nhc.value);
 const url = ref(props.url);
 const title = ref("Resultado de Laboratorio - Metrovirtual - Hospital Metropolitano");
 

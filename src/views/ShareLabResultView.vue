@@ -21,12 +21,9 @@ const url = ref(props.url)
 const statusPaciente = ref(null)
 const title = ref('Resultado de Laboratorio - Metrovirtual - Hospital Metropolitano')
 onMounted(async () => {
-  isLoading.value = true
 
-  nhc.value = await decryptId(encryptedNHC.value)
   screenview('Compartir Resultado de Laboratorio')
   getUrl(url.value)
-  getPatientDetails(nhc.value)
 })
 
 const getPatientDetails = (nhc) => {
@@ -52,7 +49,7 @@ const getUrl = async (url) => {
   isLoading.value = true
   try {
 
-    const response = await urlDocumentoImagenShare(url)
+    const response = await urlDocumentoLaboratorioShare(url)
     console.log('response', response)
     if (response.status) {
       src.value = response.url
