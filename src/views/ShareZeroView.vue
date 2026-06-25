@@ -12,12 +12,14 @@ const router = useRouter();
 const isLoading = ref(false);
 const props = defineProps(["nhc"]);
 const encryptedNHC = ref(props.nhc);
-const nhc = ref(await decryptId(encryptedNHC.value));
+const nhc = ref(null);
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
 const viewerUrl = ref(null)
 const getUrl = async () => {
   isLoading.value = true;
   try {
+    nhc.value = await decryptId(encryptedNHC.value)
+
     const response = await urlZfp({
       'nhc': nhc.value
     })

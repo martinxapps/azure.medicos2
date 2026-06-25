@@ -12,13 +12,15 @@ const router = useRouter();
 const route = useRoute();
 const isLoading = ref(false);
 const encrypted_exam_id = ref(props.id);
-const exam_id = ref(await decryptId(encrypted_exam_id.value));
+const exam_id = ref(null);
 const title = ref("Zero FootPrint GE - Metrovirtual - Hospital Metropolitano");
 const shareLink = computed(() => `${window.location.origin}/compartir/zerofootprint-item/${encrypted_exam_id.value}`);
 const viewerUrl = ref(null)
 const getUrl = async () => {
   isLoading.value = true;
   try {
+    exam_id.value = await decryptId(encrypted_exam_id.value)
+
     const response = await urlZfpItem({
       'id': exam_id.value
     })

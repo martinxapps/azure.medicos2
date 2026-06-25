@@ -32,7 +32,7 @@ const router = useRouter()
 const route = useRoute()
 const props = defineProps(['nhc'])
 const encryptedNHC = ref(props.nhc)
-const nhc = ref(decryptId(encryptedNHC.value))
+const nhc = ref(null)
 const title = ref('Resultados de Imagen y Laboratorio - MetroVirtual - Hospital Metropolitano')
 
 const getLabResults = (nhc) => {
@@ -191,7 +191,7 @@ const goToZeroCtrlItem = async (item) => {
     nhc: nhc.value,
     id: item.ID_ESTUDIO
   })
-  const encryptedId = encryptId(item.ID_ESTUDIO)
+  const encryptedId = await encryptId(item.ID_ESTUDIO)
   let url = router.resolve({
     name: 'medic-patient-zerofootprint-item-view',
     params: { id: encryptedId },
@@ -321,8 +321,9 @@ const downloadLabFile = (labResult) => {
 }
 
 onMounted(async () => {
+  nhc.value = await decryptId(encryptedNHC.value)
   if (nhc.value) {
-    nhc.value = await decryptId(encryptedNHC.value)
+
     getPatientDetails(nhc.value)
     getLabResults(nhc.value)
     getImageResults(nhc.value)

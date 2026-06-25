@@ -43,7 +43,7 @@ const goToPatientResults = async (patient) => {
   event('view_patient_results', {
     patient: `${patient.APELLIDOS} ${patient.NOMBRES}`
   });
-  let encryptedNHC = encryptId(patient.PK_NHCL);
+  let encryptedNHC = await encryptId(patient.PK_NHCL);
   await router.push({ name: "resultados-paciente-imagen-y-laboratorio-medicos", params: { nhc: encryptedNHC } });
 };
 
@@ -53,7 +53,7 @@ const goToPatientResultsCtrl = async (patient) => {
   event('view_patient_results', {
     patient: `${patient.APELLIDOS} ${patient.NOMBRES}`
   });
-  let encryptedNHC = encryptId(patient.PK_NHCL);
+  let encryptedNHC = await encryptId(patient.PK_NHCL);
   let url = router.resolve({
     name: "resultados-paciente-imagen-y-laboratorio-medicos",
     params: { nhc: encryptedNHC }
