@@ -12,7 +12,7 @@ const router = useRouter()
 const isLoading = ref(false)
 const props = defineProps(['id'])
 const encrypted_exam_id = ref(props.id)
-const exam_id = ref(decryptId(encrypted_exam_id.value))
+const exam_id = ref(await decryptId(encrypted_exam_id.value))
 const title = ref('Zero FootPrint GE - Metrovirtual - Hospital Metropolitano')
 const viewerUrl = ref(null)
 const getUrl = async () => {

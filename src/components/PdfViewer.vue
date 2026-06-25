@@ -16,7 +16,7 @@ const share = ref(props.share);
 const name = ref(props.name);
 const pageType = ref(props.type);
 const nhc = ref(props.nhc);
-const encryptedNHC = ref(encryptId(nhc.value));
+const encryptedNHC = ref(await encryptId(nhc.value));
 const type = ref(props.type);
 
 const currentPage = ref(1);
