@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   resultadosImagenPaciente,
   resultadosLaboratorioPaciente,
+  statusPacienteEmergencia,
   urlDocumento,
   urlDocumentoImagen,
   urlDocumentoLaboratorio
@@ -239,7 +240,7 @@ const goToImageResultCtrl = async (result) => {
 }
 
 const downloadImageFile = (imageResult) => {
-  console.log('imageResult', imageResult);
+  console.log('imageResult', imageResult)
   if (imageResult.deep_link) {
     notify({
       title: 'Listo',
@@ -248,7 +249,7 @@ const downloadImageFile = (imageResult) => {
     })
 
     const id = imageResult.deep_link.split('/')[3]
-    console.log('imageResult id', id);
+    console.log('imageResult id', id)
 
     urlDocumentoImagen(id).then(async (response) => {
       if (response.status) {
@@ -280,7 +281,7 @@ const downloadImageFile = (imageResult) => {
   }
 }
 const downloadLabFile = (labResult) => {
-  console.log('labResult', labResult);
+  console.log('labResult', labResult)
   if (labResult.deep_link) {
     notify({
       title: 'Listo',
@@ -288,7 +289,7 @@ const downloadLabFile = (labResult) => {
       type: 'info'
     })
     const id = labResult.deep_link.split('/')[3]
-    console.log('labResult id', id);
+    console.log('labResult id', id)
 
     urlDocumentoLaboratorio(id).then(async (response) => {
       if (response.status) {
@@ -321,6 +322,7 @@ const downloadLabFile = (labResult) => {
 
 onMounted(async () => {
   if (nhc.value) {
+    nhc.value = await decryptId(encryptedNHC.value)
     getPatientDetails(nhc.value)
     getLabResults(nhc.value)
     getImageResults(nhc.value)
