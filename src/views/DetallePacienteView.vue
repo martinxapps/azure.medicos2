@@ -51,7 +51,7 @@ const lab_results = computed(() => patientDetailStore.lab_results)
 const image_results = computed(() => patientDetailStore.image_results)
 const props = defineProps(['nhc'])
 const encryptedNHC = ref(props.nhc)
-const nhc = ref(decryptId(encryptedNHC.value))
+const nhc = ref(null)
 
 const isLoading = ref(false)
 const isLoadingSV = ref(false)
@@ -503,7 +503,7 @@ const goToGraphic = async (type, item) => {
   event('see_graph', {
     value: item.SIGNO
   })
-  const encryptedAttention = encryptId(item.ATENCION)
+  const encryptedAttention = await encryptId(item.ATENCION)
   await router.push({
     name: 'medic-patient-curva-view',
     params: { type, na: encryptedAttention, nhc: encryptedNHC.value }
@@ -516,7 +516,7 @@ const goToGraphicCtrl = async (type, item) => {
   event('see_graph', {
     value: item.SIGNO
   })
-  const encryptedAttention = encryptId(item.ATENCION)
+  const encryptedAttention = await encryptId(item.ATENCION)
   let url = router.resolve({
     name: 'medic-patient-curva-view',
     params: { type, na: encryptedAttention, nhc: encryptedNHC.value }
@@ -555,7 +555,7 @@ const goToZeroCtrlItem = async (item) => {
     nhc: nhc.value,
     id: item.ID_ESTUDIO
   })
-  const encryptedId = encryptId(item.ID_ESTUDIO)
+  const encryptedId = await encryptId(item.ID_ESTUDIO)
   let url = router.resolve({
     name: 'medic-patient-zerofootprint-item-view',
     params: { id: encryptedId },
@@ -600,6 +600,7 @@ const goToImageResultCtrl = async (result) => {
 
 onMounted(async () => {
   console.log('nhc', nhc.value)
+  nhc.value = await decryptId(encryptedNHC.value);
   if (nhc.value) {
     getPatientDetails(nhc.value)
     getPatientSV(nhc.value)
