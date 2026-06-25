@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import {
   statusPacienteEmergencia,
   urlDocumentoImagen,
+  urlDocumentoImagenShare,
   urlDocumentoLaboratorioShare
 } from '../services/patient'
 import PdfViewer from '../components/PdfViewer.vue'
@@ -22,12 +23,13 @@ const title = ref('Resultado de Imagen - MetroVirtual - Hospital Metropolitano')
 const statusPaciente = ref(null)
 
 onMounted(async () => {
-  isLoading.value = true
-  nhc.value = await decryptId(encryptedNHC.value)
+  screenview('Compartir Resultado de Imagen')
+
+  // isLoading.value = true
+  // nhc.value = await decryptId(encryptedNHC.value)
   getUrl(url.value)
 
-  getPatientDetails(nhc.value)
-  screenview('Compartir Resultado de Imagen')
+  //getPatientDetails(nhc.value)
 })
 const getPatientDetails = (nhc) => {
   try {
@@ -51,8 +53,7 @@ const getUrl = async (url) => {
   if (!url) return
   isLoading.value = true
   try {
-
-    const response = await urlDocumentoLaboratorioShare(url)
+    const response = await urlDocumentoImagenShare(url)
     console.log('response', response)
     if (response.status) {
       src.value = response.url
