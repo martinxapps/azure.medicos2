@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import IframeViewer from '../components/IframeViewer.vue'
 import { screenview } from 'vue-gtag'
-import { urlZfp, urlZfpItemShare, urlZfpShare } from '@/services/patient'
+import { urlZfpShare } from '@/services/patient'
 
 const route = useRoute()
 const router = useRouter()
@@ -17,7 +17,7 @@ const viewerUrl = ref(null)
 const getUrl = async () => {
   isLoading.value = true
   try {
-    const response = await urlZfpItemShare({
+    const response = await urlZfpShare({
       nhc: nhc.value
     })
     console.log('response', response)
