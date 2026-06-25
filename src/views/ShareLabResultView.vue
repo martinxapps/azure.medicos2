@@ -48,7 +48,7 @@ const getUrl = async (url) => {
   if (!url) return
   isLoading.value = true
   try {
-    encryptedNHC.value = await decryptId(nhc.value)
+    nhc.value = await decryptId(encryptedNHC.value)
     const response = await urlDocumentoImagenShare(url)
     console.log('response', response)
     if (response.status) {

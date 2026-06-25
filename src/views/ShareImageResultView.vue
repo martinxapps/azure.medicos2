@@ -16,7 +16,7 @@ const isAvailable = ref(false)
 const props = defineProps(['url', 'nhc'])
 const src = ref(null)
 const encryptedNHC = ref(props.nhc)
-const nhc = ref(await decryptId(encryptedNHC.value))
+const nhc = ref(null)
 const url = ref(props.url)
 const title = ref('Resultado de Imagen - MetroVirtual - Hospital Metropolitano')
 const statusPaciente = ref(null)
@@ -48,7 +48,7 @@ const getUrl = async (url) => {
   if (!url) return
   isLoading.value = true
   try {
-    encryptedNHC.value = await decryptId(nhc.value)
+    nhc.value = await decryptId(encryptedNHC.value)
     const response = await urlDocumentoLaboratorioShare(url)
     console.log('response', response)
     if (response.status) {
