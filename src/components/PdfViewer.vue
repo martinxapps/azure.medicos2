@@ -139,17 +139,17 @@ onMounted(async () => {
     </div>
     <div class="container">
       <div class="row justify-content-end my-1 row-img">
-        <div class="col-2 col-md-1 col-img" v-if="!share">
-          <a class="icon-img cursor-pointer" title="Compartir por whatsapp" target="_blank"
-             @click="registerWhatsappShare()"
-             :href="`https://api.whatsapp.com/send?text=Te%20comparto%20mi%20${stringVal}%20en%20el%20siguiente%20enlace:%20${shareLink}`">
-            <div class="row img-borderv4">
-              <img class="img-icon-colorv3" src="@/assets/whatsapp.png" alt=" icon">
-              <img class="img-icon-colorv3" src="@/assets/whatsapp-blanco.png" alt=" icon"
-                   style="margin-top: -35px;">
-            </div>
-          </a>
-        </div>
+<!--        <div class="col-2 col-md-1 col-img" v-if="!share">-->
+<!--          <a class="icon-img cursor-pointer" title="Compartir por whatsapp" target="_blank"-->
+<!--             @click="registerWhatsappShare()"-->
+<!--             :href="`https://api.whatsapp.com/send?text=Te%20comparto%20mi%20${stringVal}%20en%20el%20siguiente%20enlace:%20${shareLink}`">-->
+<!--            <div class="row img-borderv4">-->
+<!--              <img class="img-icon-colorv3" src="@/assets/whatsapp.png" alt=" icon">-->
+<!--              <img class="img-icon-colorv3" src="@/assets/whatsapp-blanco.png" alt=" icon"-->
+<!--                   style="margin-top: -35px;">-->
+<!--            </div>-->
+<!--          </a>-->
+<!--        </div>-->
         <div class="col-2 col-md-1 col-img" v-if="!share">
 
           <a class="icon-img cursor-pointer" title="Compartir por email" target="_blank" @click="registerEmailShare()"
