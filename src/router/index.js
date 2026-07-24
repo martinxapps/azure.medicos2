@@ -5,11 +5,15 @@ import ResultadosImagenLaboratorioMedicosView from "../views/ResultadosImagenLab
 import BusquedaResultadosImagenLaboratorioMedicosView
     from "../views/BusquedaResultadosImagenLaboratorioMedicosView.vue";
 import LabResultView from "../views/LabResultView.vue";
+import CardiologyResultView from "../views/CardiologyResultView.vue";
+import PathologyResultView from "../views/PathologyResultView.vue";
 import ShareLabResultView from "../views/ShareLabResultView.vue";
 import V2ShareLabResultView from "../views/V2ShareLabResultView.vue";
 import ImageResultView from "../views/ImageResultView.vue";
 import ShareImageResultView from "../views/ShareImageResultView.vue";
 import V2ShareImageResultView from "../views/V2ShareImageResultView.vue";
+import ShareCardiologyResultView from "../views/ShareCardiologyResultView.vue";
+import SharePathologyResultView from "../views/SharePathologyResultView.vue";
 import CurvaView from "../views/CurvaView.vue";
 import ZeroView from "../views/ZeroView.vue";
 import ShareZeroView from "../views/ShareZeroView.vue";
@@ -142,6 +146,30 @@ const router = createRouter({
                 roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
             }
         },
+        // patient cardiology result / medic
+        {
+            path: language === "es" ? "/mis-pacientes/:nhc/cardiologia/:url" : "/my-patients/:nhc/cardiology/:url",
+            name: "medic-patient-cardiology-result-view",
+            component: CardiologyResultView,
+            props: true,
+            meta: {
+                authRequired: true,
+                userType: "medic",
+                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
+            }
+        },
+        // patient pathology result / medic
+        {
+            path: language === "es" ? "/mis-pacientes/:nhc/patologia/:url" : "/mis-pacientes/:nhc/pathology/:url",
+            name: "medic-patient-pathology-result-view",
+            component: PathologyResultView,
+            props: true,
+            meta: {
+                authRequired: true,
+                userType: "medic",
+                roles: ["PERFIL_MEDICO_PACIENTES", "PERFIL_MEDICO_RESIDENTES"]
+            }
+        },
 
         // patient zerofootprint view / medic
         {
@@ -208,6 +236,32 @@ const router = createRouter({
             path: "/compartir-v2/zerofootprint-item/:id",
             name: "share-v2-patient-zerofootprint-item-view",
             component: V2ShareZeroItemView,
+            props: true,
+            meta: {
+                authRequired: false,
+                userType: "generic",
+                roles: []
+            }
+        },
+
+        // share cardiology result / medic
+        {
+            path: language === "es" ? "/compartir/:nhc/cardiologia/:url" : "/share/:nhc/cardiology/:url",
+            name: "share-cardiology-result-view",
+            component: ShareCardiologyResultView,
+            props: true,
+            meta: {
+                authRequired: false,
+                userType: "generic",
+                roles: []
+            }
+        },
+
+        // share pathology result / medic
+        {
+            path: language === "es" ? "/compartir/:nhc/patologia/:url" : "/share/:nhc/pathology/:url",
+            name: "share-pathology-result-view",
+            component: SharePathologyResultView,
             props: true,
             meta: {
                 authRequired: false,

@@ -35,6 +35,16 @@ export function resultadosImagenPaciente(nhc) {
   return patients.get(`${nhc}`)
 }
 
+export function resultadosCardiologiaPaciente(nhc) {
+  const patients = mande(`${baseURL}/pacientes/resultados-cardiologia`)
+  return patients.get(`${nhc}`)
+}
+
+export function resultadosPatologiaPaciente(nhc) {
+  const patients = mande(`${baseURL}/pacientes/resultados-patologia`)
+  return patients.get(`${nhc}`)
+}
+
 export function formularioPaciente(nhc, adm) {
   const patients = mande(`${baseURL}/medicos`)
   return patients.get(`formulario?nhcl=${nhc}&adm=${adm}`)
@@ -54,7 +64,6 @@ export function urlDocumentoLaboratorio(id) {
 
   return patients.get(`/pacientes/resultado/l?id=${encodeURIComponent(id)}`)
 }
-
 export function urlDocumentoImagen(id) {
   const patients = mande(baseURL)
 
@@ -70,6 +79,27 @@ export function urlDocumentoImagenShare(id) {
   const patients = mande(baseURL)
 
   return patients.get(`/res/pacientes/resultado/i?id=${encodeURIComponent(id)}`)
+}
+export function urlDocumentoCardiologia(id) {
+  const patients = mande(baseURL)
+
+  return patients.get(`/pacientes/resultado/i?id=${encodeURIComponent(id)}`)
+}
+export function urlDocumentoPatologia(id) {
+  const patients = mande(baseURL)
+
+  return patients.get(`/pacientes/resultado/patologia?id=${encodeURIComponent(id)}`)
+}
+export function urlDocumentoCardiologiaShare(id) {
+  const patients = mande(baseURL)
+
+  return patients.get(`/res/pacientes/resultado/i?id=${encodeURIComponent(id)}`)
+}
+
+export function urlDocumentoPatologiaShare(id) {
+  const patients = mande(baseURL)
+
+  return patients.get(`/res/pacientes/resultado/patologia?id=${encodeURIComponent(id)}`)
 }
 
 export function urlCurva(data) {
@@ -98,3 +128,5 @@ export function urlZfpItemShare(data) {
 
   return patients.post(data);
 }
+
+

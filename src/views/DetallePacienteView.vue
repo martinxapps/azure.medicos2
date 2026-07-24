@@ -27,7 +27,11 @@ import {
   formularioPaciente,
   urlDocumento,
   urlDocumentoImagen,
-  urlDocumentoLaboratorio
+  urlDocumentoLaboratorio,
+  resultadosCardiologiaPaciente,
+  resultadosPatologiaPaciente,
+  urlDocumentoCardiologia,
+  urlDocumentoPatologia
 } from '../services/patient'
 
 import { useNotification } from '@kyvg/vue3-notification'
@@ -49,6 +53,8 @@ const evPaciente = computed(() => patientDetailStore.evPaciente)
 const formsPaciente = computed(() => patientDetailStore.formsPaciente)
 const lab_results = computed(() => patientDetailStore.lab_results)
 const image_results = computed(() => patientDetailStore.image_results)
+const cardiology_results = computed(() => patientDetailStore.cardiology_results)
+const pathology_results = computed(() => patientDetailStore.pathology_results)
 const props = defineProps(['nhc'])
 const encryptedNHC = ref(props.nhc)
 const nhc = ref(null)
@@ -58,6 +64,8 @@ const isLoadingSV = ref(false)
 const isLoadingForms = ref(false)
 const isLoadingLab = ref(false)
 const isLoadingImage = ref(false)
+const isLoadingCardiology = ref(false)
+const isLoadingPathology = ref(false)
 const title = ref('Detalle del Paciente - MetroVirtual - Hospital Metropolitano')
 const route = useRoute()
 const router = useRouter()
@@ -244,6 +252,63 @@ const getPatientEV = async (nhc) => {
     isLoadingForms.value = false
   }
 }
+const getCardiologyResults = async (nhc) => {
+  // get patient lab results
+  try {
+    if (patientDetailStore.cardiology_results.length < 1) {
+      isLoadingCardiology.value = true
+    }
+    const response = await resultadosCardiologiaPaciente(nhc)
+    if (response.status) {
+      patientDetailStore.cardiology_results = response.data
+    } else {
+      patientDetailStore.cardiology_results = []
+      notify({
+        title: '¡Atención!',
+        text: 'No existen resultados de cardiología disponibles para este paciente',
+        type: 'info'
+      })
+    }
+    isLoadingCardiology.value = false
+  } catch (e) {
+    isLoadingCardiology.value = false
+    notify({
+      title: '¡Error!',
+      text: 'No se pudo cargar los resultados de cardiología para este paciente',
+      type: 'error'
+    })
+  }
+}
+const getPathologyResults = async (nhc) => {
+  // get patient lab results
+  try {
+    if (patientDetailStore.pathology_results.length < 1) {
+      isLoadingPathology.value = true
+    }
+
+    const response = await resultadosPatologiaPaciente(nhc)
+    if (response.status) {
+      patientDetailStore.pathology_results = response.data
+    } else {
+      patientDetailStore.pathology_results = []
+      notify({
+        title: '¡Atención!',
+        text: 'No existen resultados de patología disponibles para este paciente',
+        type: 'info'
+      })
+    }
+    isLoadingPathology.value = false
+  } catch (e) {
+    isLoadingPathology.value = false
+
+    notify({
+      title: '¡Error!',
+      text: 'No se pudo cargar los resultados de patología para este paciente',
+      type: 'error'
+    })
+  }
+}
+
 const getLabResults = (nhc) => {
   // get patient lab results
   if (patientDetailStore.lab_results.length < 1) {
@@ -378,6 +443,80 @@ const goBack = () => {
     router.back()
   }
 }
+const downloadCardiologyFile = (result) => {
+  if (result.urlPdf) {
+    notify({
+      title: 'Listo',
+      text: 'Se procederá con la descarga en unos segundos',
+      type: 'info'
+    })
+    const id = new URL(result.urlPdf).searchParams.get('id');
+
+    urlDocumentoCardiologia(id).then(async (response) => {
+      if (response.status) {
+        const link = document.createElement('a')
+        link.setAttribute('href', response.url)
+        // link.setAttribute('target', '_blank')
+        link.setAttribute('download', `${result.estudio}.pdf`)
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        notify({
+          title: 'Listo',
+          text: 'Resultado de Cardiología descargado',
+          type: 'success'
+        })
+        event('file_download', {
+          value: 'cardiología'
+        })
+      } else {
+        notify({
+          title: 'El archivo no esta disponible',
+          text: response.message,
+          type: 'error'
+        })
+      }
+    })
+  }
+}
+const downloadPathologyFile = (labResult) => {
+  if (labResult.deep_link) {
+    notify({
+      title: 'Listo',
+      text: 'Se procederá con la descarga en unos segundos',
+      type: 'info'
+    })
+    const id = labResult.deep_link.split('/')[3]
+
+    urlDocumentoPatologia(id).then(async (response) => {
+      if (response.status) {
+        const link = document.createElement('a')
+        link.setAttribute('href', response.url)
+        // link.setAttribute('target', '_blank')
+        link.setAttribute('download', `${labResult.ID_STUDIO}.pdf`)
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        notify({
+          title: 'Listo',
+          text: 'Resultado de patología descargado',
+          type: 'success'
+        })
+        event('file_download', {
+          value: 'patología'
+        })
+      } else {
+        notify({
+          title: 'El archivo no esta disponible',
+          text: response.message,
+          type: 'error'
+        })
+      }
+    })
+  }
+}
 const downloadLabFile = (labResult) => {
   if (labResult.deep_link) {
     notify({
@@ -454,6 +593,73 @@ const downloadImageFile = (imageResult) => {
   }
 }
 
+const goToPathologyResult = async (result) => {
+  let split = result.deep_link.split('/')
+  // let url = router.resolve({
+  //   name: "medic-patient-lab-result-view",
+  //   params: { url: split[3], nhc: nhc.value },
+  //   query: { prev: "detalle-paciente" }
+  // });
+  // window.open(url.href, "_blank");
+  event('see_pathology_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  })
+  await router.push({
+    name: 'medic-patient-pathology-result-view',
+    params: { url: split[3], nhc: encryptedNHC.value },
+    query: { prev: 'detalle-paciente' }
+  })
+}
+const goToPathologyResultCtrl = async (result) => {
+  let split = result.deep_link.split('/')
+  event('see_pathology_result', {
+    nhc: nhc.value,
+    uuid: split[3]
+  })
+  let url = router.resolve({
+    name: 'medic-patient-pathology-result-view',
+    params: { url: split[3], nhc: encryptedNHC.value },
+    query: { prev: 'detalle-paciente' }
+  })
+  window.open(url.href, '_blank')
+  // await router.push({
+  //   name: "medic-patient-lab-result-view",
+  //   params: { url: split[3], nhc: nhc.value },
+  //   query: { prev: "detalle-paciente" }
+  // });
+}
+const goToCardiologyResult = async (result) => {
+
+  const id = new URL(result.urlPdf).searchParams.get('id');
+  event('see_cardiology_result', {
+    nhc: nhc.value,
+    uuid: id
+  })
+  await router.push({
+    name: 'medic-patient-cardiology-result-view',
+    params: { url: id, nhc: encryptedNHC.value },
+    query: { prev: 'detalle-paciente' }
+  })
+}
+const goToCardiologyResultCtrl = async (result) => {
+  const id = new URL(result.urlPdf).searchParams.get('id');
+  event('see_cardiology_result', {
+    nhc: nhc.value,
+    uuid: id
+  })
+  let url = router.resolve({
+    name: 'medic-patient-cardiology-result-view',
+    params: { url: id, nhc: encryptedNHC.value },
+    query: { prev: 'detalle-paciente' }
+  })
+  window.open(url.href, '_blank')
+  // await router.push({
+  //   name: "medic-patient-lab-result-view",
+  //   params: { url: split[3], nhc: nhc.value },
+  //   query: { prev: "detalle-paciente" }
+  // });
+}
 const goToLabResult = async (result) => {
   let split = result.deep_link.split('/')
   // let url = router.resolve({
@@ -599,12 +805,14 @@ const goToImageResultCtrl = async (result) => {
 }
 
 onMounted(async () => {
-  nhc.value = await decryptId(encryptedNHC.value);
+  nhc.value = await decryptId(encryptedNHC.value)
   if (nhc.value) {
     getPatientDetails(nhc.value)
     getPatientSV(nhc.value)
     getLabResults(nhc.value)
     getImageResults(nhc.value)
+    getCardiologyResults(nhc.value)
+    //getPathologyResults(nhc.value)
     await getPatientEV(nhc.value)
   } else {
     await router.replace({ name: 'mis-pacientes' })
@@ -805,6 +1013,38 @@ onMounted(async () => {
                   Imagen
                 </button>
               </li>
+              <li class="nav-item tab-hm" role="presentation">
+                <button
+                  class="nav-link nav-hm pl-0"
+                  id="cardiology-tab"
+                  data-toggle="tab"
+                  :class="{ active: patientDetailStore.activeTabPaciente === 4 }"
+                  @click="patientDetailStore.activeTabPaciente = 4"
+                  data-target="#cardiology"
+                  type="button"
+                  role="tab"
+                  aria-controls="cardiology"
+                  aria-selected="true"
+                >
+                  Cardiología
+                </button>
+              </li>
+<!--              <li class="nav-item tab-hm" role="presentation">-->
+<!--                <button-->
+<!--                  class="nav-link nav-hm pl-0"-->
+<!--                  id="pathology-tab"-->
+<!--                  data-toggle="tab"-->
+<!--                  :class="{ active: patientDetailStore.activeTabPaciente === 5 }"-->
+<!--                  @click="patientDetailStore.activeTabPaciente = 5"-->
+<!--                  data-target="#pathology"-->
+<!--                  type="button"-->
+<!--                  role="tab"-->
+<!--                  aria-controls="pathology"-->
+<!--                  aria-selected="false"-->
+<!--                >-->
+<!--                  Patología-->
+<!--                </button>-->
+<!--              </li>-->
             </ul>
             <div class="tab-content" id="PatientTabContent">
               <div
@@ -1255,6 +1495,204 @@ onMounted(async () => {
                             class="my-1 p-4 row cursor-pointer text-left border-result hover-list-element"
                           >
                             <p class="title-results m-4"><b>Ver Informes</b></p>
+                          </div>
+                        </template>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="tab-pane fade"
+                id="cardiology"
+                role="tabpanel"
+                :class="{
+                  active: patientDetailStore.activeTabPaciente === 4,
+                  show: patientDetailStore.activeTabPaciente === 4
+                }"
+                aria-labelledby="cardiology-tab"
+              >
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-12 py-4">
+                      <template v-if="isLoadingCardiology">
+                        <div class="d-flex justify-content-center">
+                          <img class="img-fluid" src="@/assets/loading.gif" alt="Loading Hm" />
+                        </div>
+                      </template>
+                      <template v-else>
+                        <template v-if="cardiology_results.length > 0">
+                          <div
+                            class="my-1 py-2 row text-left border-result hover-list-element"
+                            v-for="(cardiologyResult, cardiologyResultKey) in cardiology_results"
+                            :key="cardiologyResultKey"
+                          >
+                            <div class="col-9">
+                              <p class="title-results">
+                                <b>{{ cardiologyResult?.estudio }}</b>
+                              </p>
+                              <p class="text-results">{{ cardiologyResult?.fechaHora }}</p>
+                              <p class="text-results"><b>Médico:</b> {{ cardiologyResult?.nombreMedico }}</p>
+
+                              <p style="color: #ff8201" class="text-results">Cardiología</p>
+                            </div>
+                            <div class="col-3 d-flex flex-column flex-md-row justify-content-end">
+                              <div
+                                class="cursor-pointer"
+                                title="Ver resultado"
+                                style="display: inline-block"
+                                @click.exact="goToCardiologyResult(cardiologyResult)"
+                                @click.ctrl="goToCardiologyResultCtrl(cardiologyResult)"
+                              >
+                                <div class="py-3 p-md-4">
+                                  <font-awesome-icon
+                                    :icon="['fas', 'eye']"
+                                    size="2x"
+                                    class="icon-device"
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                @click="downloadCardiologyFile(cardiologyResult)"
+                                class="cursor-pointer"
+                                title="Descargar resultado"
+                              >
+                                <div class="p-0 p-md-4">
+                                  <font-awesome-icon
+                                    :icon="['fas', 'download']"
+                                    size="2x"
+                                    class="icon-device"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <div class="my-3 py-3 text-center">
+                            <h4 class="center text-search">
+                              No existen resultados de cardiología disponibles para este paciente.
+                            </h4>
+                          </div>
+                        </template>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="pathology"
+                role="tabpanel"
+                :class="{
+                  active: patientDetailStore.activeTabPaciente === 5,
+                  show: patientDetailStore.activeTabPaciente === 5
+                }"
+                aria-labelledby="pathology-tab"
+              >
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-12 py-4">
+                      <template v-if="isLoadingPathology">
+                        <div class="d-flex justify-content-center">
+                          <img class="img-fluid" src="@/assets/loading.gif" alt="Loading Hm" />
+                        </div>
+                      </template>
+                      <template v-else>
+                        <template v-if="pathology_results.length > 0">
+                          <div
+                            class="my-1 py-2 row text-left border-result hover-list-element"
+                            v-for="(pathologyResult, pathologyResultKey) in pathology_results"
+                            :key="pathologyResultKey"
+                          >
+                            <div class="col-9">
+                              <p class="title-results">
+                                <b>{{ pathologyResult?.ORIGEN }}</b>
+                                <span
+                                  class="p-2 mx-2 pill"
+                                  v-if="isWithin24Hours(pathologyResult?.fecha_)"
+                                  :class="{
+                                    gray:
+                                      pathologyResult?.IsOrderValidated === 'false' ||
+                                      !pathologyResult?.IsOrderValidated,
+                                    orange:
+                                      pathologyResult?.IsOrderValidated ||
+                                      pathologyResult?.IsOrderValidated === 'true'
+                                  }"
+                                >
+                                  {{ getWord(pathologyResult?.IsOrderValidated) }}
+                                </span>
+                              </p>
+                              <p class="text-results">{{ pathologyResult?.FECHA }}</p>
+                              <p class="text-results">
+                                <b>Médico:</b> {{ pathologyResult?.MEDICO }}
+                              </p>
+                              <div
+                                class="flex cursor-pointer"
+                                @click="pathologyResult.isOpen = !pathologyResult.isOpen"
+                              >
+                                <font-awesome-icon class="px-1" :icon="['fas', 'list']" />
+                                Exámenes solicitados
+                                <font-awesome-icon
+                                  class="px-2"
+                                  :icon="[
+                                    'fas',
+                                    pathologyResult.isOpen ? 'chevron-up' : 'chevron-down'
+                                  ]"
+                                />
+                              </div>
+                              <template v-if="pathologyResult.isOpen">
+                                <hr class="my-1" />
+                                <div class="row px-3 py-1">
+                                  <ul
+                                    class="col-12 col-md-6 m-0"
+                                    v-for="(exam, key) in pathologyResult.examenes"
+                                    v-bind:key="key"
+                                  >
+                                    <li class="m-0 small-font">{{ exam }}</li>
+                                  </ul>
+                                </div>
+                              </template>
+                              <p style="color: #ff8201" class="text-results">Patología</p>
+                            </div>
+                            <div class="col-3 d-flex flex-column flex-md-row justify-content-end">
+                              <div
+                                class="cursor-pointer"
+                                title="Ver resultado"
+                                style="display: inline-block"
+                                @click.exact="goToPathologyResult(pathologyResult)"
+                                @click.ctrl="goToPathologyResultCtrl(pathologyResult)"
+                              >
+                                <div class="py-3 p-md-4">
+                                  <font-awesome-icon
+                                    :icon="['fas', 'eye']"
+                                    size="2x"
+                                    class="icon-device"
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                @click="downloadPathologyFile(pathologyResult)"
+                                class="cursor-pointer"
+                                title="Descargar resultado"
+                              >
+                                <div class="p-0 p-md-4">
+                                  <font-awesome-icon
+                                    :icon="['fas', 'download']"
+                                    size="2x"
+                                    class="icon-device"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <div class="my-3 py-3 text-center">
+                            <h4 class="center text-search">
+                              No existen resultados de patología disponibles para este paciente.
+                            </h4>
                           </div>
                         </template>
                       </template>

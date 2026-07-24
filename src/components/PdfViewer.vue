@@ -5,7 +5,7 @@ import printJS from "print-js";
 
 import { useNotification } from "@kyvg/vue3-notification";
 import {event} from "vue-gtag";
-import {encryptId} from "../services/security";
+import {encryptId} from '@/services/security';
 const { notify } = useNotification();
 const pdfRef = ref(null);
 
@@ -121,6 +121,14 @@ onMounted(async () => {
      case 'imagen':
        subject.value = 'MetroVirtual%20Resultado%20de%20Imagen'
        stringVal.value = 'Resultado%20de%20Imagen'
+       break;
+     case 'cardiologia':
+       subject.value = 'MetroVirtual%20Resultado%20de%20Cardiología'
+       stringVal.value = 'Resultado%20de%20Cardiología'
+       break;
+     case 'patologia':
+       subject.value = 'MetroVirtual%20Resultado%20de%20Patología'
+       stringVal.value = 'Resultado%20de%20Patología'
        break;
       default:
         subject.value = 'MetroVirtual%20Resultado'
