@@ -4,10 +4,12 @@ import { useAuthStore } from '../stores/auth'
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
+  resultadosCardiologiaPaciente,
   resultadosImagenPaciente,
   resultadosLaboratorioPaciente,
   statusPacienteEmergencia,
   urlDocumento,
+  urlDocumentoCardiologia,
   urlDocumentoImagen,
   urlDocumentoLaboratorio
 } from '../services/patient'
@@ -26,14 +28,18 @@ const patient = computed(() => patientResultsStore.patient)
 const patientResultsStore = usePatientResultsStore()
 const lab_results = computed(() => patientResultsStore.lab_results)
 const image_results = computed(() => patientResultsStore.image_results)
+const cardiology_results = computed(() => patientResultsStore.cardiology_results)
 let isLoadingLab = ref(false)
 let isLoadingImage = ref(false)
+let isLoadingCardiology = ref(false)
 const router = useRouter()
 const route = useRoute()
 const props = defineProps(['nhc'])
 const encryptedNHC = ref(props.nhc)
 const nhc = ref(null)
-const title = ref('Resultados de Imagen y Laboratorio - MetroVirtual - Hospital Metropolitano')
+const title = ref(
+  'Resultados de Imagen, Laboratorio y Cardiología - MetroVirtual - Hospital Metropolitano'
+)
 
 const getLabResults = (nhc) => {
   // get patient lab results
@@ -74,6 +80,30 @@ const getImageResults = (nhc) => {
       notify({
         title: '¡Atención!',
         text: 'No existen resultados de imagen disponibles para este paciente',
+        type: 'info'
+      })
+    }
+  })
+}
+const getCardiologyResults = (nhc) => {
+  // get patient lab results
+  if (cardiology_results.value.length < 1) {
+    isLoadingCardiology.value = true
+  }
+  resultadosCardiologiaPaciente(nhc).then((response) => {
+    isLoadingCardiology.value = false
+    if (response.status) {
+      // image_results.value = response.data.map((image_result) => {
+      //   let newIr = image_result;
+      //   newIr.fecha_ = `${image_result.FECHA.substring(6, 10)}-${image_result.FECHA.substring(3, 5)}-${image_result.FECHA.substring(0, 2)}`;
+      //   return newIr;
+      // });
+      patientResultsStore.cardiology_results = response.data
+    } else {
+      patientResultsStore.cardiology_results = []
+      notify({
+        title: '¡Atención!',
+        text: 'No existen resultados de cardilogía disponibles para este paciente',
         type: 'info'
       })
     }
@@ -161,6 +191,38 @@ const goToLabResultCtrl = async (result) => {
   window.open(url.href, '_blank')
   // await router.push({name: 'medic-lab-result-view', params: {url: split[3], nhc: nhc.value}});
 }
+
+const goToCardiologyResult = async (result) => {
+  const id = new URL(result.urlPdf).searchParams.get('id')
+  event('see_cardiology_result', {
+    nhc: nhc.value,
+    uuid: id
+  })
+  await router.push({
+    name: 'medic-patient-cardiology-result-view',
+    params: { url: id, nhc: encryptedNHC.value },
+    query: { prev: 'detalle-paciente' }
+  })
+}
+const goToCardiologyResultCtrl = async (result) => {
+  const id = new URL(result.urlPdf).searchParams.get('id')
+  event('see_cardiology_result', {
+    nhc: nhc.value,
+    uuid: id
+  })
+  let url = router.resolve({
+    name: 'medic-patient-cardiology-result-view',
+    params: { url: id, nhc: encryptedNHC.value },
+    query: { prev: 'detalle-paciente' }
+  })
+  window.open(url.href, '_blank')
+  // await router.push({
+  //   name: "medic-patient-lab-result-view",
+  //   params: { url: split[3], nhc: nhc.value },
+  //   query: { prev: "detalle-paciente" }
+  // });
+}
+
 const goToZero = async () => {
   // let url = router.resolve({
   //   name: "medic-patient-zerofootprint-view",
@@ -280,6 +342,47 @@ const downloadImageFile = (imageResult) => {
     })
   }
 }
+const downloadCardiologyFile = (cardiologyResult) => {
+  console.log('cardiologyResult', cardiologyResult)
+  if (cardiologyResult.urlPdf) {
+    notify({
+      title: 'Listo',
+      text: 'Se procederá con la descarga en unos segundos',
+      type: 'info'
+    })
+
+    const id = new URL(cardiologyResult.urlPdf).searchParams.get('id')
+    console.log('imageResult id', id)
+
+    urlDocumentoCardiologia(id).then(async (response) => {
+      if (response.status) {
+        const link = document.createElement('a')
+        link.setAttribute('href', response.url)
+        // link.setAttribute('target', '_blank')
+        const d = new Date()
+        link.setAttribute('download', `${cardiologyResult.estudio}.pdf`)
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        notify({
+          title: 'Listo',
+          text: 'Resultado de cardiología descargado',
+          type: 'success'
+        })
+        event('file_download', {
+          value: 'imagen'
+        })
+      } else {
+        notify({
+          title: 'El archivo no esta disponible',
+          text: response.message,
+          type: 'error'
+        })
+      }
+    })
+  }
+}
 const downloadLabFile = (labResult) => {
   console.log('labResult', labResult)
   if (labResult.deep_link) {
@@ -323,10 +426,10 @@ const downloadLabFile = (labResult) => {
 onMounted(async () => {
   nhc.value = await decryptId(encryptedNHC.value)
   if (nhc.value) {
-
     getPatientDetails(nhc.value)
     getLabResults(nhc.value)
     getImageResults(nhc.value)
+    getCardiologyResults(nhc.value)
   }
 })
 </script>
@@ -359,7 +462,7 @@ onMounted(async () => {
                   class="d-flex text-headerv2 mt-1"
                   style="text-align: left; color: #05305d; font-weight: 600"
                 >
-                  Resultados de Imagen y Laboratorio<br />
+                  Resultados de Imagen, Laboratorio y Cardiología<br />
                   {{ patient?.NOMBRES }} {{ patient?.APELLIDOS }}
                 </h4>
               </div>
@@ -419,6 +522,22 @@ onMounted(async () => {
                   aria-selected="false"
                 >
                   Imagen <span class="bg-number">{{ image_results.length }}</span>
+                </button>
+              </li>
+              <li class="nav-item tab-hm" role="presentation">
+                <button
+                  class="nav-link nav-hm"
+                  id="cardiology-tab"
+                  data-toggle="tab"
+                  :class="{ active: patientResultsStore.activeTab === 2 }"
+                  @click="patientResultsStore.activeTab = 2"
+                  data-target="#cardiology"
+                  type="button"
+                  role="tab"
+                  aria-controls="cardiology"
+                  aria-selected="false"
+                >
+                  Cardiología <span class="bg-number">{{ cardiology_results.length }}</span>
                 </button>
               </li>
             </ul>
@@ -659,6 +778,86 @@ onMounted(async () => {
                             class="my-1 p-4 row cursor-pointer text-left border-result hover-list-element"
                           >
                             <p class="title-results m-4"><b>Ver Informes</b></p>
+                          </div>
+                        </template>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="tab-pane fade"
+                id="cardiology"
+                role="tabpanel"
+                :class="{
+                  active: patientResultsStore.activeTab === 2,
+                  show: patientResultsStore.activeTab === 2
+                }"
+                aria-labelledby="cardiology-tab"
+              >
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-12 p-4">
+                      <template v-if="isLoadingCardiology">
+                        <div class="d-flex justify-content-center">
+                          <img class="img-fluid" src="@/assets/loading.gif" alt="Loading Hm" />
+                        </div>
+                      </template>
+                      <template v-else>
+                        <template v-if="cardiology_results.length > 0">
+                          <div
+                            class="my-1 py-2 row text-left border-result hover-list-element"
+                            v-for="(cardiologyResult, cardiologyResultKey) in cardiology_results"
+                            :key="cardiologyResultKey"
+                          >
+                            <div class="col-9">
+                              <p class="title-results">
+                                <b>{{ cardiologyResult?.estudio }}</b>
+                              </p>
+                              <p class="text-results">{{ cardiologyResult?.fechaHora }}</p>
+                              <p class="text-results">
+                                <b>Médico:</b> {{ cardiologyResult?.nombreMedico }}
+                              </p>
+                              <p style="color: #ff8201">Cardiología</p>
+                            </div>
+                            <div class="col-3 d-flex flex-column flex-md-row justify-content-end">
+                              <div
+                                class="cursor-pointer"
+                                title="Ver resultado"
+                                style="display: inline-block"
+                                @click.exact="goToCardiologyResult(cardiologyResult)"
+                                @click.ctrl="goToCardiologyResultCtrl(cardiologyResult)"
+                              >
+                                <div class="p-2 p-md-4">
+                                  <font-awesome-icon
+                                    :icon="['fas', 'eye']"
+                                    size="2x"
+                                    class="icon-device"
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                @click="downloadCardiologyFile(cardiologyResult)"
+                                class="cursor-pointer"
+                                title="Descargar resultado"
+                              >
+                                <div class="p-2 p-md-4">
+                                  <font-awesome-icon
+                                    :icon="['fas', 'download']"
+                                    size="2x"
+                                    class="icon-device"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <div class="my-3 py-3 text-center">
+                            <h4 class="center text-search">
+                              No existen resultados de cardiología disponibles para este paciente.
+                            </h4>
                           </div>
                         </template>
                       </template>

@@ -1,23 +1,25 @@
-import {defineStore} from 'pinia';
+import { defineStore } from 'pinia'
 // searchPage
-export let usePatientResultsStore;
+export let usePatientResultsStore
 usePatientResultsStore = defineStore({
-    id: 'PatientResults',
-    getters: {},
-    actions: {
-        clearPatientResults() {
-            this.patient = null;
-            this.lab_results = [];
-            this.image_results = [];
-            this.activeTab = 0;
-            this.seeImages = false;
-        },
-    },
-    state: () => ({
-        patient: null,
-        lab_results: [],
-        image_results: [],
-        activeTab: 0,
-        seeImages: false,
-    }),
-});
+  id: 'PatientResults',
+  getters: {},
+  actions: {
+    clearPatientResults() {
+      this.patient = null
+      this.lab_results = []
+      this.image_results = []
+      this.cardiology_results = []
+      this.activeTab = 0
+      this.seeImages = false
+    }
+  },
+  state: () => ({
+    patient: null,
+    lab_results: [],
+    image_results: [],
+    cardiology_results: [],
+    activeTab: 0,
+    seeImages: false
+  })
+})
