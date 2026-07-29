@@ -85,12 +85,23 @@ const downloadPdf = () => {
 
 const printPdf = async () => {
   try {
-    console.log("src", src.value);
-    let resPrint = await printJS({ printable: src.value, type: "pdf", showModal: true });
-    console.log("res", resPrint);
+    const value = src.value;
+
+    const isBase64 = value.startsWith('data:application/pdf;base64,') ||
+      (!value.startsWith('http') && !value.startsWith('/'));
+
+    await printJS({
+      printable: isBase64
+        ? value.replace(/^data:application\/pdf;base64,/, '')
+        : value,
+      type: 'pdf',
+      base64: isBase64,
+      showModal: true
+    });
+
     event('print');
   } catch (e) {
-    console.log("e", e);
+    console.error(e);
     notify({
       title: "Hubo un error al imprimir",
       type: "error"
