@@ -285,8 +285,10 @@ const getPathologyResults = async (nhc) => {
     if (patientDetailStore.pathology_results.length < 1) {
       isLoadingPathology.value = true
     }
-
-    const response = await resultadosPatologiaPaciente(nhc)
+    const formattedNhc = nhc?.endsWith('01')
+      ? nhc.slice(0, -2)
+      : nhc
+    const response = await resultadosPatologiaPaciente(formattedNhc)
     if (response.status) {
       patientDetailStore.pathology_results = response.data
     } else {
@@ -443,6 +445,7 @@ const goBack = () => {
     router.back()
   }
 }
+
 const downloadCardiologyFile = (result) => {
   if (result.urlPdf) {
     notify({
@@ -480,21 +483,22 @@ const downloadCardiologyFile = (result) => {
     })
   }
 }
-const downloadPathologyFile = (labResult) => {
-  if (labResult.deep_link) {
+
+const downloadPathologyFile = (result) => {
+  if (result.pedidoId) {
     notify({
       title: 'Listo',
       text: 'Se procederá con la descarga en unos segundos',
       type: 'info'
     })
-    const id = labResult.deep_link.split('/')[3]
 
-    urlDocumentoPatologia(id).then(async (response) => {
+
+    urlDocumentoPatologia(result.pedidoId).then(async (response) => {
       if (response.status) {
         const link = document.createElement('a')
-        link.setAttribute('href', response.url)
+        link.setAttribute('href', response.pdfBase64)
         // link.setAttribute('target', '_blank')
-        link.setAttribute('download', `${labResult.ID_STUDIO}.pdf`)
+        link.setAttribute('download', `${result.examName}.pdf`)
         link.style.display = 'none'
         document.body.appendChild(link)
         link.click()
@@ -594,40 +598,29 @@ const downloadImageFile = (imageResult) => {
 }
 
 const goToPathologyResult = async (result) => {
-  let split = result.deep_link.split('/')
-  // let url = router.resolve({
-  //   name: "medic-patient-lab-result-view",
-  //   params: { url: split[3], nhc: nhc.value },
-  //   query: { prev: "detalle-paciente" }
-  // });
-  // window.open(url.href, "_blank");
   event('see_pathology_result', {
     nhc: nhc.value,
-    uuid: split[3]
+    uuid: result.pedidoId
   })
   await router.push({
     name: 'medic-patient-pathology-result-view',
-    params: { url: split[3], nhc: encryptedNHC.value },
+    params: { url: result.pedidoId, nhc: encryptedNHC.value },
     query: { prev: 'detalle-paciente' }
   })
 }
 const goToPathologyResultCtrl = async (result) => {
-  let split = result.deep_link.split('/')
+
   event('see_pathology_result', {
     nhc: nhc.value,
-    uuid: split[3]
+    uuid: result.pedidoId
   })
   let url = router.resolve({
     name: 'medic-patient-pathology-result-view',
-    params: { url: split[3], nhc: encryptedNHC.value },
+    params: { url: result.pedidoId, nhc: encryptedNHC.value },
     query: { prev: 'detalle-paciente' }
   })
   window.open(url.href, '_blank')
-  // await router.push({
-  //   name: "medic-patient-lab-result-view",
-  //   params: { url: split[3], nhc: nhc.value },
-  //   query: { prev: "detalle-paciente" }
-  // });
+
 }
 const goToCardiologyResult = async (result) => {
 
@@ -812,7 +805,7 @@ onMounted(async () => {
     getLabResults(nhc.value)
     getImageResults(nhc.value)
     getCardiologyResults(nhc.value)
-    //getPathologyResults(nhc.value)
+    getPathologyResults(nhc.value)
     await getPatientEV(nhc.value)
   } else {
     await router.replace({ name: 'mis-pacientes' })
@@ -1029,22 +1022,22 @@ onMounted(async () => {
                   Cardiología
                 </button>
               </li>
-<!--              <li class="nav-item tab-hm" role="presentation">-->
-<!--                <button-->
-<!--                  class="nav-link nav-hm pl-0"-->
-<!--                  id="pathology-tab"-->
-<!--                  data-toggle="tab"-->
-<!--                  :class="{ active: patientDetailStore.activeTabPaciente === 5 }"-->
-<!--                  @click="patientDetailStore.activeTabPaciente = 5"-->
-<!--                  data-target="#pathology"-->
-<!--                  type="button"-->
-<!--                  role="tab"-->
-<!--                  aria-controls="pathology"-->
-<!--                  aria-selected="false"-->
-<!--                >-->
-<!--                  Patología-->
-<!--                </button>-->
-<!--              </li>-->
+              <li class="nav-item tab-hm" role="presentation">
+                <button
+                  class="nav-link nav-hm pl-0"
+                  id="pathology-tab"
+                  data-toggle="tab"
+                  :class="{ active: patientDetailStore.activeTabPaciente === 5 }"
+                  @click="patientDetailStore.activeTabPaciente = 5"
+                  data-target="#pathology"
+                  type="button"
+                  role="tab"
+                  aria-controls="pathology"
+                  aria-selected="false"
+                >
+                  Patología
+                </button>
+              </li>
             </ul>
             <div class="tab-content" id="PatientTabContent">
               <div
@@ -1608,54 +1601,15 @@ onMounted(async () => {
                           >
                             <div class="col-9">
                               <p class="title-results">
-                                <b>{{ pathologyResult?.ORIGEN }}</b>
-                                <span
-                                  class="p-2 mx-2 pill"
-                                  v-if="isWithin24Hours(pathologyResult?.fecha_)"
-                                  :class="{
-                                    gray:
-                                      pathologyResult?.IsOrderValidated === 'false' ||
-                                      !pathologyResult?.IsOrderValidated,
-                                    orange:
-                                      pathologyResult?.IsOrderValidated ||
-                                      pathologyResult?.IsOrderValidated === 'true'
-                                  }"
-                                >
-                                  {{ getWord(pathologyResult?.IsOrderValidated) }}
-                                </span>
+                                <b>{{ pathologyResult?.examName }}</b>
                               </p>
-                              <p class="text-results">{{ pathologyResult?.FECHA }}</p>
+                              <p class="text-results">{{ pathologyResult?.datePedido }} {{ pathologyResult?.hourPedido }}</p>
                               <p class="text-results">
-                                <b>Médico:</b> {{ pathologyResult?.MEDICO }}
+                                <b>Médico:</b> {{ pathologyResult?.doctorNme }}
                               </p>
-                              <div
-                                class="flex cursor-pointer"
-                                @click="pathologyResult.isOpen = !pathologyResult.isOpen"
-                              >
-                                <font-awesome-icon class="px-1" :icon="['fas', 'list']" />
-                                Exámenes solicitados
-                                <font-awesome-icon
-                                  class="px-2"
-                                  :icon="[
-                                    'fas',
-                                    pathologyResult.isOpen ? 'chevron-up' : 'chevron-down'
-                                  ]"
-                                />
-                              </div>
-                              <template v-if="pathologyResult.isOpen">
-                                <hr class="my-1" />
-                                <div class="row px-3 py-1">
-                                  <ul
-                                    class="col-12 col-md-6 m-0"
-                                    v-for="(exam, key) in pathologyResult.examenes"
-                                    v-bind:key="key"
-                                  >
-                                    <li class="m-0 small-font">{{ exam }}</li>
-                                  </ul>
-                                </div>
-                              </template>
                               <p style="color: #ff8201" class="text-results">Patología</p>
                             </div>
+
                             <div class="col-3 d-flex flex-column flex-md-row justify-content-end">
                               <div
                                 class="cursor-pointer"

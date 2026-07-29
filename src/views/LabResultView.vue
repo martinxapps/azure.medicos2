@@ -26,8 +26,9 @@ const nhc = ref(null);
 const url = ref(props.url);
 const title = ref("Resultado de Laboratorio - Metrovirtual - Hospital Metropolitano");
 
-onMounted(() => {
+onMounted(async () => {
   screenview('Resultado de Laboratorio');
+  nhc.value = await decryptId(encryptedNHC.value);
   getUrl(url.value);
   getPatientDetails(nhc.value);
 
@@ -35,7 +36,7 @@ onMounted(() => {
 const getPatientDetails = async (nhc) => {
   try {
     // get patient status
-    nhc.value = await decryptId(encryptedNHC.value);
+
 
     statusPacienteEmergencia(nhc).then((response) => {
       if (response.status) {

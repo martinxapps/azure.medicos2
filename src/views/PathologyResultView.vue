@@ -3,7 +3,7 @@ import FooterMedico from "../components/FooterMedico.vue";
 //import { useAuthStore } from "../stores/auth";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { statusPacienteEmergencia, urlDocumento, urlDocumentoPatologia } from "../services/patient";
+import { statusPacienteEmergencia, urlDocumento, urlDocumentoPatologia } from '@/services/patient';
 import PdfViewer from "../components/PdfViewer.vue";
 import { useNotification } from "@kyvg/vue3-notification";
 import {screenview} from "vue-gtag";
@@ -26,8 +26,10 @@ const nhc = ref(null);
 const url = ref(props.url);
 const title = ref("Resultado de Patología - Metrovirtual - Hospital Metropolitano");
 
-onMounted(() => {
+onMounted(async() => {
   screenview('Resultado de Patología');
+  nhc.value = await decryptId(encryptedNHC.value);
+
   getUrl(url.value);
   getPatientDetails(nhc.value);
 
@@ -35,7 +37,6 @@ onMounted(() => {
 const getPatientDetails = async (nhc) => {
   try {
     // get patient status
-    nhc.value = await decryptId(encryptedNHC.value);
 
     statusPacienteEmergencia(nhc).then((response) => {
       if (response.status) {
@@ -73,7 +74,7 @@ const getUrl = async (url) => {
       let response = await urlDocumentoPatologia(url);
       console.log("response", response);
       if (response.status) {
-        src.value = response.url;
+        src.value = response.pdfBase64;
         isAvailable.value = true;
       } else {
         isAvailable.value = false;
@@ -145,7 +146,7 @@ const getUrl = async (url) => {
             </template>
             <template v-else>
               <template v-if="isAvailable">
-                <pdf-viewer :url="src" :nhc="nhc" :name="'resultado_patologia'" :id="url"
+                <pdf-viewer :url="'data:application/pdf;base64,'+src" :nhc="nhc" :name="'resultado_patologia'" :id="url"
                             :type="'patologia'" :share="false"/>
               </template>
               <template v-else>

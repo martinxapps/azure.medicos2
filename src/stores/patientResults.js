@@ -10,6 +10,7 @@ usePatientResultsStore = defineStore({
       this.lab_results = []
       this.image_results = []
       this.cardiology_results = []
+      this.pathology_results = []
       this.activeTab = 0
       this.seeImages = false
     }
@@ -19,6 +20,7 @@ usePatientResultsStore = defineStore({
     lab_results: [],
     image_results: [],
     cardiology_results: [],
+    pathology_results: [],
     activeTab: 0,
     seeImages: false
   })
