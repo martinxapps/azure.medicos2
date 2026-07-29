@@ -90,7 +90,7 @@ const printPdf = async () => {
     const isBase64 = value.startsWith('data:application/pdf;base64,') ||
       (!value.startsWith('http') && !value.startsWith('/'));
 
-    await printJS({
+    printJS({
       printable: isBase64
         ? value.replace(/^data:application\/pdf;base64,/, '')
         : value,
@@ -138,6 +138,7 @@ onMounted(async () => {
        stringVal.value = 'Resultado%20de%20Cardiología'
        break;
      case 'patologia':
+     case 'patología':
        subject.value = 'MetroVirtual%20Resultado%20de%20Patología'
        stringVal.value = 'Resultado%20de%20Patología'
        break;

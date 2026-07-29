@@ -32,7 +32,7 @@ import {
   resultadosPatologiaPaciente,
   urlDocumentoCardiologia,
   urlDocumentoPatologia
-} from '../services/patient'
+} from '@/services/patient'
 
 import { useNotification } from '@kyvg/vue3-notification'
 import Form005Viewer from '../components/Form005Viewer.vue'
@@ -1602,6 +1602,12 @@ onMounted(async () => {
                             <div class="col-9">
                               <p class="title-results">
                                 <b>{{ pathologyResult?.examName }}</b>
+                                <span
+                                  class="p-2 mx-2 pill orange"
+                                  v-if="isWithin24Hours(pathologyResult?.datePedido)"
+                                >
+                                  Nuevo
+                                </span>
                               </p>
                               <p class="text-results">{{ pathologyResult?.datePedido }} {{ pathologyResult?.hourPedido }}</p>
                               <p class="text-results">
