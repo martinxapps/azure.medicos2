@@ -83,12 +83,12 @@ export function urlDocumentoImagenShare(id) {
 export function urlDocumentoCardiologia(id) {
   const patients = mande(baseURL)
 
-  return patients.get(`/res/pacientes/resultado/i?id=${encodeURIComponent(id)}`)
+  return patients.get(`/pacientes/resultado/i?id=${encodeURIComponent(id)}`)
 }
 export function urlDocumentoPatologia(id) {
   const patients = mande(baseURL)
 
-  return patients.get(`/res/pacientes/resultado/patologia?id=${encodeURIComponent(id)}`)
+  return patients.get(`/pacientes/resultado/patologia?id=${encodeURIComponent(id)}`)
 }
 export function urlDocumentoCardiologiaShare(id) {
   const patients = mande(baseURL)
