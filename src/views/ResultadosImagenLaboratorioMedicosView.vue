@@ -1052,7 +1052,7 @@ onMounted(async () => {
                         <template v-else>
                           <div class="my-3 py-3 text-center">
                             <h4 class="center text-search">
-                              No existen resultados de cardiología disponibles para este paciente.
+                              No existen resultados de patología disponibles para este paciente.
                             </h4>
                           </div>
                         </template>
