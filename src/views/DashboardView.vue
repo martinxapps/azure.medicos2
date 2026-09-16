@@ -139,7 +139,7 @@ onMounted(async () => {
               Resultados de <br />
               Imagen, <br />
               Laboratorio, <br />
-              Cardiolgía & <br />
+              Cardiología & <br />
               Patología
             </p>
           </div>

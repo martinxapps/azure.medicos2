@@ -108,7 +108,7 @@ onMounted(() => {
                   Búsqueda de <br />
                   Resultados de Imagen, <br />
                   Laboratorio, <br />
-                  Cardiogía <br />
+                  Cardiología <br />
                   y Patología <br />
                 </h4>
               </div>
