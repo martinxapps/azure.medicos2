@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {searchPatients} from '@/services/searchPatients';
+import { newSearchPatients, searchPatients } from '@/services/searchPatients'
 import { useNotification } from '@kyvg/vue3-notification';
 const { notify }  = useNotification();
 // searchPage
@@ -16,7 +16,7 @@ usePatientsListStore = defineStore({
                     pte: searchTerm,
                     tipoBusqueda: searchType
                 };
-                const response = await searchPatients(data);
+                const response = await newSearchPatients(data)
                 console.log('response searchPatients', response);
                 if (response.status) {
                     this.patient_list = response.data;
