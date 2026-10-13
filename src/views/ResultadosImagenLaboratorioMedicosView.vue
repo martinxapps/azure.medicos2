@@ -41,12 +41,15 @@ const route = useRoute()
 const props = defineProps(['nhc'])
 const encryptedNHC = ref(props.nhc)
 const nhc = ref(null)
-const title = ref(
-  'Resultados - MetroVirtual - Hospital Metropolitano'
-)
+const title = ref('Resultados - MetroVirtual - Hospital Metropolitano')
 
 const getLabResults = (nhc) => {
   // get patient lab results
+  nhc = String(nhc)
+
+  if (!nhc.endsWith('01')) {
+    nhc += '01'
+  }
   if (lab_results.value.length < 1) {
     isLoadingLab.value = true
   }
@@ -66,6 +69,11 @@ const getLabResults = (nhc) => {
   })
 }
 const getImageResults = (nhc) => {
+  nhc = String(nhc)
+
+  if (!nhc.endsWith('01')) {
+    nhc += '01'
+  }
   // get patient lab results
   if (image_results.value.length < 1) {
     isLoadingImage.value = true
@@ -119,9 +127,7 @@ const getPathologyResults = async (nhc) => {
     if (patientResultsStore.pathology_results.length < 1) {
       isLoadingPathology.value = true
     }
-    const formattedNhc = nhc?.endsWith('01')
-      ? nhc.slice(0, -2)
-      : nhc
+    const formattedNhc = nhc?.endsWith('01') ? nhc.slice(0, -2) : nhc
 
     const response = await resultadosPatologiaPaciente(formattedNhc)
     if (response.status) {
@@ -155,9 +161,7 @@ const getPatientDetails = (nhc) => {
     if (response.status) {
       patientResultsStore.patient = response.data[0]
       title.value = `Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS} - MetroVirtual - Hospital Metropolitano`
-      screenview(
-        `Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS}`
-      )
+      screenview(`Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS}`)
     } else {
       notify({
         title: 'El paciente no existe',
@@ -241,7 +245,6 @@ const goToPathologyResult = async (result) => {
   })
 }
 const goToPathologyResultCtrl = async (result) => {
-
   event('see_pathology_result', {
     nhc: nhc.value,
     uuid: result.pedidoId
@@ -252,7 +255,6 @@ const goToPathologyResultCtrl = async (result) => {
     query: { prev: 'detalle-paciente' }
   })
   window.open(url.href, '_blank')
-
 }
 const goToCardiologyResult = async (result) => {
   const id = new URL(result.urlPdf).searchParams.get('id')
@@ -492,11 +494,10 @@ const downloadPathologyFile = (result) => {
       type: 'info'
     })
 
-
     urlDocumentoPatologia(result.pedidoId).then(async (response) => {
       if (response.status) {
         const link = document.createElement('a')
-        link.setAttribute('href', 'data:application/pdf;base64,'+response.pdfBase64)
+        link.setAttribute('href', 'data:application/pdf;base64,' + response.pdfBase64)
         // link.setAttribute('target', '_blank')
         link.setAttribute('download', `${result.examName}.pdf`)
         link.style.display = 'none'
@@ -521,7 +522,6 @@ const downloadPathologyFile = (result) => {
     })
   }
 }
-
 
 onMounted(async () => {
   nhc.value = await decryptId(encryptedNHC.value)
@@ -1011,7 +1011,9 @@ onMounted(async () => {
                               <p class="title-results">
                                 <b>{{ pathologyResult?.examName }}</b>
                               </p>
-                              <p class="text-results">{{ pathologyResult?.datePedido }} {{ pathologyResult?.hourPedido }}</p>
+                              <p class="text-results">
+                                {{ pathologyResult?.datePedido }} {{ pathologyResult?.hourPedido }}
+                              </p>
                               <p class="text-results">
                                 <b>Médico:</b> {{ pathologyResult?.doctorNme }}
                               </p>
