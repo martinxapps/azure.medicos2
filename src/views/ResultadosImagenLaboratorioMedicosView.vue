@@ -15,7 +15,7 @@ import {
   urlDocumentoImagen,
   urlDocumentoLaboratorio
 } from '../services/patient'
-import { searchPatients } from '../services/searchPatients'
+import { newSearchPatients } from '../services/searchPatients'
 import { useNotification } from '@kyvg/vue3-notification'
 import dayjs from 'dayjs'
 import { event, screenview } from 'vue-gtag'
@@ -149,9 +149,9 @@ const getPathologyResults = async (nhc) => {
 const getPatientDetails = (nhc) => {
   let data = {
     pte: nhc,
-    tipoBusqueda: 'nhc'
+    tipoBusqueda: 'his'
   }
-  searchPatients(data).then((response) => {
+  newSearchPatients(data).then((response) => {
     if (response.status) {
       patientResultsStore.patient = response.data[0]
       title.value = `Resultados de ${patient.value?.NOMBRES} ${patient.value?.APELLIDOS} - MetroVirtual - Hospital Metropolitano`
