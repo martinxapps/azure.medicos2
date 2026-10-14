@@ -19,9 +19,12 @@ const getUrl = async () => {
   isLoading.value = true
   try {
     nhc.value = await decryptId(encryptedNHC.value)
-
+    let iNHC = nhc.value
+    if (!iNHC.endsWith('01')) {
+      iNHC += '01'
+    }
     const response = await urlZfpShare({
-      nhc: nhc.value
+      nhc: iNHC
     })
     console.log('response', response)
     if (response.url) {

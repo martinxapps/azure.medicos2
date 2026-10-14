@@ -22,10 +22,14 @@ const viewerUrl = ref(null)
 const getUrl = async () => {
   isLoading.value = true
   nhc.value = await decryptId(encryptedNHC.value)
+  let iNHC = nhc.value
+  if (!iNHC.endsWith('01')) {
+    iNHC += '01'
+  }
 
   try {
     const response = await urlZfp({
-      nhc: nhc.value
+      nhc: iNHC
     })
     console.log('response', response)
     if (response.url) {
@@ -77,23 +81,23 @@ const goBack = () => {
             <!--        <span class="text-white d-none d-md-block">{{ user ? 'Dr. ' + user.name : 'MÉDICOS' }}</span>-->
           </button>
           <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
-<!--            <li>-->
-<!--              <a-->
-<!--                class="d-flex py-1 cursor-pointer item-list"-->
-<!--                title="Compartir por whatsapp"-->
-<!--                target="_blank"-->
-<!--                :href="`https://api.whatsapp.com/send?text=Te%20comparto%20mis%20resultados%20de%20imagen%20en%20el%20siguiente%20enlace:%20${shareLink}`"-->
-<!--              >-->
-<!--                <img-->
-<!--                  class="icon icon&#45;&#45;small mx-2 d-block"-->
-<!--                  src="@/assets/whatsapp.png"-->
-<!--                  width="30"-->
-<!--                  height="30"-->
-<!--                  alt="Whatsapp"-->
-<!--                />-->
-<!--                <p class="my-1">Whatsapp</p>-->
-<!--              </a>-->
-<!--            </li>-->
+            <!--            <li>-->
+            <!--              <a-->
+            <!--                class="d-flex py-1 cursor-pointer item-list"-->
+            <!--                title="Compartir por whatsapp"-->
+            <!--                target="_blank"-->
+            <!--                :href="`https://api.whatsapp.com/send?text=Te%20comparto%20mis%20resultados%20de%20imagen%20en%20el%20siguiente%20enlace:%20${shareLink}`"-->
+            <!--              >-->
+            <!--                <img-->
+            <!--                  class="icon icon&#45;&#45;small mx-2 d-block"-->
+            <!--                  src="@/assets/whatsapp.png"-->
+            <!--                  width="30"-->
+            <!--                  height="30"-->
+            <!--                  alt="Whatsapp"-->
+            <!--                />-->
+            <!--                <p class="my-1">Whatsapp</p>-->
+            <!--              </a>-->
+            <!--            </li>-->
             <li class="">
               <a
                 class="d-flex py-1 cursor-pointer item-list"
